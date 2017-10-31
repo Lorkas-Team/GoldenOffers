@@ -9,6 +9,7 @@ import android.widget.Button;
 import com.example.lord.goldenoffers.R;
 
 public class BusinessActivity extends AppCompatActivity {
+    //master
     //test
     public Button loginButton;
     public Button registerButton;
