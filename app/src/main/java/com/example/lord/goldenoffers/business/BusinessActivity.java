@@ -9,7 +9,7 @@ import android.widget.Button;
 import com.example.lord.goldenoffers.R;
 
 public class BusinessActivity extends AppCompatActivity {
-    //lord branch12
+    //lord branch123
     //test
     public Button loginButton;
     public Button registerButton;
