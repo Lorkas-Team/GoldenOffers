@@ -14,7 +14,7 @@ public class MainActivity extends AppCompatActivity {
     public Button businessButton ;
     public Button userButton;
 
-    //test
+    //my branch zahos
     public void init(){
         businessButton=(Button)findViewById(R.id.businessButton);
         businessButton.setOnClickListener(new View.OnClickListener() {
