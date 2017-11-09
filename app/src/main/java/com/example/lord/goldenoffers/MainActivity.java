@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import com.example.lord.goldenoffers.business.BusinessActivity;
+import com.example.lord.goldenoffers.business.BusinessLoginActivity;
 import com.example.lord.goldenoffers.user.UserActivity;
 
 public class MainActivity extends AppCompatActivity {
@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                Intent toy = new Intent(MainActivity.this,BusinessActivity.class);
+                Intent toy = new Intent(MainActivity.this,BusinessLoginActivity.class);
                 startActivity(toy);
             }
         });
