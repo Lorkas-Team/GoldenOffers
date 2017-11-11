@@ -14,11 +14,12 @@
         android:layout_marginTop="8dp"
         android:ems="10"
         android:hint="Email"
-        android:inputType="textPersonName"
+        android:inputType="textEmailAddress"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginLeft="8dp" />
 
     <EditText
         android:id="@+id/etName"
@@ -58,7 +59,7 @@
         android:layout_marginTop="8dp"
         android:ems="10"
         android:hint="Afm"
-        android:inputType="textPersonName"
+        android:inputType="textPersonName|number"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"

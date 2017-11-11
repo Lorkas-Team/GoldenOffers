@@ -33,6 +33,7 @@ public class RegisterActivity extends Activity {
     private EditText inputEmail;
     private EditText inputPassword;
     private EditText inputOwner;
+    private EditText inputAfm;
     private ProgressDialog pDialog;
     private SessionManager session;
     private SQLiteHandler db;
@@ -46,6 +47,7 @@ public class RegisterActivity extends Activity {
         inputEmail = (EditText) findViewById(R.id.etEmail);
         inputPassword = (EditText) findViewById(R.id.etPassword);
         inputOwner = (EditText) findViewById(R.id.etOwner);
+        inputAfm = (EditText) findViewById(R.id.etAfm);
         RegisterBtn = (Button) findViewById(R.id.RegisterBtn);
 
         // Progress dialog
@@ -74,10 +76,11 @@ public class RegisterActivity extends Activity {
                 String email = inputEmail.getText().toString().trim();
                 String password = inputPassword.getText().toString().trim();
                 String owner = inputOwner.getText().toString().trim();
+                int afm = Integer.parseInt(inputAfm.getText().toString());
 
 
                 if (!name.isEmpty() && !email.isEmpty() && !password.isEmpty() && !owner.isEmpty()) {
-                    registerUser(name, email, password, owner);
+                    registerUser(name, email, password, owner, afm);
                 } else {
                     Toast.makeText(getApplicationContext(),
                             "Please enter your details!", Toast.LENGTH_LONG)
@@ -93,7 +96,7 @@ public class RegisterActivity extends Activity {
      * email, password) to register url
      * */
     private void registerUser(final String name, final String email,
-                              final String password, final String owner) {
+                              final String password, final String owner, final int afm) {
         // Tag used to cancel the request
         String tag_string_req = "req_register";
 
@@ -120,11 +123,12 @@ public class RegisterActivity extends Activity {
                         String name = user.getString("name");
                         String email = user.getString("email");
                         String owner = user.getString("owner");
+                        int afm = user.getInt("afm");
                         String created_at = user
                                 .getString("created_at");
 
                         // Inserting row in users table
-                        db.addUser(name, email, uid, owner, created_at);
+                        db.addUser(name, email, uid, owner, String.valueOf(afm), created_at);
 
                         Toast.makeText(getApplicationContext(), "User successfully registered. Try login now!", Toast.LENGTH_LONG).show();
 
@@ -166,6 +170,7 @@ public class RegisterActivity extends Activity {
                 params.put("email", email);
                 params.put("password", password);
                 params.put("owner", owner);
+                params.put("afm", afm + "");
 
                 return params;
             }
