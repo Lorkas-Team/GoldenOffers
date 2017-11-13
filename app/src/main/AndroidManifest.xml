@@ -21,7 +21,10 @@
         <activity android:name=".business.LoginActivity" />
         <activity android:name=".business.RegisterActivity" />
         <activity android:name=".user.LoginActivity" />
-        <activity android:name=".user.RegisterActivity"></activity>
+        <activity android:name=".user.RegisterActivity" />
+        <activity android:name=".user.HomepageActivity"></activity>
     </application>
+
+    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>
