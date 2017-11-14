@@ -13,7 +13,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
-import android.text.TextUtils;
+
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -162,7 +162,14 @@ public class RegisterActivity extends Activity {
                                     "Password doesn't match!", Toast.LENGTH_LONG)
                                     .show();
                         } else {
-                            registerUser(name, email, password, owner, afm);
+                            if(afm.matches("[0-9]{9}")) {
+                                registerUser(name, email, password, owner, afm);
+                            }else {
+                                Toast.makeText(getApplicationContext(),
+                                        "AFM must contain 9 numbers exactly!", Toast.LENGTH_LONG)
+                                        .show();
+                            }
+
                         }
 
                     }else{
@@ -174,7 +181,7 @@ public class RegisterActivity extends Activity {
 
                 } else {
                     Toast.makeText(getApplicationContext(),
-                            "Please enter your details!", Toast.LENGTH_LONG)
+                            "You must fill in all fields!", Toast.LENGTH_LONG)
                             .show();
                 }
             }
@@ -215,12 +222,12 @@ public class RegisterActivity extends Activity {
                         String name = user.getString("name");
                         String email = user.getString("email");
                         String owner = user.getString("owner");
-                        int afm = user.getInt("afm");
+                        String afm = user.getString("afm");
                         String created_at = user
                                 .getString("created_at");
 
                         // Inserting row in users table
-                        db.addUser(name, email, uid, owner, String.valueOf(afm), created_at);
+                        db.addUser(name, email, uid, owner, afm, created_at);
 
                         Toast.makeText(getApplicationContext(), "User successfully registered. Try login now!", Toast.LENGTH_LONG).show();
 
@@ -262,7 +269,7 @@ public class RegisterActivity extends Activity {
                 params.put("email", email);
                 params.put("password", password);
                 params.put("owner", owner);
-                params.put("afm", afm + "");
+                params.put("afm", afm);
 
                 return params;
             }
