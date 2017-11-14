@@ -1,14 +1,24 @@
 package com.example.lord.goldenoffers.business;
 
+import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.support.v4.app.ActivityCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -44,6 +54,14 @@ public class RegisterActivity extends Activity {
     private SessionManager session;
     private SQLiteHandler db;
 
+    private TextView locationText;
+    private static final int REQUEST_LOCATION = 1;
+    private Button locationButton;
+    private LocationManager locationManager;
+    private String latitude,longitude;
+
+
+
     public final static boolean isEmailValid(String email)
     {
         String regExpn =
@@ -70,6 +88,31 @@ public class RegisterActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_business_register);
+
+        ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
+
+        locationText = (TextView)findViewById(R.id.text_location);
+        locationButton = (Button)findViewById(R.id.button_location);
+
+        locationButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+
+                locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+                if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                    buildAlertMessageNoGps();
+
+                } else if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                    getLocation();
+                }
+
+            }
+
+        });
+
+
+
+
+
 
         inputFullName = (EditText) findViewById(R.id.etName);
         inputEmail = (EditText) findViewById(R.id.etEmail);
@@ -99,6 +142,7 @@ public class RegisterActivity extends Activity {
             startActivity(intent);
             finish();
         }
+
 
         // Register Button Click event
         RegisterBtn.setOnClickListener(new View.OnClickListener() {
@@ -137,6 +181,7 @@ public class RegisterActivity extends Activity {
         });
 
     }
+
 
     /**
      * Function to store user in MySQL database will post params(tag, name,
@@ -237,4 +282,48 @@ public class RegisterActivity extends Activity {
         if (pDialog.isShowing())
             pDialog.dismiss();
     }
+    private void getLocation() {
+        if (ActivityCompat.checkSelfPermission(RegisterActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission
+                (RegisterActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(RegisterActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
+
+        } else {
+            Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+
+            if (location != null) {
+                double latti = location.getLatitude();
+                double longi = location.getLongitude();
+                latitude = String.valueOf(latti);
+                longitude = String.valueOf(longi);
+
+                locationText.setText("Your current location is"+ "\n" + "Lattitude = " + latitude
+                        + "\n" + "Longitude = " + longitude);
+            }else{
+                Toast.makeText(this,"Unable to Trace your location",Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    protected void buildAlertMessageNoGps() {
+
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Please Turn ON your GPS Connection")
+                .setCancelable(false)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialog, final int id) {
+                        startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialog, final int id) {
+                        dialog.cancel();
+                    }
+                });
+        final AlertDialog alert = builder.create();
+        alert.show();
+    }
+
 }
+
