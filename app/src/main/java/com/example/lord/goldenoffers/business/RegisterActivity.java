@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -28,8 +27,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import static java.sql.Types.NULL;
 
 public class RegisterActivity extends Activity {
     private static final String TAG = RegisterActivity.class.getSimpleName();
@@ -110,7 +107,7 @@ public class RegisterActivity extends Activity {
                 String owner = inputOwner.getText().toString().trim();
                 String afm = inputAfm.getText().toString().trim();
 
-                if (!name.isEmpty() && !email.isEmpty() && !password.isEmpty() && !repeatpass.isEmpty() && !owner.isEmpty() && !afm.isEmpty()  ) {
+                if (!name.isEmpty() && !email.isEmpty() && !password.isEmpty() && !repeatpass.isEmpty() && !owner.isEmpty() && !afm.isEmpty() ) {
                     if(isEmailValid(email)==true) {
 
                         if (!password.equals(repeatpass)) {
@@ -118,7 +115,14 @@ public class RegisterActivity extends Activity {
                                     "Password doesn't match!", Toast.LENGTH_LONG)
                                     .show();
                         } else {
-                            registerUser(name, email, password, owner, afm);
+                            if(afm.matches("[0-9]{9}")) {
+                                registerUser(name, email, password, owner, afm);
+                            }else {
+                                Toast.makeText(getApplicationContext(),
+                                        "AFM must contain 9 numbers exactly!", Toast.LENGTH_LONG)
+                                        .show();
+                            }
+
                         }
 
                     }else{
@@ -130,7 +134,7 @@ public class RegisterActivity extends Activity {
 
                 } else {
                     Toast.makeText(getApplicationContext(),
-                            "Please enter your details!", Toast.LENGTH_LONG)
+                            "You must fill in all fields!", Toast.LENGTH_LONG)
                             .show();
                 }
             }
@@ -170,12 +174,12 @@ public class RegisterActivity extends Activity {
                         String name = user.getString("name");
                         String email = user.getString("email");
                         String owner = user.getString("owner");
-                        int afm = user.getInt("afm");
+                        String afm = user.getString("afm");
                         String created_at = user
                                 .getString("created_at");
 
                         // Inserting row in users table
-                        db.addUser(name, email, uid, owner, String.valueOf(afm), created_at);
+                        db.addUser(name, email, uid, owner, afm, created_at);
 
                         Toast.makeText(getApplicationContext(), "User successfully registered. Try login now!", Toast.LENGTH_LONG).show();
 
@@ -217,7 +221,7 @@ public class RegisterActivity extends Activity {
                 params.put("email", email);
                 params.put("password", password);
                 params.put("owner", owner);
-                params.put("afm", afm + "");
+                params.put("afm", afm);
 
                 return params;
             }
