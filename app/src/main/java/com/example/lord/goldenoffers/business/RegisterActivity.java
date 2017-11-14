@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -25,6 +26,10 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import static java.sql.Types.NULL;
 
 public class RegisterActivity extends Activity {
     private static final String TAG = RegisterActivity.class.getSimpleName();
@@ -32,11 +37,34 @@ public class RegisterActivity extends Activity {
     private EditText inputFullName;
     private EditText inputEmail;
     private EditText inputPassword;
-    //private EditText inputOwner;
-    //private EditText inputAfm;
+    private EditText inputRepeatPass;
+    private EditText inputOwner;
+    private EditText inputAfm;
     private ProgressDialog pDialog;
     private SessionManager session;
     private SQLiteHandler db;
+
+    public final static boolean isEmailValid(String email)
+    {
+        String regExpn =
+                "^(([\\w-]+\\.)+[\\w-]+|([a-zA-Z]{1}|[\\w-]{2,}))@"
+                        +"((([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
+                        +"[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\."
+                        +"([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
+                        +"[0-9]{1,2}|25[0-5]|2[0-4][0-9])){1}|"
+                        +"([a-zA-Z]+[\\w-]+\\.)+[a-zA-Z]{2,4})$";
+
+        CharSequence inputStr = email;
+
+        Pattern pattern = Pattern.compile(regExpn,Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(inputStr);
+
+        if(matcher.matches())
+            return true;
+        else
+            return false;
+    }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -46,9 +74,12 @@ public class RegisterActivity extends Activity {
         inputFullName = (EditText) findViewById(R.id.etName);
         inputEmail = (EditText) findViewById(R.id.etEmail);
         inputPassword = (EditText) findViewById(R.id.etPassword);
-        //inputOwner = (EditText) findViewById(R.id.etOwner);
-        //inputAfm = (EditText) findViewById(R.id.etAfm);
+        inputRepeatPass = (EditText) findViewById(R.id.etRepeatPass);
+        inputOwner = (EditText) findViewById(R.id.etOwner);
+        inputAfm = (EditText) findViewById(R.id.etAfm);
         RegisterBtn = (Button) findViewById(R.id.RegisterBtn);
+
+
 
         // Progress dialog
         pDialog = new ProgressDialog(this);
@@ -75,12 +106,28 @@ public class RegisterActivity extends Activity {
                 String name = inputFullName.getText().toString().trim();
                 String email = inputEmail.getText().toString().trim();
                 String password = inputPassword.getText().toString().trim();
-                //String owner = inputOwner.getText().toString().trim();
-                //int afm = Integer.parseInt(inputAfm.getText().toString());
+                String repeatpass = inputRepeatPass.getText().toString().trim();
+                String owner = inputOwner.getText().toString().trim();
+                String afm = inputAfm.getText().toString().trim();
+
+                if (!name.isEmpty() && !email.isEmpty() && !password.isEmpty() && !repeatpass.isEmpty() && !owner.isEmpty() && !afm.isEmpty()  ) {
+                    if(isEmailValid(email)==true) {
+
+                        if (!password.equals(repeatpass)) {
+                            Toast.makeText(getApplicationContext(),
+                                    "Password doesn't match!", Toast.LENGTH_LONG)
+                                    .show();
+                        } else {
+                            registerUser(name, email, password, owner, afm);
+                        }
+
+                    }else{
+                        Toast.makeText(getApplicationContext(),
+                                "This is not a valid Email address!", Toast.LENGTH_LONG)
+                                .show();
+                    }
 
 
-                if (!name.isEmpty() && !email.isEmpty() && !password.isEmpty()) {
-                    registerUser(name, email, password);
                 } else {
                     Toast.makeText(getApplicationContext(),
                             "Please enter your details!", Toast.LENGTH_LONG)
@@ -96,7 +143,7 @@ public class RegisterActivity extends Activity {
      * email, password) to register url
      * */
     private void registerUser(final String name, final String email,
-                              final String password) {
+                              final String password, final String owner, final String afm) {
         // Tag used to cancel the request
         String tag_string_req = "req_register";
 
@@ -122,11 +169,13 @@ public class RegisterActivity extends Activity {
                         JSONObject user = jObj.getJSONObject("user");
                         String name = user.getString("name");
                         String email = user.getString("email");
+                        String owner = user.getString("owner");
+                        int afm = user.getInt("afm");
                         String created_at = user
                                 .getString("created_at");
 
                         // Inserting row in users table
-                        db.addUser(name, email, uid, created_at);
+                        db.addUser(name, email, uid, owner, String.valueOf(afm), created_at);
 
                         Toast.makeText(getApplicationContext(), "User successfully registered. Try login now!", Toast.LENGTH_LONG).show();
 
@@ -167,6 +216,8 @@ public class RegisterActivity extends Activity {
                 params.put("name", name);
                 params.put("email", email);
                 params.put("password", password);
+                params.put("owner", owner);
+                params.put("afm", afm + "");
 
                 return params;
             }

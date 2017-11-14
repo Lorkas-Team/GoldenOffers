@@ -133,13 +133,15 @@ public class BusinessLoginActivity extends Activity {
                         JSONObject user = jObj.getJSONObject("user");
                         String name = user.getString("name");
                         String email = user.getString("email");
+                        String owner = user.getString("owner");
+                        int afm = user.getInt("afm");
                         String created_at = user
                                 .getString("created_at");
 
                         // Inserting row in users table
-                        db.addUser(name, email, uid, created_at);
+                        db.addUser(name, email, uid, owner, String.valueOf(afm), created_at);
 
-                        // Launch main activity
+                        // Launch Logged In activity
                         Intent intent = new Intent(BusinessLoginActivity.this,
                                 LoggedInActivity.class);
                         startActivity(intent);
