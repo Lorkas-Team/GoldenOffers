@@ -1,5 +1,5 @@
 package com.example.lord.goldenoffers.business;
-
+//lord
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
