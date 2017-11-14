@@ -301,7 +301,7 @@ public class RegisterActivity extends Activity {
                 locationText.setText("Your current location is"+ "\n" + "Lattitude = " + latitude
                         + "\n" + "Longitude = " + longitude);
             }else{
-                Toast.makeText(this,"Unable to Trace your location",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this,"Unable to Trace your location please try again soon",Toast.LENGTH_SHORT).show();
             }
         }
     }
