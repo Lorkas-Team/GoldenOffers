@@ -300,6 +300,7 @@ public class RegisterActivity extends Activity {
 
                 locationText.setText("Your current location is"+ "\n" + "Lattitude = " + latitude
                         + "\n" + "Longitude = " + longitude);
+                RegisterBtn.setEnabled(true);
             }else{
                 Toast.makeText(this,"Unable to Trace your location please try again soon",Toast.LENGTH_SHORT).show();
             }
