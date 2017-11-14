@@ -25,6 +25,8 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class RegisterActivity extends Activity {
     private static final String TAG = RegisterActivity.class.getSimpleName();
@@ -32,11 +34,34 @@ public class RegisterActivity extends Activity {
     private EditText inputFullName;
     private EditText inputEmail;
     private EditText inputPassword;
+    private EditText inputRepeatPass;
     private EditText inputOwner;
     private EditText inputAfm;
     private ProgressDialog pDialog;
     private SessionManager session;
     private SQLiteHandler db;
+
+    public final static boolean isEmailValid(String email)
+    {
+        String regExpn =
+                "^(([\\w-]+\\.)+[\\w-]+|([a-zA-Z]{1}|[\\w-]{2,}))@"
+                        +"((([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
+                        +"[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\."
+                        +"([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
+                        +"[0-9]{1,2}|25[0-5]|2[0-4][0-9])){1}|"
+                        +"([a-zA-Z]+[\\w-]+\\.)+[a-zA-Z]{2,4})$";
+
+        CharSequence inputStr = email;
+
+        Pattern pattern = Pattern.compile(regExpn,Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(inputStr);
+
+        if(matcher.matches())
+            return true;
+        else
+            return false;
+    }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -46,9 +71,12 @@ public class RegisterActivity extends Activity {
         inputFullName = (EditText) findViewById(R.id.etName);
         inputEmail = (EditText) findViewById(R.id.etEmail);
         inputPassword = (EditText) findViewById(R.id.etPassword);
+        inputRepeatPass = (EditText) findViewById(R.id.etRepeatPass);
         inputOwner = (EditText) findViewById(R.id.etOwner);
         inputAfm = (EditText) findViewById(R.id.etAfm);
         RegisterBtn = (Button) findViewById(R.id.RegisterBtn);
+
+
 
         // Progress dialog
         pDialog = new ProgressDialog(this);
@@ -75,12 +103,29 @@ public class RegisterActivity extends Activity {
                 String name = inputFullName.getText().toString().trim();
                 String email = inputEmail.getText().toString().trim();
                 String password = inputPassword.getText().toString().trim();
+                String repeatpass = inputRepeatPass.getText().toString().trim();
                 String owner = inputOwner.getText().toString().trim();
-                int afm = Integer.parseInt(inputAfm.getText().toString());
+                int afm = Integer.parseInt(inputAfm.getText().toString().trim());
 
 
-                if (!name.isEmpty() && !email.isEmpty() && !password.isEmpty() && !owner.isEmpty()) {
-                    registerUser(name, email, password, owner, afm);
+                if (!name.isEmpty() && !email.isEmpty() && !password.isEmpty() && !repeatpass.isEmpty() && !owner.isEmpty()) {
+                    if(isEmailValid(email)==true) {
+
+                        if (!password.equals(repeatpass)) {
+                            Toast.makeText(getApplicationContext(),
+                                    "Password doesn't match!", Toast.LENGTH_LONG)
+                                    .show();
+                        } else {
+                            registerUser(name, email, password, owner, afm);
+                        }
+
+                    }else{
+                        Toast.makeText(getApplicationContext(),
+                                "This is not a valid Email address!", Toast.LENGTH_LONG)
+                                .show();
+                    }
+
+
                 } else {
                     Toast.makeText(getApplicationContext(),
                             "Please enter your details!", Toast.LENGTH_LONG)
