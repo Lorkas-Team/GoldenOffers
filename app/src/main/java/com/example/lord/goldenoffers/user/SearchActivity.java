@@ -7,6 +7,8 @@ import com.example.lord.goldenoffers.R;
 
 public class SearchActivity extends AppCompatActivity {
 
+    //Search for items
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -17,6 +17,7 @@ public class HomepageActivity extends AppCompatActivity {
 
     public void nav() {
 
+        //Starts the AddWishActivity when the ADD NEW WISH button is pressed
         AddWishButton = (Button) findViewById(R.id.AddWishButton);
         AddWishButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -27,6 +28,7 @@ public class HomepageActivity extends AppCompatActivity {
             }
         });
 
+        //Starts the ViewWishActivity when  VIEW YOUR WISHES button is pressed
         ViewWishButton = (Button) findViewById(R.id.ViewWishButton);
         ViewWishButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -37,6 +39,7 @@ public class HomepageActivity extends AppCompatActivity {
             }
         });
 
+        //Starts the SearchActivity when the SEARCH button is pressed
         SearchButton = (Button) findViewById(R.id.SearchButton);
         SearchButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -47,7 +50,7 @@ public class HomepageActivity extends AppCompatActivity {
             }
         });
 
-        //Needs logoutButton
+        //Still needs a logoutButton
     }
 
     @Override

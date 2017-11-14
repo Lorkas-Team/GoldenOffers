@@ -7,6 +7,8 @@ import com.example.lord.goldenoffers.R;
 
 public class AddWishActivity extends AppCompatActivity {
 
+    //Add items to a wish list
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

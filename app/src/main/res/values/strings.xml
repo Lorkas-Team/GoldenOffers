@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">GoldenOffers</string>
+    <string name="log_in">Log In</string>
+    <string name="user_login">User Login</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="usrname">username</string>
 </resources>
