@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -27,6 +28,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static java.sql.Types.NULL;
 
 public class RegisterActivity extends Activity {
     private static final String TAG = RegisterActivity.class.getSimpleName();
@@ -105,10 +108,9 @@ public class RegisterActivity extends Activity {
                 String password = inputPassword.getText().toString().trim();
                 String repeatpass = inputRepeatPass.getText().toString().trim();
                 String owner = inputOwner.getText().toString().trim();
-                int afm = Integer.parseInt(inputAfm.getText().toString().trim());
+                String afm = inputAfm.getText().toString().trim();
 
-
-                if (!name.isEmpty() && !email.isEmpty() && !password.isEmpty() && !repeatpass.isEmpty() && !owner.isEmpty()) {
+                if (!name.isEmpty() && !email.isEmpty() && !password.isEmpty() && !repeatpass.isEmpty() && !owner.isEmpty() && !afm.isEmpty()  ) {
                     if(isEmailValid(email)==true) {
 
                         if (!password.equals(repeatpass)) {
@@ -141,7 +143,7 @@ public class RegisterActivity extends Activity {
      * email, password) to register url
      * */
     private void registerUser(final String name, final String email,
-                              final String password, final String owner, final int afm) {
+                              final String password, final String owner, final String afm) {
         // Tag used to cancel the request
         String tag_string_req = "req_register";
 
