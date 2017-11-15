@@ -13,7 +13,6 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
-
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -39,7 +38,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static java.sql.Types.NULL;
+
 
 public class RegisterActivity extends Activity {
     private static final String TAG = RegisterActivity.class.getSimpleName();
@@ -58,6 +57,15 @@ public class RegisterActivity extends Activity {
     private static final int REQUEST_LOCATION = 1;
     private Button locationButton;
     private LocationManager locationManager;
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
     private String latitude,longitude;
 
 
@@ -154,6 +162,7 @@ public class RegisterActivity extends Activity {
                 String owner = inputOwner.getText().toString().trim();
                 String afm = inputAfm.getText().toString().trim();
 
+
                 if (!name.isEmpty() && !email.isEmpty() && !password.isEmpty() && !repeatpass.isEmpty() && !owner.isEmpty() && !afm.isEmpty()  ) {
                     if(isEmailValid(email)==true) {
 
@@ -163,7 +172,7 @@ public class RegisterActivity extends Activity {
                                     .show();
                         } else {
                             if(afm.matches("[0-9]{9}")) {
-                                registerUser(name, email, password, owner, afm);
+                                registerUser(name, email, password, owner, afm, latitude, longitude);
                             }else {
                                 Toast.makeText(getApplicationContext(),
                                         "AFM must contain 9 numbers exactly!", Toast.LENGTH_LONG)
@@ -195,7 +204,7 @@ public class RegisterActivity extends Activity {
      * email, password) to register url
      * */
     private void registerUser(final String name, final String email,
-                              final String password, final String owner, final String afm) {
+                              final String password, final String owner, final String afm, final String latitude, final String longitude) {
         // Tag used to cancel the request
         String tag_string_req = "req_register";
 
@@ -223,11 +232,13 @@ public class RegisterActivity extends Activity {
                         String email = user.getString("email");
                         String owner = user.getString("owner");
                         String afm = user.getString("afm");
+                        String latitude = user.getString( "latitude");
+                        String longitude = user.getString("longitude");
                         String created_at = user
                                 .getString("created_at");
 
                         // Inserting row in users table
-                        db.addUser(name, email, uid, owner, afm, created_at);
+                        db.addUser(name, email, uid, owner, afm, latitude, longitude, created_at);
 
                         Toast.makeText(getApplicationContext(), "User successfully registered. Try login now!", Toast.LENGTH_LONG).show();
 
@@ -270,6 +281,8 @@ public class RegisterActivity extends Activity {
                 params.put("password", password);
                 params.put("owner", owner);
                 params.put("afm", afm);
+                params.put("latitude", latitude);
+                params.put("longitude", longitude);
 
                 return params;
             }
@@ -302,8 +315,11 @@ public class RegisterActivity extends Activity {
             if (location != null) {
                 double latti = location.getLatitude();
                 double longi = location.getLongitude();
+
                 latitude = String.valueOf(latti);
+                setLatitude(latitude);
                 longitude = String.valueOf(longi);
+                setLongitude(longitude);
 
                 locationText.setText("Your current location is"+ "\n" + "Lattitude = " + latitude+ "\n" + "Longitude = " + longitude);
                 RegisterBtn.setEnabled(true);

@@ -14,7 +14,8 @@
         android:layout_marginStart="128dp"
         android:text="Users Port"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginLeft="128dp" />
 
     <Button
         android:id="@+id/businessButton"
@@ -24,26 +25,7 @@
         android:layout_marginTop="68dp"
         android:text="Business Port"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/latitude"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="40dp"
-        android:layout_marginStart="8dp"
-        android:text="latitude"
-        app:layout_constraintBottom_toTopOf="@+id/longitude"
-        app:layout_constraintStart_toStartOf="@+id/longitude" />
-
-    <TextView
-        android:id="@+id/longitude"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="124dp"
-        android:layout_marginStart="160dp"
-        android:text="longitude"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginLeft="128dp" />
 
 </android.support.constraint.ConstraintLayout>
