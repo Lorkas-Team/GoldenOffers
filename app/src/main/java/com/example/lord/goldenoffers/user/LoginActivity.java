@@ -55,7 +55,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                CheckLogin checkLogin = new CheckLogin(); //Async task for reduced load on app process
+                CheckLogin checkLogin = new CheckLogin();          //Async task for reduced load on app process
 
                 checkLogin.execute("");
             }
@@ -82,8 +82,8 @@ public class LoginActivity extends AppCompatActivity {
             Toast.makeText(LoginActivity.this, r, Toast.LENGTH_SHORT).show();
             if (isSuccess) {
 
-                Toast.makeText(LoginActivity.this, "Login Successfull", Toast.LENGTH_LONG).show();
-                //finish();
+                Toast.makeText(LoginActivity.this, "Login Successful", Toast.LENGTH_LONG).show();
+                finish();
                 Intent intent = new Intent(LoginActivity.this, HomepageActivity.class);
                 startActivity(intent);
 
@@ -109,7 +109,7 @@ public class LoginActivity extends AppCompatActivity {
                         ResultSet rs = stmt.executeQuery(query);
                         if (rs.next()) {
 
-                            z = "Login seccessful";
+                            z = "Login successful";
                             isSuccess = true;
                             con.close();
                         } else {
