@@ -39,7 +39,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static java.sql.Types.NULL;
+
 
 public class RegisterActivity extends Activity {
     private static final String TAG = RegisterActivity.class.getSimpleName();
@@ -58,6 +58,15 @@ public class RegisterActivity extends Activity {
     private static final int REQUEST_LOCATION = 1;
     private Button locationButton;
     private LocationManager locationManager;
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
     private String latitude,longitude;
 
 
@@ -302,8 +311,11 @@ public class RegisterActivity extends Activity {
             if (location != null) {
                 double latti = location.getLatitude();
                 double longi = location.getLongitude();
+
                 latitude = String.valueOf(latti);
+                setLatitude(latitude);
                 longitude = String.valueOf(longi);
+                setLongitude(longitude);
 
                 locationText.setText("Your current location is"+ "\n" + "Lattitude = " + latitude+ "\n" + "Longitude = " + longitude);
                 RegisterBtn.setEnabled(true);
