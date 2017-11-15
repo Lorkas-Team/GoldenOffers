@@ -30,6 +30,8 @@ public class SQLiteHandler extends SQLiteOpenHelper {
     private static final String KEY_UID = "uid";
     private static final String KEY_OWNER = "owner";
     private static final String KEY_AFM = "afm";
+    private static final String KEY_LATITUDE = "latitude";
+    private static final String KEY_LONGITUDE = "longitude";
     private static final String KEY_CREATED_AT = "created_at";
 
     public SQLiteHandler(Context context) {
@@ -43,6 +45,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
                 + KEY_ID + " INTEGER PRIMARY KEY," + KEY_NAME + " TEXT,"
                 + KEY_EMAIL + " TEXT UNIQUE," + KEY_UID + " TEXT,"
                 + KEY_OWNER + " TEXT," + KEY_AFM + " TEXT,"
+                + KEY_LATITUDE + " TEXT," + KEY_LONGITUDE +" TEXT,"
                 + KEY_CREATED_AT + " TEXT" + ")";
         db.execSQL(CREATE_LOGIN_TABLE);
 
@@ -62,7 +65,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
     /**
      * Storing user details in database
      * */
-    public void addUser(String name, String email, String uid, String owner, String afm, String created_at) {
+    public void addUser(String name, String email, String uid, String owner, String afm, String latitude, String longitude, String created_at) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -71,6 +74,8 @@ public class SQLiteHandler extends SQLiteOpenHelper {
         values.put(KEY_UID, uid); // Email
         values.put(KEY_OWNER, owner); //Owner
         values.put(KEY_AFM, afm); //AFM
+        values.put(KEY_LATITUDE, latitude);
+        values.put(KEY_LONGITUDE, longitude);
         values.put(KEY_CREATED_AT, created_at); // Created At
 
         // Inserting Row

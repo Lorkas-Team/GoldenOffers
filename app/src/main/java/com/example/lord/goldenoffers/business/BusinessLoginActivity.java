@@ -135,11 +135,13 @@ public class BusinessLoginActivity extends Activity {
                         String email = user.getString("email");
                         String owner = user.getString("owner");
                         String afm = user.getString("afm");
+                        String latitude = user.getString("latitude");
+                        String longitude = user.getString("longitude");
                         String created_at = user
                                 .getString("created_at");
 
                         // Inserting row in users table
-                        db.addUser(name, email, uid, owner, afm, created_at);
+                        db.addUser(name, email, uid, owner, afm, latitude, longitude, created_at);
 
                         // Launch Logged In activity
                         Intent intent = new Intent(BusinessLoginActivity.this,

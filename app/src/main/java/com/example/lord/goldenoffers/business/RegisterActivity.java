@@ -13,7 +13,6 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
-
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -163,6 +162,7 @@ public class RegisterActivity extends Activity {
                 String owner = inputOwner.getText().toString().trim();
                 String afm = inputAfm.getText().toString().trim();
 
+
                 if (!name.isEmpty() && !email.isEmpty() && !password.isEmpty() && !repeatpass.isEmpty() && !owner.isEmpty() && !afm.isEmpty()  ) {
                     if(isEmailValid(email)==true) {
 
@@ -172,7 +172,7 @@ public class RegisterActivity extends Activity {
                                     .show();
                         } else {
                             if(afm.matches("[0-9]{9}")) {
-                                registerUser(name, email, password, owner, afm);
+                                registerUser(name, email, password, owner, afm, latitude, longitude);
                             }else {
                                 Toast.makeText(getApplicationContext(),
                                         "AFM must contain 9 numbers exactly!", Toast.LENGTH_LONG)
@@ -204,7 +204,7 @@ public class RegisterActivity extends Activity {
      * email, password) to register url
      * */
     private void registerUser(final String name, final String email,
-                              final String password, final String owner, final String afm) {
+                              final String password, final String owner, final String afm, final String latitude, final String longitude) {
         // Tag used to cancel the request
         String tag_string_req = "req_register";
 
@@ -232,11 +232,13 @@ public class RegisterActivity extends Activity {
                         String email = user.getString("email");
                         String owner = user.getString("owner");
                         String afm = user.getString("afm");
+                        String latitude = user.getString( "latitude");
+                        String longitude = user.getString("longitude");
                         String created_at = user
                                 .getString("created_at");
 
                         // Inserting row in users table
-                        db.addUser(name, email, uid, owner, afm, created_at);
+                        db.addUser(name, email, uid, owner, afm, latitude, longitude, created_at);
 
                         Toast.makeText(getApplicationContext(), "User successfully registered. Try login now!", Toast.LENGTH_LONG).show();
 
@@ -279,6 +281,8 @@ public class RegisterActivity extends Activity {
                 params.put("password", password);
                 params.put("owner", owner);
                 params.put("afm", afm);
+                params.put("latitude", latitude);
+                params.put("longitude", longitude);
 
                 return params;
             }
