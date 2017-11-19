@@ -41,7 +41,7 @@ public class BusinessLoginActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bussines_login);
-
+//test1
         inputEmail = (EditText) findViewById(R.id.email);
         inputPassword = (EditText) findViewById(R.id.password);
         LoginBtn = (Button) findViewById(R.id.LoginBtn);
