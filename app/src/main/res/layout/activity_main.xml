@@ -12,7 +12,7 @@
         android:layout_height="44dp"
         android:layout_marginBottom="288dp"
         android:layout_marginStart="128dp"
-        android:text="Users Port"
+        android:text="@string/users_port"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginLeft="128dp" />
@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="128dp"
         android:layout_marginTop="68dp"
-        android:text="Business Port"
+        android:text="@string/business_port"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginLeft="128dp" />
