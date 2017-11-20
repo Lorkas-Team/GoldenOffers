@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import com.example.lord.goldenoffers.business.BusinessActivity;
+import com.example.lord.goldenoffers.business.BusinessLoginActivity;
 import com.example.lord.goldenoffers.user.UserActivity;
 
 public class MainActivity extends AppCompatActivity {
@@ -14,14 +14,14 @@ public class MainActivity extends AppCompatActivity {
     public Button businessButton ;
     public Button userButton;
 
-    //test
+    //test-lord112345
     public void init(){
         businessButton=(Button)findViewById(R.id.businessButton);
         businessButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                Intent toy = new Intent(MainActivity.this,BusinessActivity.class);
+                Intent toy = new Intent(MainActivity.this,BusinessLoginActivity.class);
                 startActivity(toy);
             }
         });
