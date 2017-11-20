@@ -5,11 +5,11 @@ import android.os.Bundle;
 
 import com.example.lord.goldenoffers.R;
 
-public class RegisterActivity extends AppCompatActivity {
+public class UserLoggedInActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_register);
+        setContentView(R.layout.activity_user_loged_in);
     }
 }
