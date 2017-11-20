@@ -122,7 +122,7 @@ public class RegisterActivity extends Activity {
 
 
 
-        inputFullName = (EditText) findViewById(R.id.etName);
+        inputFullName = (EditText) findViewById(R.id.etUserName);
         inputEmail = (EditText) findViewById(R.id.etEmail);
         inputPassword = (EditText) findViewById(R.id.etPassword);
         inputRepeatPass = (EditText) findViewById(R.id.etRepeatPass);

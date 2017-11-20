@@ -24,6 +24,9 @@
     <string name="welcome">Welcome</string>
     <string name="logout">LOG OUT</string>
 
+    //User Register
+    <string name="username">Username</string>
+
     //Error
     <string name="error">Unexpected Error</string>
 </resources>
