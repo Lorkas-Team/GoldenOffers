@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
 
 
-                Intent toy = new Intent(MainActivity.this,UserRegisterActivity.class);
+                Intent toy = new Intent(MainActivity.this,UserLoginActivity.class);
                 startActivity(toy);
 
             }
