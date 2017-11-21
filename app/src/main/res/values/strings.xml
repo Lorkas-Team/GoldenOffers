@@ -23,10 +23,26 @@
     //Logged In
     <string name="welcome">Welcome</string>
     <string name="logout">LOG OUT</string>
+    <string name="addOffer">Add New Offer</string>
+    <string name="viewOffers">View My Offers</string>
 
     //User Register
     <string name="username">Username</string>
 
     //Error
     <string name="error">Unexpected Error</string>
+    
+    //Add Offer
+    <string name="productName">Product Name</string>
+    <string name="productType">Product Type</string>
+    <string name="regDate">Registration Date</string>
+    <string name="expDate">Expiration Date</string>
+    <string name="price">Price</string>
+    <string name="photo">Insert Photo</string>
+    <string name="description">Add a description for the product</string>
+    <string name="uploadImg">Upload Image</string>
+    <string name="uploadbtn">Upload Offer</string>
+
+    <string name="title_activity_add_offer">AddOfferActivity</string>
+    <string name="action_settings">Settings</string>
 </resources>

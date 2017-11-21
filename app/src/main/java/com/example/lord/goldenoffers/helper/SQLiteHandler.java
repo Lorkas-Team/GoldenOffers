@@ -20,14 +20,13 @@ public class SQLiteHandler extends SQLiteOpenHelper {
     // Database Name
     private static final String DATABASE_NAME = "id3430729_database";
 
-    // Login table name for business
+    // Login table name
     private static final String TABLE_BUSINESS = "business";
 
-    //Login table name for user
-    private static final String TABLE_USERS = "users";
+    // Offers table name
+    private static final String TABLE_OFFERS = "items";
 
-
-    // Login Table Columns names FOR BUSINESS
+    // Login Table Columns names
     private static final String KEY_ID = "id";
     private static final String KEY_NAME = "name";
     private static final String KEY_EMAIL = "email";
@@ -38,11 +37,12 @@ public class SQLiteHandler extends SQLiteOpenHelper {
     private static final String KEY_LONGITUDE = "longitude";
     private static final String KEY_CREATED_AT = "created_at";
 
-    // LOGIN TABLE COLUMNS NAMES FOR USERS
-    private static final String USER_KEY_ID = "id";
-    private static final String USER_KEY_NAME = "username";
-    private static final String USER_KEY_EMAIL = "email";
-
+    // Offers Table Columns names
+    private static final String KEY_PRODUCT_NAME = "product_name";
+    private static final String KEY_PRICE = "price";
+    private static final String KEY_DESCRIPTION = "description";
+    private static final String KEY_REGISTRATION_DATE = "regDate";
+    private static final String KEY_EXPIRATION_DATE = "expDate";
 
     public SQLiteHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -51,6 +51,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
     // Creating Tables
     @Override
     public void onCreate(SQLiteDatabase db) {
+
         String CREATE_LOGIN_TABLE = "CREATE TABLE " + TABLE_BUSINESS + "("
                 + KEY_ID + " INTEGER PRIMARY KEY," + KEY_NAME + " TEXT,"
                 + KEY_EMAIL + " TEXT UNIQUE," + KEY_UID + " TEXT,"
@@ -58,6 +59,15 @@ public class SQLiteHandler extends SQLiteOpenHelper {
                 + KEY_LATITUDE + " TEXT," + KEY_LONGITUDE +" TEXT,"
                 + KEY_CREATED_AT + " TEXT" + ")";
         db.execSQL(CREATE_LOGIN_TABLE);
+
+
+        String CREATE_ITEMS_TABLE = "CREATE TABLE " + TABLE_OFFERS + "("
+                + KEY_PRODUCT_NAME + " TEXT,"
+                + KEY_PRICE + " TEXT," + KEY_DESCRIPTION + " TEXT,"
+                + KEY_REGISTRATION_DATE + " TEXT," + KEY_EXPIRATION_DATE + " TEXT"
+                + ")";
+                db.execSQL(CREATE_ITEMS_TABLE);
+
 
         Log.d(TAG, "Database tables created");
     }
@@ -73,7 +83,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
     }
 
     /**
-     * Storing user details in database for business
+     * Storing user details in database
      * */
     public void addUser(String name, String email, String uid, String owner, String afm, String latitude, String longitude, String created_at) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -95,20 +105,26 @@ public class SQLiteHandler extends SQLiteOpenHelper {
         Log.d(TAG, "New user inserted into sqlite: " + id);
     }
 
-    public void addUser(String username, String email) {
+
+    public void addOffer(String product_name, String regDate, String expDate, String price, String description) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(USER_KEY_NAME, username); // Name
-        values.put(USER_KEY_EMAIL, email); // Email
-
+        values.put(KEY_PRODUCT_NAME, product_name);
+        values.put(KEY_REGISTRATION_DATE, regDate);
+        values.put(KEY_EXPIRATION_DATE, expDate);
+        values.put(KEY_PRICE, price);
+        values.put(KEY_DESCRIPTION, description);
 
         // Inserting Row
-        long id = db.insert(TABLE_USERS, null, values);
+        long id = db.insert(TABLE_OFFERS, null, values);
         db.close(); // Closing database connection
 
-        Log.d(TAG, "New user inserted into sqlite: " + id);
+        Log.d(TAG, "New offer inserted into sqlite: " + id);
+
     }
+
+
 
     /**
      * Getting user data from database
@@ -135,6 +151,9 @@ public class SQLiteHandler extends SQLiteOpenHelper {
         return user;
     }
 
+
+
+
     /**
      * Re crate database Delete all tables and create them again
      * */
@@ -142,6 +161,16 @@ public class SQLiteHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         // Delete All Rows
         db.delete(TABLE_BUSINESS, null, null);
+        db.delete(TABLE_BUSINESS, null, null);
+        db.close();
+
+        Log.d(TAG, "Deleted all user info from sqlite");
+    }
+
+    public void deleteOffers() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        // Delete All Rows
+        db.delete(TABLE_OFFERS, null, null);
         db.close();
 
         Log.d(TAG, "Deleted all user info from sqlite");
