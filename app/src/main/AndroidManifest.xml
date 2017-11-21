@@ -2,12 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.lord.goldenoffers">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
-        android:name="com.example.lord.goldenoffers.app.AppController"
+        android:name=".app.AppController"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -26,7 +26,9 @@
         <activity android:name=".business.RegisterActivity" />
         <activity android:name=".user.LoginActivity" />
         <activity android:name=".user.RegisterActivity" />
-        <activity android:name=".business.LoggedInActivity"></activity>
+        <activity android:name=".business.LoggedInActivity" />
+        <activity android:name=".business.AddOfferActivity" />
+        <activity android:name=".business.MyOffersActivity"></activity>
     </application>
 
 </manifest>

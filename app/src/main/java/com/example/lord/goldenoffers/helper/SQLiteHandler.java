@@ -21,7 +21,10 @@ public class SQLiteHandler extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "id3430729_database";
 
     // Login table name
-    private static final String TABLE_USER = "business";
+    private static final String TABLE_BUSINESS = "business";
+
+    // Offers table name
+    private static final String TABLE_OFFERS = "items";
 
     // Login Table Columns names
     private static final String KEY_ID = "id";
@@ -34,6 +37,13 @@ public class SQLiteHandler extends SQLiteOpenHelper {
     private static final String KEY_LONGITUDE = "longitude";
     private static final String KEY_CREATED_AT = "created_at";
 
+    // Offers Table Columns names
+    private static final String KEY_PRODUCT_NAME = "product_name";
+    private static final String KEY_PRICE = "price";
+    private static final String KEY_DESCRIPTION = "description";
+    private static final String KEY_REGISTRATION_DATE = "regDate";
+    private static final String KEY_EXPIRATION_DATE = "expDate";
+
     public SQLiteHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -41,13 +51,23 @@ public class SQLiteHandler extends SQLiteOpenHelper {
     // Creating Tables
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_LOGIN_TABLE = "CREATE TABLE " + TABLE_USER + "("
+
+        String CREATE_LOGIN_TABLE = "CREATE TABLE " + TABLE_BUSINESS + "("
                 + KEY_ID + " INTEGER PRIMARY KEY," + KEY_NAME + " TEXT,"
                 + KEY_EMAIL + " TEXT UNIQUE," + KEY_UID + " TEXT,"
                 + KEY_OWNER + " TEXT," + KEY_AFM + " TEXT,"
                 + KEY_LATITUDE + " TEXT," + KEY_LONGITUDE +" TEXT,"
                 + KEY_CREATED_AT + " TEXT" + ")";
         db.execSQL(CREATE_LOGIN_TABLE);
+
+
+        String CREATE_ITEMS_TABLE = "CREATE TABLE " + TABLE_OFFERS + "("
+                + KEY_PRODUCT_NAME + " TEXT,"
+                + KEY_PRICE + " TEXT," + KEY_DESCRIPTION + " TEXT,"
+                + KEY_REGISTRATION_DATE + " TEXT," + KEY_EXPIRATION_DATE + " TEXT"
+                + ")";
+                db.execSQL(CREATE_ITEMS_TABLE);
+
 
         Log.d(TAG, "Database tables created");
     }
@@ -56,7 +76,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // Drop older table if existed
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_USER);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_BUSINESS + TABLE_OFFERS);
 
         // Create tables again
         onCreate(db);
@@ -79,18 +99,39 @@ public class SQLiteHandler extends SQLiteOpenHelper {
         values.put(KEY_CREATED_AT, created_at); // Created At
 
         // Inserting Row
-        long id = db.insert(TABLE_USER, null, values);
+        long id = db.insert(TABLE_BUSINESS, null, values);
         db.close(); // Closing database connection
 
         Log.d(TAG, "New user inserted into sqlite: " + id);
     }
+
+
+    public void addOffer(String product_name, String regDate, String expDate, String price, String description) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_PRODUCT_NAME, product_name);
+        values.put(KEY_REGISTRATION_DATE, regDate);
+        values.put(KEY_EXPIRATION_DATE, expDate);
+        values.put(KEY_PRICE, price);
+        values.put(KEY_DESCRIPTION, description);
+
+        // Inserting Row
+        long id = db.insert(TABLE_OFFERS, null, values);
+        db.close(); // Closing database connection
+
+        Log.d(TAG, "New offer inserted into sqlite: " + id);
+
+    }
+
+
 
     /**
      * Getting user data from database
      * */
     public HashMap<String, String> getUserDetails() {
         HashMap<String, String> user = new HashMap<String, String>();
-        String selectQuery = "SELECT  * FROM " + TABLE_USER;
+        String selectQuery = "SELECT  * FROM " + TABLE_BUSINESS;
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
@@ -110,13 +151,25 @@ public class SQLiteHandler extends SQLiteOpenHelper {
         return user;
     }
 
+
+
+
     /**
      * Re crate database Delete all tables and create them again
      * */
     public void deleteUsers() {
         SQLiteDatabase db = this.getWritableDatabase();
         // Delete All Rows
-        db.delete(TABLE_USER, null, null);
+        db.delete(TABLE_BUSINESS, null, null);
+        db.close();
+
+        Log.d(TAG, "Deleted all user info from sqlite");
+    }
+
+    public void deleteOffers() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        // Delete All Rows
+        db.delete(TABLE_OFFERS, null, null);
         db.close();
 
         Log.d(TAG, "Deleted all user info from sqlite");
