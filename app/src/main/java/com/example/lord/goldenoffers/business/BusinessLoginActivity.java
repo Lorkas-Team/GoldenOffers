@@ -26,7 +26,7 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
-
+//20/11/2017
 public class BusinessLoginActivity extends Activity {
     private static final String TAG = RegisterActivity.class.getSimpleName();
     private Button LoginBtn;

@@ -1,5 +1,6 @@
 package com.example.lord.goldenoffers.business;
 
+import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -24,6 +26,7 @@ import com.example.lord.goldenoffers.helper.SessionManager;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,6 +36,7 @@ public class AddOfferActivity extends AppCompatActivity {
     private EditText inputProductName;
     private EditText inputRegDate;
     private EditText inputExpDate;
+    private DatePickerDialog datePickerDialog;
     private EditText inputPrice;
     private ImageView inputImage;
     private Button uploadImgBtn;
@@ -68,6 +72,44 @@ public class AddOfferActivity extends AppCompatActivity {
         db = new SQLiteHandler(getApplicationContext());
 
 
+        inputRegDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Calendar c = Calendar.getInstance();
+                int mYear = c.get(Calendar.YEAR); //current year
+                int mMonth = c.get(Calendar.MONTH); // current month
+                int mDay = c.get(Calendar.DAY_OF_MONTH); //current day
+
+                datePickerDialog = new DatePickerDialog(AddOfferActivity.this, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        inputRegDate.setText(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth );
+                    }
+                },mYear,mMonth,mDay);
+                datePickerDialog.show();
+
+            }
+        });
+
+        inputExpDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Calendar c = Calendar.getInstance();
+                int mYear = c.get(Calendar.YEAR); //current year
+                int mMonth = c.get(Calendar.MONTH); // current month
+                int mDay = c.get(Calendar.DAY_OF_MONTH); //current day
+
+                datePickerDialog = new DatePickerDialog(AddOfferActivity.this, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        inputExpDate.setText(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth );
+                    }
+                },mYear,mMonth,mDay);
+                datePickerDialog.show();
+
+            }
+        });
+
 
         inputImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,7 +136,16 @@ public class AddOfferActivity extends AppCompatActivity {
                 String price = inputPrice.getText().toString().trim();
                 String description = inputDescription.getText().toString().trim();
 
-                offerUpload(product_name, regDate, expDate, price, description);
+
+                if(!product_name.isEmpty() && !regDate.isEmpty() && !price.isEmpty()){
+
+                        offerUpload(product_name, regDate, expDate, price, description);
+
+                }else {
+                    Toast.makeText(getApplicationContext(),
+                            "You must fill in all fields with  *  ", Toast.LENGTH_LONG)
+                            .show();
+                }
 
             }
         });
