@@ -3,11 +3,8 @@
     package="com.example.lord.goldenoffers">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
-        android:name=".app.AppController"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -21,13 +18,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".business.BusinessLoginActivity" />
+        <activity android:name=".business.BusinessActivity" />
+        <activity android:name=".user.UserActivity" />
+        <activity android:name=".business.LoginActivity" />
         <activity android:name=".business.RegisterActivity" />
-        <activity android:name=".business.LoggedInActivity" />
-        <activity android:name=".user.UserLoginActivity" />
-        <activity android:name=".user.UserLoggedInActivity" />
-        <activity android:name=".user.UserRegisterActivity" />
-        <activity android:name=".user.UserLoggedInActivity" />
+        <activity android:name=".user.LoginActivity" />
+        <activity android:name=".user.RegisterActivity" />
+        <activity android:name=".user.HomepageActivity" />
+        <activity android:name=".user.AddWishActivity" />
+        <activity android:name=".user.ViewWishActivity" />
+        <activity android:name=".user.SearchActivity"></activity>
     </application>
 
 </manifest>
