@@ -35,7 +35,7 @@
     <string name="regDate">Registration Date*</string>
     <string name="expDate">Expiration Date</string>
     <string name="price">Price*</string>
-    <string name="photo">Insert Photo*</string>
+    <string name="photo">Insert Photo</string>
     <string name="description">Add a description for the product</string>
     <string name="uploadImg">Upload Image</string>
     <string name="uploadbtn">Upload Offer</string>

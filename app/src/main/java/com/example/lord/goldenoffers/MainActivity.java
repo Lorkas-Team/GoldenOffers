@@ -1,14 +1,12 @@
 package com.example.lord.goldenoffers;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
 import com.example.lord.goldenoffers.business.BusinessLoginActivity;
-import com.example.lord.goldenoffers.user.UserLoginActivity;
-import com.example.lord.goldenoffers.user.UserRegisterActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -28,16 +26,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         userButton=(Button)findViewById(R.id.userButton);
-        userButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
 
-
-                Intent toy = new Intent(MainActivity.this,UserRegisterActivity.class);
-                startActivity(toy);
-
-            }
-        });
 
     }
 

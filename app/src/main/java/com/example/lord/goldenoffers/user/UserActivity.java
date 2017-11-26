@@ -1,9 +1,7 @@
 package com.example.lord.goldenoffers.user;
 
-import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.Button;
 
 import com.example.lord.goldenoffers.R;
@@ -15,7 +13,7 @@ public class UserActivity extends AppCompatActivity {
 
     public void user_init(){
         loginButton=(Button)findViewById(R.id.loginButton);
-        loginButton.setOnClickListener(new View.OnClickListener() {
+        /*loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -34,7 +32,7 @@ public class UserActivity extends AppCompatActivity {
                 startActivity(toy);
 
             }
-        });
+        });*/
 
     }
 

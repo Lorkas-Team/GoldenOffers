@@ -38,11 +38,14 @@ public class SQLiteHandler extends SQLiteOpenHelper {
     private static final String KEY_CREATED_AT = "created_at";
 
     // Offers Table Columns names
+    private static final String KEY_BUSINESS_ID = "business_id";
+    private static final String KEY_BUSINESS_NAME = "business_name";
     private static final String KEY_PRODUCT_NAME = "product_name";
     private static final String KEY_PRICE = "price";
     private static final String KEY_DESCRIPTION = "description";
     private static final String KEY_REGISTRATION_DATE = "regDate";
     private static final String KEY_EXPIRATION_DATE = "expDate";
+    private static final String KEY_IMAGE = "image";
 
     public SQLiteHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -62,9 +65,11 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 
 
         String CREATE_ITEMS_TABLE = "CREATE TABLE " + TABLE_OFFERS + "("
+                + KEY_BUSINESS_ID + " TEXT," + KEY_BUSINESS_NAME + " TEXT,"
                 + KEY_PRODUCT_NAME + " TEXT,"
                 + KEY_PRICE + " TEXT," + KEY_DESCRIPTION + " TEXT,"
-                + KEY_REGISTRATION_DATE + " TEXT," + KEY_EXPIRATION_DATE + " TEXT"
+                + KEY_REGISTRATION_DATE + " TEXT," + KEY_EXPIRATION_DATE + " TEXT,"
+                + KEY_IMAGE + "LONGBLOB"
                 + ")";
                 db.execSQL(CREATE_ITEMS_TABLE);
 
@@ -106,15 +111,18 @@ public class SQLiteHandler extends SQLiteOpenHelper {
     }
 
 
-    public void addOffer(String product_name, String regDate, String expDate, String price, String description) {
+    public void addOffer(String business_id, String business_name, String product_name, String regDate, String expDate, String price, String description, String image) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
+        values.put(KEY_BUSINESS_ID, business_id);
+        values.put(KEY_BUSINESS_NAME, business_name);
         values.put(KEY_PRODUCT_NAME, product_name);
         values.put(KEY_REGISTRATION_DATE, regDate);
         values.put(KEY_EXPIRATION_DATE, expDate);
         values.put(KEY_PRICE, price);
         values.put(KEY_DESCRIPTION, description);
+        values.put(KEY_IMAGE, image);
 
         // Inserting Row
         long id = db.insert(TABLE_OFFERS, null, values);
