@@ -93,10 +93,10 @@ public class AddOfferActivity extends AppCompatActivity {
         inputRegDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Calendar c = Calendar.getInstance();
-                int mYear = c.get(Calendar.YEAR); //current year
-                int mMonth = c.get(Calendar.MONTH); // current month
-                int mDay = c.get(Calendar.DAY_OF_MONTH); //current day
+                final Calendar c1 = Calendar.getInstance();
+                int mYear = c1.get(Calendar.YEAR); //current year
+                int mMonth = c1.get(Calendar.MONTH); // current month
+                int mDay = c1.get(Calendar.DAY_OF_MONTH); //current day
 
                 datePickerDialog = new DatePickerDialog(AddOfferActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
@@ -112,10 +112,10 @@ public class AddOfferActivity extends AppCompatActivity {
         inputExpDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Calendar c = Calendar.getInstance();
-                int mYear = c.get(Calendar.YEAR); //current year
-                int mMonth = c.get(Calendar.MONTH); // current month
-                int mDay = c.get(Calendar.DAY_OF_MONTH); //current day
+                final Calendar c2 = Calendar.getInstance();
+                int mYear = c2.get(Calendar.YEAR); //current year
+                int mMonth = c2.get(Calendar.MONTH); // current month
+                int mDay = c2.get(Calendar.DAY_OF_MONTH); //current day
 
                 datePickerDialog = new DatePickerDialog(AddOfferActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
@@ -151,18 +151,20 @@ public class AddOfferActivity extends AppCompatActivity {
                 String expDate = inputExpDate.getText().toString().trim();
                 String price = inputPrice.getText().toString().trim();
                 String description = inputDescription.getText().toString().trim();
-                String image = imageToString(bitmap);
 
 
-                if(!product_name.isEmpty() && !regDate.isEmpty() && !price.isEmpty()){
+                    if(!product_name.isEmpty() && !regDate.isEmpty() && !expDate.isEmpty() && !price.isEmpty() && bitmap != null){
+
+                        String image = imageToString(bitmap);
 
                         offerUpload(business_id, business_name, product_name, regDate, expDate, price, description, image);
 
-                }else {
-                    Toast.makeText(getApplicationContext(),
-                            "You must fill in all fields with  *  ", Toast.LENGTH_LONG)
-                            .show();
-                }
+                    }else {
+                        Toast.makeText(getApplicationContext(),
+                                "You must fill in all fields with  *  ", Toast.LENGTH_LONG)
+                                .show();
+                    }
+
 
             }
         });
