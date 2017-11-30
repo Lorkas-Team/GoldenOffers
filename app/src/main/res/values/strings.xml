@@ -26,6 +26,9 @@
     <string name="addOffer">Add New Offer</string>
     <string name="viewOffers">View My Offers</string>
 
+    //User Register
+    <string name="username">Username</string>
+
     //Error
     <string name="error">Unexpected Error</string>
     

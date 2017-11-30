@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.lord.goldenoffers">
 
-    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
@@ -23,8 +23,12 @@
             </intent-filter>
         </activity>
         <activity android:name=".business.BusinessLoginActivity" />
-        <activity android:name=".user.UserActivity" />
         <activity android:name=".business.RegisterActivity" />
+        <activity android:name=".business.LoggedInActivity" />
+        <activity android:name=".user.UserLoginActivity" />
+        <activity android:name=".user.UserLoggedInActivity" />
+        <activity android:name=".user.UserRegisterActivity" />
+        <activity android:name=".user.UserLoggedInActivity" />
         <activity android:name=".business.LoggedInActivity" />
         <activity android:name=".business.AddOfferActivity" />
         <activity android:name=".business.MyOffersActivity"></activity>

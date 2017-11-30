@@ -26,7 +26,11 @@ public class SQLiteHandler extends SQLiteOpenHelper {
     // Offers table name
     private static final String TABLE_OFFERS = "items";
 
-    // Login Table Columns names
+    //Login table name for user
+    private static final String TABLE_USERS = "users";
+
+
+    // Login Table Columns names FOR BUSINESS
     private static final String KEY_ID = "id";
     private static final String KEY_NAME = "name";
     private static final String KEY_EMAIL = "email";
@@ -36,6 +40,12 @@ public class SQLiteHandler extends SQLiteOpenHelper {
     private static final String KEY_LATITUDE = "latitude";
     private static final String KEY_LONGITUDE = "longitude";
     private static final String KEY_CREATED_AT = "created_at";
+
+    // LOGIN TABLE COLUMNS NAMES FOR USERS
+    private static final String USER_KEY_ID = "id";
+    private static final String USER_KEY_NAME = "username";
+    private static final String USER_KEY_EMAIL = "email";
+
 
     // Offers Table Columns names
     private static final String KEY_BUSINESS_ID = "business_id";
@@ -88,7 +98,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
     }
 
     /**
-     * Storing user details in database
+     * Storing user details in database for business
      * */
     public void addUser(String name, String email, String uid, String owner, String afm, String latitude, String longitude, String created_at) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -105,6 +115,21 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 
         // Inserting Row
         long id = db.insert(TABLE_BUSINESS, null, values);
+        db.close(); // Closing database connection
+
+        Log.d(TAG, "New user inserted into sqlite: " + id);
+    }
+
+    public void addUser(String username, String email) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(USER_KEY_NAME, username); // Name
+        values.put(USER_KEY_EMAIL, email); // Email
+
+
+        // Inserting Row
+        long id = db.insert(TABLE_USERS, null, values);
         db.close(); // Closing database connection
 
         Log.d(TAG, "New user inserted into sqlite: " + id);
