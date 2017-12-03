@@ -9,4 +9,6 @@ public class AppConfig {
     public static String USER_URL_REGISTER = "https://golden-offers.000webhostapp.com/API/Users_API_by_george/Register.php";
 
     public static String USER_URL_LOGIN = "https://golden-offers.000webhostapp.com/API/Users_API_by_george/Login.php";
+
+    public static String USER_URL_ADD_DESIRE = "https://golden-offers.000webhostapp.com/API/Users_API_by_george/Add_New_Desire.php";
 }

@@ -14,9 +14,6 @@ import com.example.lord.goldenoffers.helper.SessionManager;
 import java.util.HashMap;
 
 public class UserLoggedInActivity extends AppCompatActivity {
-    private TextView NameTv;
-    private TextView EmailTv;
-    private Button LogoutBtn;
 
     private SQLiteHandlerForUsers db;
     private SessionManager session;
@@ -24,25 +21,24 @@ public class UserLoggedInActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_loged_in);
+        setContentView(R.layout.activity_user_logged_in);
 
-        NameTv = (TextView) findViewById(R.id.NameTv);
-        EmailTv = (TextView) findViewById(R.id.EmailTv);
-        LogoutBtn = (Button) findViewById(R.id.LogoutBtn);
+        TextView NameTv = (TextView) findViewById(R.id.NameTv);
+        TextView EmailTv = (TextView) findViewById(R.id.EmailTv);
+        Button btnLogout = (Button) findViewById(R.id.LogoutBtn);
+        Button btnAddDesire = (Button) findViewById(R.id.btn_add_desire);
+        Button btnDesiresList = (Button) findViewById(R.id.btn_desires_list);
 
         // SqLite database handler
         db = new SQLiteHandlerForUsers(getApplicationContext());
-
         // session manager
         session = new SessionManager(getApplicationContext());
-
         if (!session.isLoggedIn()) {
             logoutUser();
         }
 
         // Fetching user details from sqlite
         HashMap<String, String> user = db.getUserDetails();
-
         String name = user.get("username");
         String email = user.get("email");
 
@@ -51,26 +47,46 @@ public class UserLoggedInActivity extends AppCompatActivity {
         EmailTv.setText(email);
 
         // Logout button click event
-        LogoutBtn.setOnClickListener(new View.OnClickListener() {
-
+        btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 logoutUser();
             }
         });
+
+        // Add Desire button click event
+        btnAddDesire.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                launchAddDesireActivity();
+            }
+        });
+
+        btnDesiresList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                launchDesiresListActivity();
+            }
+        });
     }
 
-    /**
-     * Logging out the user. Will set isLoggedIn flag to false in shared
-     * preferences Clears the user data from sqlite users table
-     * */
     private void logoutUser() {
         session.setLogin(false);
-
         db.deleteUsers();
-
         // Launching the login activity
         Intent intent = new Intent(UserLoggedInActivity.this, UserLoginActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    private void launchAddDesireActivity() {
+        Intent intent = new Intent(UserLoggedInActivity.this, AddDesireActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    private void launchDesiresListActivity() {
+        Intent intent = new Intent(UserLoggedInActivity.this, DesireListActivity.class);
         startActivity(intent);
         finish();
     }

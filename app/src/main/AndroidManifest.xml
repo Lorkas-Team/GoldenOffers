@@ -28,6 +28,8 @@
         <activity android:name=".user.UserLoggedInActivity" />
         <activity android:name=".user.UserRegisterActivity" />
         <activity android:name=".user.UserLoggedInActivity" />
+        <activity android:name=".user.AddDesireActivity" />
+        <activity android:name=".user.DesireListActivity"></activity>
     </application>
 
 </manifest>
