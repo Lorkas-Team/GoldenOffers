@@ -31,7 +31,8 @@
         <activity android:name=".user.UserLoggedInActivity" />
         <activity android:name=".business.LoggedInActivity" />
         <activity android:name=".business.AddOfferActivity" />
-        <activity android:name=".business.MyOffersActivity"></activity>
+        <activity android:name=".business.MyOffersActivity"
+            android:windowSoftInputMode="adjustPan"></activity>
     </application>
 
 </manifest>
