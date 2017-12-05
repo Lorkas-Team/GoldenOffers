@@ -21,6 +21,8 @@ public class UserLoggedInActivity extends AppCompatActivity {
     private SQLiteHandlerForUsers db;
     private SessionManager session;
 
+    public Button ContButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +60,22 @@ public class UserLoggedInActivity extends AppCompatActivity {
                 logoutUser();
             }
         });
+    }
+
+    public void init(){
+
+        ContButton=(Button)findViewById(R.id.ContButton);
+        ContButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
+                Intent toy = new Intent(UserLoggedInActivity.this,HomepageActivity.class);
+                startActivity(toy);
+
+            }
+        });
+
     }
 
     /**
