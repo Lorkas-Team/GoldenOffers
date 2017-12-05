@@ -29,4 +29,6 @@
 
     //Error
     <string name="error">Unexpected Error</string>
+
+    <string name="cont">Continue</string>
 </resources>
