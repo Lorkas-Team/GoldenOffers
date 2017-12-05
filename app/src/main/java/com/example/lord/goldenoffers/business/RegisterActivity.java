@@ -172,7 +172,9 @@ public class RegisterActivity extends Activity {
                                     .show();
                         } else {
                             if(afm.matches("[0-9]{9}")) {
+
                                 registerUser(name, email, password, owner, afm, latitude, longitude);
+
                             }else {
                                 Toast.makeText(getApplicationContext(),
                                         "AFM must contain 9 numbers exactly!", Toast.LENGTH_LONG)

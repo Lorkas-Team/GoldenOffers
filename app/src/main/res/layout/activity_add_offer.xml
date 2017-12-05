@@ -34,8 +34,10 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
             android:ems="10"
+            android:focusable="false"
             android:hint="@string/regDate"
-            android:inputType="text"
+            android:inputType="none"
+            android:longClickable="false"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -64,8 +66,10 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
             android:ems="10"
+            android:focusable="false"
             android:hint="@string/expDate"
-            android:inputType="text"
+            android:inputType="none"
+            android:longClickable="false"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -88,14 +92,15 @@
 
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="215dp"
-            android:layout_height="140dp"
-            android:layout_marginStart="16dp"
+            android:layout_width="317dp"
+            android:layout_height="178dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="32dp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/etPrice"
-            app:srcCompat="@android:drawable/ic_input_add"
-            android:layout_marginLeft="16dp" />
+            app:srcCompat="@android:drawable/ic_input_add" />
 
         <TextView
             android:id="@+id/textView3"
@@ -108,21 +113,6 @@
             app:layout_constraintEnd_toEndOf="@+id/imageView"
             app:layout_constraintHorizontal_bias="0.479"
             app:layout_constraintStart_toStartOf="@+id/imageView" />
-
-        <Button
-            android:id="@+id/uploadImgbtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:text="@string/uploadImg"
-            app:layout_constraintBottom_toBottomOf="@+id/imageView"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.333"
-            app:layout_constraintStart_toEndOf="@+id/imageView"
-            app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
         <Button
             android:id="@+id/uploadBtn"
