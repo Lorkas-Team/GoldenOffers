@@ -95,7 +95,7 @@ public class HomepageActivity extends AppCompatActivity {
         db.deleteUsers();
 
         // Launching the login activity
-        Intent intent = new Intent(UserLoggedInActivity.this, UserLoginActivity.class);
+        Intent intent = new Intent(HomepageActivity.this, UserLoginActivity.class);
         startActivity(intent);
         finish();
     }
