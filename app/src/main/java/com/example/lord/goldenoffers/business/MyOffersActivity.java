@@ -36,7 +36,7 @@ public class MyOffersActivity extends AppCompatActivity {
 
 
     ExpandableListView expListView;
-
+    //on progress
 
     private SessionManager session;
     private SQLiteHandler db;
