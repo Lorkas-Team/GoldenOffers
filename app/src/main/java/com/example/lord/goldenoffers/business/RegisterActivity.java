@@ -41,6 +41,7 @@ import java.util.regex.Pattern;
 
 
 public class RegisterActivity extends Activity {
+
     private static final String TAG = RegisterActivity.class.getSimpleName();
     private Button RegisterBtn;
     private EditText inputFullName;
@@ -52,7 +53,6 @@ public class RegisterActivity extends Activity {
     private ProgressDialog pDialog;
     private SessionManager session;
     private SQLiteHandler db;
-
     private TextView locationText;
     private static final int REQUEST_LOCATION = 1;
     private Button locationButton;
@@ -172,7 +172,9 @@ public class RegisterActivity extends Activity {
                                     .show();
                         } else {
                             if(afm.matches("[0-9]{9}")) {
+
                                 registerUser(name, email, password, owner, afm, latitude, longitude);
+
                             }else {
                                 Toast.makeText(getApplicationContext(),
                                         "AFM must contain 9 numbers exactly!", Toast.LENGTH_LONG)

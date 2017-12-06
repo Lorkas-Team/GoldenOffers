@@ -18,6 +18,8 @@ public class LoggedInActivity extends Activity {
     private TextView NameTv;
     private TextView EmailTv;
     private Button LogoutBtn;
+    private Button AddOffer;
+    private Button ViewOffers;
 
     private SQLiteHandler db;
     private SessionManager session;
@@ -30,6 +32,9 @@ public class LoggedInActivity extends Activity {
         NameTv = (TextView) findViewById(R.id.NameTv);
         EmailTv = (TextView) findViewById(R.id.EmailTv);
         LogoutBtn = (Button) findViewById(R.id.LogoutBtn);
+        AddOffer = (Button) findViewById(R.id.addOfferBtn);
+        ViewOffers = (Button) findViewById(R.id.viewOffersBtn);
+
 
         // SqLite database handler
         db = new SQLiteHandler(getApplicationContext());
@@ -50,6 +55,25 @@ public class LoggedInActivity extends Activity {
         // Displaying the user details on the screen
         NameTv.setText(name);
         EmailTv.setText(email);
+
+        //Add New Offer on click event
+        AddOffer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent gotoAddOffer = new Intent(LoggedInActivity.this,AddOfferActivity.class);
+                startActivity(gotoAddOffer);
+            }
+        });
+
+        //View My Offers on click event
+        ViewOffers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent gotoViewOffer = new Intent(LoggedInActivity.this,MyOffersActivity.class);
+                startActivity(gotoViewOffer);
+            }
+        });
+
 
         // Logout button click event
         LogoutBtn.setOnClickListener(new View.OnClickListener() {
