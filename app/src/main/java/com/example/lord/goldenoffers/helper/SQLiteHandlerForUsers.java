@@ -6,6 +6,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+import android.widget.Toast;
+
+import com.example.lord.goldenoffers.user.Desire;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,7 +51,7 @@ public class SQLiteHandlerForUsers extends SQLiteOpenHelper {
 
         String CREATE_DESIRES_TABLE = "CREATE TABLE " + TABLE_DESIRES + "("
                 + DESIRE_KEY_ID + " INTEGER PRIMARY KEY," + DESIRE_KEY_PROD_NAME + " TEXT UNIQUE,"
-                + DESIRE_KEY_PRICE_LOW + " TEXT," + DESIRE_KEY_PRICE_HIGH + " TEXT"+")";
+                + DESIRE_KEY_PRICE_LOW + " TEXT," + DESIRE_KEY_PRICE_HIGH + " TEXT" +")";
         db.execSQL(CREATE_DESIRES_TABLE);
 
         Log.d(TAG, "Database tables created");
@@ -72,7 +75,6 @@ public class SQLiteHandlerForUsers extends SQLiteOpenHelper {
         values.put(USER_KEY_NAME, username); // Name
         values.put(USER_KEY_EMAIL, email); // Email
 
-
         // Inserting Row
         long id = db.insert(TABLE_USERS, null, values);
         db.close(); // Closing database connection
@@ -86,12 +88,18 @@ public class SQLiteHandlerForUsers extends SQLiteOpenHelper {
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
+
+        int usernameCol = cursor.getColumnIndex(USER_KEY_NAME);
+        int emailCol = cursor.getColumnIndex(USER_KEY_EMAIL);
+
         // Move to first row
         cursor.moveToFirst();
-        if (cursor.getCount() > 0) {
-            user.put("username", cursor.getString(1));
-            user.put("email", cursor.getString(2));
 
+        if (cursor != null && cursor.getCount() > 0) {
+                user.put("username", cursor.getString(usernameCol));
+                user.put("email", cursor.getString(emailCol));
+        } else {
+            //nothing to show
         }
         cursor.close();
         db.close();
@@ -135,25 +143,24 @@ public class SQLiteHandlerForUsers extends SQLiteOpenHelper {
         int priceLowCol = cursor.getColumnIndex(DESIRE_KEY_PRICE_LOW);
         int priceHighCol = cursor.getColumnIndex(DESIRE_KEY_PRICE_HIGH);
 
-        // Move to first row
         cursor.moveToFirst();
         if (cursor != null && cursor.getCount() > 0) {
             do {
                 listDesires.add(
                         new Desire(
-                                Integer.parseInt(cursor.getString(idCol)),
+                                cursor.getInt(idCol),
                                 cursor.getString(nameCol),
-                                Float.parseFloat(cursor.getString(priceLowCol)),
-                                Float.parseFloat(cursor.getString(priceHighCol))
+                                cursor.getFloat(priceLowCol),
+                                cursor.getInt(priceHighCol)
                         )
                 );
             } while (cursor.moveToNext());
         } else {
-            //nothing to show
+            //TODO nothing to show
         }
         cursor.close();
         db.close();
-        //Log.d(TAG, "Fetching user from Sqlite: " + user.toString());
+        Log.d(TAG, "Fetching user from Sqlite: " + listDesires.toString());
         return listDesires;
     }
 

@@ -21,6 +21,7 @@ import com.example.lord.goldenoffers.app.AppController;
 import com.example.lord.goldenoffers.helper.SQLiteHandlerForUsers;
 import com.example.lord.goldenoffers.helper.SessionManager;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -31,8 +32,8 @@ public class UserLoginActivity extends AppCompatActivity {
 
 
     private static final String TAG = UserRegisterActivity.class.getSimpleName();
-    private Button LoginBtn;
-    private TextView RegisterTextView;
+    private Button btnLogin;
+    private TextView tvRegister;
     private EditText inputEmail;
     private EditText inputPassword;
     private ProgressDialog pDialog;
@@ -46,8 +47,8 @@ public class UserLoginActivity extends AppCompatActivity {
 
         inputEmail = (EditText) findViewById(R.id.email);
         inputPassword = (EditText) findViewById(R.id.password);
-        LoginBtn = (Button) findViewById(R.id.LoginBtn);
-        RegisterTextView = (TextView) findViewById(R.id.RegisterTextView);
+        btnLogin = (Button) findViewById(R.id.LoginBtn);
+        tvRegister = (TextView) findViewById(R.id.RegisterTextView);
 
         // Progress dialog
         pDialog = new ProgressDialog(this);
@@ -68,7 +69,7 @@ public class UserLoginActivity extends AppCompatActivity {
         }
 
         // Login button Click Event
-        LoginBtn.setOnClickListener(new View.OnClickListener() {
+        btnLogin.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View view) {
                 String email = inputEmail.getText().toString().trim();
@@ -89,7 +90,7 @@ public class UserLoginActivity extends AppCompatActivity {
         });
 
         // Link to Register Screen
-        RegisterTextView.setOnClickListener(new View.OnClickListener() {
+        tvRegister.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View view) {
                 Intent i = new Intent(getApplicationContext(),
@@ -122,22 +123,33 @@ public class UserLoginActivity extends AppCompatActivity {
                 try {
                     JSONObject jObj = new JSONObject(response);
                     boolean error = jObj.getBoolean("error");
-
-                    // Check for error node in json
                     if (!error) {
-                        // user successfully logged in
-                        // Create login session
+
                         session.setLogin(true);
 
-                        // Now store the user in SQLite
-
-                        JSONObject user = jObj.getJSONObject("user");
+                        JSONObject user = jObj.getJSONObject("user_info");
                         String username = user.getString("username");
                         String email = user.getString("email");
-
-
-                        // Inserting row in users table
                         db.addUser(username, email);
+
+                        JSONArray desires = jObj.getJSONArray("desires");
+                        for(int pos = 0; pos < desires.length(); pos++) {
+
+                            JSONObject desire = desires.getJSONObject(pos);
+
+                            String desireName = desire.getString("product_name");
+                            int desireID = desire.getInt("id");
+                            String strPriceLow = desire.getString("price_low");
+                            String strPriceHigh = desire.getString("price_high");
+
+                            db.addDesire(desireID, desireName, strPriceLow, strPriceHigh);
+
+                            Log.d("DESIRES: ", desires.toString());
+                            Log.d("PRODUCTS ID: ", String.valueOf(desireID));
+                            Log.d("PRODUCTS NAME: ", desireName);
+                            Log.d("PRODUCTS LOW: ", strPriceLow);
+                            Log.d("PRODUCTS HIGH: ", strPriceLow);
+                        }
 
                         // Launch Logged In activity
                         Intent intent = new Intent(UserLoginActivity.this,

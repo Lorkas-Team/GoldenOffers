@@ -1,4 +1,7 @@
-package com.example.lord.goldenoffers.helper;
+package com.example.lord.goldenoffers.user;
+
+import java.util.HashMap;
+import java.util.List;
 
 public class Desire {
 

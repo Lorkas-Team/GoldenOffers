@@ -68,20 +68,11 @@ public class UserRegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_register);
 
-
-
-
-
-
-
-
         inputUserName = (EditText) findViewById(R.id.etUserName);
         inputEmail = (EditText) findViewById(R.id.etEmail);
         inputPassword = (EditText) findViewById(R.id.etPassword);
         inputRepeatPass = (EditText) findViewById(R.id.etRepeatPass);
         RegisterBtn = (Button) findViewById(R.id.RegisterBtn);
-
-
 
         // Progress dialog
         pDialog = new ProgressDialog(this);
