@@ -52,7 +52,7 @@ public class DesireListActivity extends AppCompatActivity {
             }
         });
     }
-
+//test2
     private Desire getDesireByName(List<Desire> listDesires, String name) {
         //TODO is right ?
         for(Desire desire : listDesires){
