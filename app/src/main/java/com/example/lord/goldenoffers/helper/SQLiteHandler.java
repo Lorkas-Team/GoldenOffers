@@ -20,14 +20,12 @@ public class SQLiteHandler extends SQLiteOpenHelper {
     // Database Name
     private static final String DATABASE_NAME = "id3430729_database";
 
-    // Login table name
+    // Login table name for business
     private static final String TABLE_BUSINESS = "business";
 
     // Offers table name
     private static final String TABLE_OFFERS = "items";
 
-    //Login table name for user
-    private static final String TABLE_USERS = "users";
 
 
     // Login Table Columns names FOR BUSINESS
@@ -41,11 +39,6 @@ public class SQLiteHandler extends SQLiteOpenHelper {
     private static final String KEY_LONGITUDE = "longitude";
     private static final String KEY_CREATED_AT = "created_at";
 
-    // LOGIN TABLE COLUMNS NAMES FOR USERS
-    private static final String USER_KEY_ID = "id";
-    private static final String USER_KEY_NAME = "username";
-    private static final String USER_KEY_EMAIL = "email";
-
 
     // Offers Table Columns names
     private static final String KEY_BUSINESS_ID = "business_id";
@@ -56,6 +49,11 @@ public class SQLiteHandler extends SQLiteOpenHelper {
     private static final String KEY_REGISTRATION_DATE = "regDate";
     private static final String KEY_EXPIRATION_DATE = "expDate";
     private static final String KEY_IMAGE = "image";
+    private static final String KEY_SELECTED_ITEM_1 = "selectedItem1";
+    private static final String KEY_SELECTED_ITEM_2 = "selectedItem2";
+    private static final String KEY_SELECTED_ITEM_3 = "selectedItem3";
+    private static final String KEY_SELECTED_ITEM_4 = "selectedItem4";
+
 
     public SQLiteHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -79,7 +77,9 @@ public class SQLiteHandler extends SQLiteOpenHelper {
                 + KEY_PRODUCT_NAME + " TEXT,"
                 + KEY_PRICE + " TEXT," + KEY_DESCRIPTION + " TEXT,"
                 + KEY_REGISTRATION_DATE + " TEXT," + KEY_EXPIRATION_DATE + " TEXT,"
-                + KEY_IMAGE + "LONGBLOB"
+                + KEY_IMAGE + "LONGBLOB" + KEY_SELECTED_ITEM_1 + "TEXT,"
+                + KEY_SELECTED_ITEM_2 + "TEXT," + KEY_SELECTED_ITEM_3 + "TEXT,"
+                + KEY_SELECTED_ITEM_4 + "TEXT"
                 + ")";
                 db.execSQL(CREATE_ITEMS_TABLE);
 
@@ -100,7 +100,8 @@ public class SQLiteHandler extends SQLiteOpenHelper {
     /**
      * Storing user details in database for business
      * */
-    public void addUser(String name, String email, String uid, String owner, String afm, String latitude, String longitude, String created_at) {
+    public void addUser(String name, String email, String uid, String owner, String afm, String latitude,
+                        String longitude, String created_at) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -120,23 +121,10 @@ public class SQLiteHandler extends SQLiteOpenHelper {
         Log.d(TAG, "New user inserted into sqlite: " + id);
     }
 
-    public void addUser(String username, String email) {
-        SQLiteDatabase db = this.getWritableDatabase();
 
-        ContentValues values = new ContentValues();
-        values.put(USER_KEY_NAME, username); // Name
-        values.put(USER_KEY_EMAIL, email); // Email
-
-
-        // Inserting Row
-        long id = db.insert(TABLE_USERS, null, values);
-        db.close(); // Closing database connection
-
-        Log.d(TAG, "New user inserted into sqlite: " + id);
-    }
-
-
-    public void addOffer(String business_id, String business_name, String product_name, String regDate, String expDate, String price, String description, String image) {
+    public void addOffer(String business_id, String business_name, String product_name, String regDate, String expDate,
+                         String price, String description, String image, String selectedItem1, String selectedItem2,
+                         String selectedItem3, String selectedItem4) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -148,6 +136,10 @@ public class SQLiteHandler extends SQLiteOpenHelper {
         values.put(KEY_PRICE, price);
         values.put(KEY_DESCRIPTION, description);
         values.put(KEY_IMAGE, image);
+        values.put(KEY_SELECTED_ITEM_1, selectedItem1);
+        values.put(KEY_SELECTED_ITEM_2, selectedItem2);
+        values.put(KEY_SELECTED_ITEM_3, selectedItem3);
+        values.put(KEY_SELECTED_ITEM_4, selectedItem4);
 
         // Inserting Row
         long id = db.insert(TABLE_OFFERS, null, values);

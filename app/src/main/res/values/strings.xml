@@ -41,8 +41,751 @@
     <string name="photo">Insert Photo*</string>
     <string name="description">Add a description for the product</string>
     <string name="uploadbtn">Upload Offer</string>
+    <string name="category">Pick Categories and Subcategories</string>
 
 
     <string name="title_activity_add_offer">AddOfferActivity</string>
     <string name="action_settings">Settings</string>
+
+    //Spinner Arrays
+
+    <string-array name="spin1">
+        <item>Technology</item>
+        <item>House &amp; Garden</item>
+        <item>Fashion for Men</item>
+        <item>Fashion for Women</item>
+        <item>Sports &amp; Outdoors</item>
+        <item>Car &amp; Motorbike</item>
+        <item>Baby &amp; Kid</item>
+        <item>Health &amp; Beauty</item>
+    </string-array>
+
+
+    <string-array name="spin2_1">
+        <item>Telecommunications</item>
+        <item>Computers</item>
+        <item>TV &amp; Entertainment</item>
+        <item>Gaming</item>
+        <item>Audio</item>
+        <item>Camera &amp; Photo</item>
+        <item>Tablets</item>
+        <item>Wearables</item>
+    </string-array>
+
+    <string-array name="spin2_2">
+        <item>Home Appliances</item>
+        <item>Home Items</item>
+        <item>Tools</item>
+        <item>Furniture</item>
+        <item>Garden</item>
+        <item>Parties, Gifts, Seasonal</item>
+        <item>Office Supplies</item>
+        <item>Pets</item>
+        <item>Decoration</item>
+        <item>Wines &amp; Drinks</item>
+        <item>Food</item>
+    </string-array>
+
+    <string-array name="spin2_3">
+        <item>Clothes for Men</item>
+        <item>Shoes for Men</item>
+        <item>Accessories for Men</item>
+        <item>Wristwatches for Men</item>
+        <item>Backpacks/Wallets for Men</item>
+        <item>Sunglasses for Men</item>
+    </string-array>
+
+    <string-array name="spin2_4">
+        <item>Clothes for Women</item>
+        <item>Shoes for Women</item>
+        <item>Accessories for Women</item>
+        <item>Wristwatches for Women</item>
+        <item>Backpacks/Wallets for Women</item>
+        <item>Jewellery for Women</item>
+        <item>Sunglasses for Women</item>
+    </string-array>
+
+    <string-array name="spin2_5">
+        <item>Sports Equipment</item>
+        <item>Gymnastics Equipment</item>
+        <item>Musical Instruments</item>
+        <item>Hunting - Sharpshooting</item>
+        <item>Cycling</item>
+        <item>Free Time</item>
+        <item>Scuba Diving - Fishing</item>
+        <item>Games</item>
+        <item>Camping</item>
+        <item>Beach - Pool</item>
+    </string-array>
+
+    <string-array name="spin2_6">
+        <item>Car</item>
+        <item>Motorcycle</item>
+        <item>Boat</item>
+    </string-array>
+
+    <string-array name="spin2_7">
+        <item>Kids Fashion</item>
+        <item>Kids Toys</item>
+        <item>Baby Travel &amp; Carriers</item>
+        <item>Baby Food</item>
+        <item>Health and Caring</item>
+        <item>School Products</item>
+    </string-array>
+
+    <string-array name="spin2_8">
+        <item>Beauty</item>
+        <item>Fragrance</item>
+        <item>Personal Hygiene</item>
+        <item>Health</item>
+        <item>Vitamins, Minerals &amp; Supplements</item>
+    </string-array>
+
+
+    <string-array name="spin3_1_1">
+        <item>Cordless Phones</item>
+        <item>Mobile Phones</item>
+        <item>Mobile Phone Cases</item>
+        <item>Screen Protectors</item>
+        <item>Spare Parts</item>
+        <item>Bluetooth</item>
+        <item>Phone Batteries</item>
+        <item>Handsfree</item>
+        <item>Power Banks</item>
+        <item>Phone Chargers</item>
+        <item>Other Accessories</item>
+    </string-array>
+
+    <string-array name="spin3_1_2">
+        <item>Laptop &amp; Accessories</item>
+        <item>Desktop &amp; Server</item>
+        <item>Monitors</item>
+        <item>Storage</item>
+        <item>Peripherals</item>
+        <item>Hardware</item>
+        <item>Software</item>
+        <item>Networking</item>
+    </string-array>
+
+    <string-array name="spin3_1_3">
+        <item>Televisions</item>
+        <item>Television Stands</item>
+        <item>Television Accessories</item>
+        <item>Home Cinema</item>
+        <item>Media Players</item>
+        <item>Projectors</item>
+    </string-array>
+
+    <string-array name="spin3_1_4">
+        <item>Video Games</item>
+        <item>Consoles</item>
+        <item>Gaming Peripherals</item>
+        <item>Virtual Reality Headsets</item>
+        <item>Console Accessories</item>
+        <item>Console Spare Parts</item>
+        <item>Character Figures</item>
+    </string-array>
+
+    <string-array name="spin3_1_5">
+        <item>Headphones</item>
+        <item>Earphones</item>
+        <item>MP3 &amp; Digital Media Players</item>
+        <item>Speakers</item>
+        <item>Accessories</item>
+    </string-array>
+
+    <string-array name="spin3_1_6">
+        <item>Compact Digital Cameras</item>
+        <item>Compact System Cameras</item>
+        <item>Digital SLR Cameras</item>
+        <item>Action Cameras</item>
+        <item>Camera Lenses</item>
+        <item>Camera &amp; Camcorder Bags</item>
+        <item>Accessories</item>
+    </string-array>
+
+    <string-array name="spin3_1_7">
+        <item>Tablets</item>
+        <item>Tablet Cases</item>
+        <item>Tablet Chargers</item>
+        <item>Tablet Batteries</item>
+        <item>Accessories</item>
+    </string-array>
+
+    <string-array name="spin3_1_8">
+        <item>Smart Watches</item>
+        <item>Activity Trackers</item>
+        <item>Sports Watches</item>
+        <item>Accessories</item>
+    </string-array>
+
+    <string-array name="spin3_2_1">
+        <item>Air Condition</item>
+        <item>Heaters</item>
+        <item>Fans</item>
+        <item>Ovens</item>
+        <item>Hobs</item>
+        <item>Cooker Hoods</item>
+        <item>Dishwashers</item>
+        <item>Fridges</item>
+        <item>Washing Machines</item>
+        <item>Coffee Machines</item>
+        <item>Blenders</item>
+        <item>Mixers</item>
+        <item>Microwaves</item>
+        <item>Fryers</item>
+        <item>Toasters</item>
+        <item>Kitchen Scales</item>
+        <item>Irons</item>
+        <item>Vacuum Cleaners</item>
+        <item>Steam Cleaners</item>
+    </string-array>
+
+    <string-array name="spin3_2_2">
+        <item>Carpets</item>
+        <item>Blankets</item>
+        <item>Bed Sheets</item>
+        <item>Quilts</item>
+        <item>Curtains</item>
+        <item>Pillows</item>
+        <item>Towels</item>
+        <item>Bathrobes</item>
+        <item>Cooking Utensils</item>
+        <item>Cooking Accessories</item>
+        <item>Kitchen Storage</item>
+        <item>Cutlery</item>
+        <item>Mugs &amp; Glasses</item>
+        <item>Plates</item>
+        <item>Floor Lamps</item>
+        <item>Desk Lamps</item>
+        <item>Wall Lamps</item>
+        <item>Other</item>
+    </string-array>
+
+    <string-array name="spin3_2_3">
+        <item>Drills &amp; Screwdrivers</item>
+        <item>Combi Tools</item>
+        <item>Hand Tools</item>
+        <item>Other</item>
+    </string-array>
+
+    <string-array name="spin3_2_4">
+        <item>Beds</item>
+        <item>Wardrobes</item>
+        <item>Cabinets</item>
+        <item>Bedside Tables</item>
+        <item>Couches</item>
+        <item>Coffee Tables</item>
+        <item>Armchairs</item>
+        <item>Desk</item>
+        <item>Office Chair</item>
+        <item>Bookcase</item>
+        <item>Dinner Table</item>
+        <item>Dining Chairs</item>
+        <item>Other</item>
+    </string-array>
+
+    <string-array name="spin3_2_5">
+        <item>Garden Machinery</item>
+        <item>Garden Hand Tools</item>
+        <item>Garden Tables &amp; Chairs</item>
+        <item>Outdoor Closet</item>
+        <item>Gazebo Tents &amp; Kiosk</item>
+        <item>Garden Couch &amp; Benches</item>
+        <item>Hammock &amp; Swing</item>
+        <item>Garden Umbrella</item>
+        <item>Outdoor Lighting</item>
+        <item>Hedges</item>
+        <item>Construction Materials</item>
+        <item>Lawns</item>
+        <item>Soil &amp; Stones</item>
+        <item>Fountains</item>
+        <item>Garden Ornaments</item>
+        <item>Barbecue &amp; Rotisserie</item>
+        <item>Gardening Tools</item>
+        <item>Watering Tools</item>
+    </string-array>
+
+    <string-array name="spin3_2_6">
+        <item>Articles for Smokers</item>
+        <item>Rosary</item>
+        <item>Gift Items</item>
+        <item>Party Equipment</item>
+        <item>Christmas Decoration</item>
+        <item>Easter Decoration</item>
+        <item>Carnival Dresses</item>
+        <item>Traditional Costumes</item>
+        <item>Other</item>
+    </string-array>
+
+    <string-array name="spin3_2_7">
+        <item>Pens</item>
+        <item>Pencils</item>
+        <item>Marker</item>
+        <item>Notebooks</item>
+        <item>Stamps</item>
+        <item>Other Stationery</item>
+        <item>Office Accessories</item>
+        <item>Archives</item>
+        <item>Calendars</item>
+        <item>Print Paper</item>
+        <item>Billing Forms</item>
+    </string-array>
+
+    <string-array name="spin3_2_8">
+        <item>Pet Food</item>
+        <item>Leash &amp; Collars</item>
+        <item>Pet Transportation</item>
+        <item>Pet House</item>
+        <item>Pet Hygiene</item>
+        <item>Pet Toys</item>
+    </string-array>
+
+    <string-array name="spin3_2_9">
+        <item>Photo Frames</item>
+        <item>Photo Albums</item>
+        <item>Wall Clock</item>
+        <item>Desktop Clock</item>
+        <item>Wallpaper</item>
+        <item>Vases &amp; Platters</item>
+        <item>Candles</item>
+        <item>Lantern</item>
+        <item>Posters</item>
+        <item>Other Decorative</item>
+    </string-array>
+
+    <string-array name="spin3_2_10">
+        <item>Drinks</item>
+        <item>Wines</item>
+        <item>Beers</item>
+        <item>Juices</item>
+        <item>Refreshments</item>
+        <item>Table Water</item>
+        <item>Energy Drinks</item>
+        <item>Ice Tea</item>
+        <item>Accessories</item>
+    </string-array>
+
+    <string-array name="spin3_2_11">
+        <item></item>
+    </string-array>
+
+    <string-array name="spin3_3_1">
+        <item>Jacket for Men</item>
+        <item>Trousers for Men</item>
+        <item>Hoodie for Men</item>
+        <item>T-Shirt for Men</item>
+        <item>Shirts for Men</item>
+        <item>Underwear for Men</item>
+        <item>Socks for Men</item>
+        <item>Sleepwear for Men</item>
+        <item>Swimsuit for Men</item>
+    </string-array>
+
+    <string-array name="spin3_3_2">
+        <item>Sneakers for Men</item>
+        <item>Boots for Men</item>
+        <item>Oxfords for Men</item>
+        <item>Slippers for Men</item>
+        <item>Sports Shoes for Men</item>
+    </string-array>
+
+    <string-array name="spin3_3_3">
+        <item>Belts for Men</item>
+        <item>Scarf for Men</item>
+        <item>Ties</item>
+        <item>Bow Tie</item>
+        <item>Cufflinks</item>
+    </string-array>
+
+    <string-array name="spin3_3_4">
+        <item>Wristwatches</item>
+        <item>Spare Parts</item>
+    </string-array>
+
+    <string-array name="spin3_3_5">
+        <item>Male Bag</item>
+        <item>Backpack for Men</item>
+        <item>Wallet for Men</item>
+    </string-array>
+
+    <string-array name="spin3_3_6">
+        <item>Sunglasses for Men</item>
+        <item>Spare Parts</item>
+    </string-array>
+
+    <string-array name="spin3_4_1">
+        <item>Jacket for Women</item>
+        <item>Trousers for Women</item>
+        <item>Skirt</item>
+        <item>Dresses</item>
+        <item>Blouses</item>
+        <item>Pregnancy Clothes</item>
+        <item>Hoodie for Women</item>
+        <item>T-Shirt for Women</item>
+        <item>Shirts for Women</item>
+        <item>Underwear for Women</item>
+        <item>Leggings</item>
+        <item>Socks for Women</item>
+        <item>Sleepwear for Women</item>
+        <item>Swimsuit for Women</item>
+    </string-array>
+
+    <string-array name="spin3_4_2">
+        <item>High Heels</item>
+        <item>Sneakers for Women</item>
+        <item>Boots for Women</item>
+        <item>Oxfords for Women</item>
+        <item>Slippers for Women</item>
+        <item>Platforms</item>
+    </string-array>
+
+    <string-array name="spin3_4_3">
+        <item>Belts for Women</item>
+        <item>Scarfs for Women</item>
+    </string-array>
+
+    <string-array name="spin3_4_4">
+        <item>Wristwatches for Women</item>
+        <item>Spare Parts</item>
+    </string-array>
+
+    <string-array name="spin3_4_5">
+        <item>Purse</item>
+        <item>Backpack for Women</item>
+        <item>Wallet for Women</item>
+        <item>Shopping Bag</item>
+        <item>Cosmetic Bag</item>
+        <item>Beach Bag</item>
+    </string-array>
+
+    <string-array name="spin3_4_6">
+        <item>Necklace</item>
+        <item>Ring</item>
+        <item>Wedding Ring</item>
+        <item>Earring</item>
+        <item>Bracelet</item>
+    </string-array>
+
+    <string-array name="spin3_4_7">
+        <item>Sunglasses for Women</item>
+        <item>Spare Parts</item>
+    </string-array>
+
+    <string-array name="spin3_5_1">
+        <item>Extreme Sports Equipment</item>
+        <item>Martial Arts Equipments</item>
+        <item>Ski &amp; Snowboard Equipment</item>
+        <item>Football Equipment</item>
+        <item>Basketball Equipment</item>
+        <item>Tennis Equipment</item>
+        <item>Volley Equipment</item>
+        <item>Ping Pong Equipment</item>
+        <item>Baseball Equipment</item>
+        <item>Squash Equipment</item>
+        <item>Badminton Equipment</item>
+        <item>Handball Equipment</item>
+        <item>Golf Equipment</item>
+        <item>Boxing Equipment</item>
+        <item>Other Accessories</item>
+    </string-array>
+
+    <string-array name="spin3_5_2">
+        <item>Weightlifting Equipment</item>
+        <item>Treadmills</item>
+        <item>Benches &amp; Presses</item>
+        <item>Fitness Bike</item>
+        <item>Elliptical Machines</item>
+        <item>Steppers</item>
+        <item>Other Accessories</item>
+    </string-array>
+
+    <string-array name="spin3_5_3">
+        <item>Keyboards</item>
+        <item>Electric Guitar</item>
+        <item>Acoustic Guitar</item>
+        <item>Classic Guitar</item>
+        <item>Piano</item>
+        <item>Percussion</item>
+        <item>Violin</item>
+        <item>Cello</item>
+        <item>Bass</item>
+        <item>Drums</item>
+        <item>Clarinet</item>
+        <item>Flute</item>
+        <item>Trumpet</item>
+        <item>Accordion</item>
+        <item>Other Musical Instruments</item>
+        <item>Other Accessories &amp; Equipment</item>
+    </string-array>
+
+    <string-array name="spin3_5_4">
+        <item>Guns</item>
+        <item>Military Clothes</item>
+        <item>Bullets</item>
+        <item>Galoshes &amp; Boots</item>
+        <item>Binoculars</item>
+        <item>Military Backpacks</item>
+        <item>Diopters</item>
+        <item>Compasses</item>
+        <item>Other Accessories</item>
+    </string-array>
+
+    <string-array name="spin3_5_5">
+        <item>Bikes</item>
+        <item>Bike Spare Parts</item>
+        <item>Bike Accessories</item>
+        <item>Clothes for Cycling</item>
+        <item>Kids Bicycles</item>
+        <item>Bike Helmets</item>
+        <item>Bike Saddles</item>
+        <item>Bike Lockets</item>
+        <item>Other Accessories</item>
+    </string-array>
+
+    <string-array name="spin3_5_6">
+        <item>Modeling Equipment</item>
+        <item>Gambling Games Equipment</item>
+        <item>Movies</item>
+        <item>Music</item>
+        <item>Books</item>
+        <item>Darts Equipment</item>
+        <item>Billiard Equipment</item>
+        <item>Magic Tricks Equipment</item>
+        <item>Other Equipment</item>
+    </string-array>
+
+    <string-array name="spin3_5_7">
+        <item>Fishing Poles</item>
+        <item>Fishing Bait</item>
+        <item>Speargun</item>
+        <item>Accessories for Fishing</item>
+        <item>Diving Suits</item>
+        <item>Diving Masks</item>
+        <item>Snorkels</item>
+        <item>Diving Accessories</item>
+    </string-array>
+
+    <string-array name="spin3_5_8">
+        <item>Board Games</item>
+        <item>Lego</item>
+        <item>Puzzles</item>
+        <item>Card Games</item>
+    </string-array>
+
+    <string-array name="spin3_5_9">
+        <item>Camping Equipment</item>
+        <item>Sleeping Bags</item>
+        <item>Camping Furniture</item>
+        <item>Air Mattress</item>
+        <item>Camping Tents</item>
+        <item>Portable Refrigerator</item>
+        <item>Sleeping Pad</item>
+        <item>Chemical Toilet</item>
+        <item>Other Accessories</item>
+    </string-array>
+
+    <string-array name="spin3_5_10">
+        <item>Inflatable Pools</item>
+        <item>Swimming Goggles</item>
+        <item>Swimming Pool Equipment</item>
+        <item>Inflatable Boat</item>
+        <item>Inflatable Mattress</item>
+        <item>Pumps</item>
+        <item>Swimming Accessories</item>
+        <item>Beach Toys</item>
+        <item>Beach Umbrella</item>
+        <item>Other Equipment</item>
+    </string-array>
+
+    <string-array name="spin3_6_1">
+        <item>Car Consumables</item>
+        <item>Car Tires</item>
+        <item>Car Electronics</item>
+        <item>Car Cleaning</item>
+        <item>Car Interior</item>
+        <item>Car Exterior</item>
+        <item>Car Spare Parts</item>
+        <item>Other Car Accessories</item>
+    </string-array>
+
+    <string-array name="spin3_6_2">
+        <item>Biker Clothing</item>
+        <item>Motorcycle Accessories</item>
+        <item>Motorcycle Tires</item>
+        <item>Motorcycle Consumables</item>
+        <item>Motorcycle Bag Cases</item>
+        <item>Other Motorcycle Accessories</item>
+    </string-array>
+
+    <string-array name="spin3_6_3">
+        <item>Shipping Items</item>
+        <item>GPS, Plotters &amp; Sonars</item>
+        <item>Boat Engines</item>
+        <item>Boat Equipment</item>
+        <item>Boat Accessories</item>
+    </string-array>
+
+    <string-array name="spin3_7_1">
+        <item>Kids Shoes</item>
+        <item>Kids Jackets</item>
+        <item>Kids Blouses</item>
+        <item>Kids Dresses</item>
+        <item>Kids Underwear</item>
+        <item>Kids Swimsuits</item>
+        <item>Kids Sleepwear</item>
+        <item>Kids Leggings</item>
+        <item>Kids Socks</item>
+        <item>Kids Trousers</item>
+    </string-array>
+
+    <string-array name="spin3_7_2">
+        <item>Playmobil</item>
+        <item>Cars</item>
+        <item>Dolls</item>
+        <item>Role Playing Kits</item>
+        <item>Educational Toys</item>
+        <item>Action Figures</item>
+        <item>Nerf Guns</item>
+        <item>Kids Puzzles</item>
+        <item>Bicycles</item>
+        <item>Other Toys</item>
+    </string-array>
+
+    <string-array name="spin3_7_3">
+        <item>Strollers</item>
+        <item>Baby Car Seats</item>
+        <item>Baby Nursery</item>
+        <item>Baby Relax</item>
+        <item>Other Equipment</item>
+    </string-array>
+
+    <string-array name="spin3_7_4">
+        <item>Baby Food</item>
+        <item>Feeding Bottles</item>
+        <item>Sterilizers</item>
+        <item>Breastfeeding Equipment</item>
+        <item>Other Feeding Equipment</item>
+    </string-array>
+
+    <string-array name="spin3_7_5">
+        <item>Diapers</item>
+        <item>Baby Bathtubs</item>
+        <item>Baby Toilet</item>
+        <item>Other Baby Accessories</item>
+    </string-array>
+
+    <string-array name="spin3_7_6">
+        <item>School Bags</item>
+        <item>School Notebooks</item>
+        <item>Food Containers</item>
+    </string-array>
+
+    <string-array name="spin3_8_1">
+        <item>Nails</item>
+        <item>Make Up</item>
+        <item>Brushes</item>
+        <item>Mascara</item>
+        <item>Eye Shadows</item>
+        <item>Lipsticks</item>
+        <item>Concealer</item>
+        <item>Lip Gloss</item>
+        <item>Eye Liner</item>
+        <item>Makeup Accessories</item>
+    </string-array>
+
+    <string-array name="spin3_8_2">
+        <item>Perfume for Men</item>
+        <item>Perfume for Women</item>
+        <item>Perfume for Kids</item>
+        <item>Perfume Sets</item>
+    </string-array>
+
+    <string-array name="spin3_8_3">
+        <item>Oral Hygiene</item>
+        <item>Deodorant</item>
+        <item>Menstruation Products</item>
+        <item>Other Products</item>
+    </string-array>
+
+    <string-array name="spin3_8_4">
+        <item>Pharmaceutical Products</item>
+        <item>Medical Consumables</item>
+        <item>Sex &amp; Fertility</item>
+        <item>Cold</item>
+        <item>Muscle Pain</item>
+        <item>First Aid</item>
+        <item>Eye Drops</item>
+        <item>Other Medical Products</item>
+    </string-array>
+
+    <string-array name="spin3_8_5">
+        <item>Special Supplements</item>
+        <item>Vitamins</item>
+        <item>Herbal Supplements</item>
+        <item>Proteins</item>
+        <item>Probiotics</item>
+        <item>Other Supplements</item>
+    </string-array>
+    
+    <string-array name="spin4_2_1">
+        <item>Laptops</item>
+        <item>Laptop Bags</item>
+        <item>Laptop Batteries</item>
+        <item>Laptop Chargers</item>
+        <item>Cooling &amp; Docking Stations</item>
+        <item>Laptop Skins</item>
+        <item>Laptop Accessories</item>
+    </string-array>
+
+    <string-array name="spin4_2_2">
+        <item>Desktops</item>
+        <item>Mini PC</item>
+        <item>All in One PC</item>
+        <item>Barebones</item>
+        <item>Servers</item>
+        <item>Racks &amp; Accessories</item>
+        <item>Desktop Accessories</item>
+    </string-array>
+
+    <string-array name="spin4_2_4">
+        <item>SD Cards</item>
+        <item>USB Flash</item>
+        <item>Card Readers</item>
+    </string-array>
+
+    <string-array name="spin4_2_5">
+        <item>Printers</item>
+        <item>Scanners</item>
+        <item>Keyboard</item>
+        <item>Mouse</item>
+        <item>Speakers</item>
+        <item>Web Cameras</item>
+        <item>Headsets</item>
+        <item>PC Microphones</item>
+        <item>UPS</item>
+        <item>Other Peripheral Accessories</item>
+    </string-array>
+
+    <string-array name="spin4_2_6">
+        <item>Hard Disk Drives</item>
+        <item>GPU</item>
+        <item>CPU</item>
+        <item>RAM</item>
+        <item>Computer Cases</item>
+        <item>Modding &amp; Cooling</item>
+        <item>Power Supply</item>
+        <item>Optical Driver</item>
+    </string-array>
+
+    <string-array name="spin4_2_8">
+        <item>DSL Modems/Routers</item>
+        <item>Wifi Repeater</item>
+        <item>Powerline Connection</item>
+        <item>Network Adapters</item>
+        <item>Access Points</item>
+        <item>File Servers/NAS</item>
+        <item>Switches</item>
+        <item>Other Network Accessories</item>
+    </string-array>
 </resources>
