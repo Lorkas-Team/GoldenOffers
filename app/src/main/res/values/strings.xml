@@ -1,3 +1,42 @@
 <resources>
     <string name="app_name">GoldenOffers</string>
+
+    //Main Activity
+    <string name="users_port">Users Port</string>
+    <string name="business_port">Business Port</string>
+
+    //Business Register
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="rPassword">Repeat Password</string>
+    <string name="owner">Owner</string>
+    <string name="name">Name</string>
+    <string name="afm">Afm</string>
+    <string name="getLocation">Get Location</string>
+    <string name="register">Register</string>
+
+    //Business Login
+    <string name="login">LOG IN</string>
+    <string name="passReminder">Can\'t remember password? Click Here</string>
+    <string name="singup">Not Signed up yet? Register Here</string>
+
+    //Logged In
+    <string name="welcome">Welcome</string>
+    <string name="logout">LOG OUT</string>
+    <string name="btn_add_desire_text">ADD NEW DESIRE</string>
+
+    //User Register
+    <string name="username">Username</string>
+
+    //Add Desire (User)
+    <string name="btn_submit_text">ADD</string>
+    <string name="prod_name_input_hint">Products Name</string>
+    <string name="prod_descr_input_hint">Products Description</string>
+    <string name="price_low_txt">LOW :</string>
+    <string name="price_high_txt">HIGH :</string>
+    <string name="price_lbl_text">PRICE :</string>
+
+    //Error
+    <string name="error">Unexpected Error</string>
+    <string name="title_activity_desires_list">DesiresListActivity</string>
 </resources>

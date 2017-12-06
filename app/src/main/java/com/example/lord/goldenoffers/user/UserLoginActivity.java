@@ -1,8 +1,8 @@
-package com.example.lord.goldenoffers.business;
+package com.example.lord.goldenoffers.user;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -18,41 +18,44 @@ import com.android.volley.toolbox.StringRequest;
 import com.example.lord.goldenoffers.R;
 import com.example.lord.goldenoffers.app.AppConfig;
 import com.example.lord.goldenoffers.app.AppController;
-import com.example.lord.goldenoffers.helper.SQLiteHandler;
+import com.example.lord.goldenoffers.helper.SQLiteHandlerForUsers;
 import com.example.lord.goldenoffers.helper.SessionManager;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
-//20/11/2017
-public class BusinessLoginActivity extends Activity {
-    private static final String TAG = RegisterActivity.class.getSimpleName();
-    private Button LoginBtn;
-    private TextView RegisterTextView;
+
+public class UserLoginActivity extends AppCompatActivity {
+
+//test
+    private static final String TAG = UserRegisterActivity.class.getSimpleName();
+    private Button btnLogin;
+    private TextView tvRegister;
     private EditText inputEmail;
     private EditText inputPassword;
     private ProgressDialog pDialog;
     private SessionManager session;
-    private SQLiteHandler db;
+    private SQLiteHandlerForUsers db;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_business_login);
+        setContentView(R.layout.activity_user_login);
 
         inputEmail = (EditText) findViewById(R.id.email);
         inputPassword = (EditText) findViewById(R.id.password);
-        LoginBtn = (Button) findViewById(R.id.LoginBtn);
-        RegisterTextView = (TextView) findViewById(R.id.RegisterTextView);
+        btnLogin = (Button) findViewById(R.id.LoginBtn);
+        tvRegister = (TextView) findViewById(R.id.RegisterTextView);
 
         // Progress dialog
         pDialog = new ProgressDialog(this);
         pDialog.setCancelable(false);
 
         // SQLite database handler
-        db = new SQLiteHandler(getApplicationContext());
+        db = new SQLiteHandlerForUsers(getApplicationContext());
 
         // Session manager
         session = new SessionManager(getApplicationContext());
@@ -60,13 +63,13 @@ public class BusinessLoginActivity extends Activity {
         // Check if user is already logged in or not
         if (session.isLoggedIn()) {
             // User is already logged in. Take him to logged in activity
-            Intent intent = new Intent(BusinessLoginActivity.this, LoggedInActivity.class);
+            Intent intent = new Intent(UserLoginActivity.this, UserLoggedInActivity.class);
             startActivity(intent);
             finish();
         }
 
         // Login button Click Event
-        LoginBtn.setOnClickListener(new View.OnClickListener() {
+        btnLogin.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View view) {
                 String email = inputEmail.getText().toString().trim();
@@ -87,11 +90,11 @@ public class BusinessLoginActivity extends Activity {
         });
 
         // Link to Register Screen
-        RegisterTextView.setOnClickListener(new View.OnClickListener() {
+        tvRegister.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View view) {
                 Intent i = new Intent(getApplicationContext(),
-                        RegisterActivity.class);
+                        UserRegisterActivity.class);
                 startActivity(i);
                 finish();
             }
@@ -110,7 +113,7 @@ public class BusinessLoginActivity extends Activity {
         showDialog();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
-                AppConfig.URL_LOGIN, new Response.Listener<String>() {
+                AppConfig.USER_URL_LOGIN, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
@@ -120,32 +123,37 @@ public class BusinessLoginActivity extends Activity {
                 try {
                     JSONObject jObj = new JSONObject(response);
                     boolean error = jObj.getBoolean("error");
-
-                    // Check for error node in json
                     if (!error) {
-                        // user successfully logged in
-                        // Create login session
+
                         session.setLogin(true);
 
-                        // Now store the user in SQLite
-                        String uid = jObj.getString("uid");
-
-                        JSONObject user = jObj.getJSONObject("user");
-                        String name = user.getString("name");
+                        JSONObject user = jObj.getJSONObject("user_info");
+                        String username = user.getString("username");
                         String email = user.getString("email");
-                        String owner = user.getString("owner");
-                        String afm = user.getString("afm");
-                        String latitude = user.getString("latitude");
-                        String longitude = user.getString("longitude");
-                        String created_at = user
-                                .getString("created_at");
+                        db.addUser(username, email);
 
-                        // Inserting row in users table
-                        db.addUser(name, email, uid, owner, afm, latitude, longitude, created_at);
+                        JSONArray desires = jObj.getJSONArray("desires");
+                        for(int pos = 0; pos < desires.length(); pos++) {
+
+                            JSONObject desire = desires.getJSONObject(pos);
+
+                            String desireName = desire.getString("product_name");
+                            int desireID = desire.getInt("id");
+                            String strPriceLow = desire.getString("price_low");
+                            String strPriceHigh = desire.getString("price_high");
+
+                            db.addDesire(desireID, desireName, strPriceLow, strPriceHigh);
+
+                            Log.d("DESIRES: ", desires.toString());
+                            Log.d("PRODUCTS ID: ", String.valueOf(desireID));
+                            Log.d("PRODUCTS NAME: ", desireName);
+                            Log.d("PRODUCTS LOW: ", strPriceLow);
+                            Log.d("PRODUCTS HIGH: ", strPriceLow);
+                        }
 
                         // Launch Logged In activity
-                        Intent intent = new Intent(BusinessLoginActivity.this,
-                                LoggedInActivity.class);
+                        Intent intent = new Intent(UserLoginActivity.this,
+                                UserLoggedInActivity.class);
                         startActivity(intent);
                         finish();
                     } else {

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.lord.goldenoffers.user.AddDesireActivity"
+    tools:layout_editor_absoluteY="81dp">
+
+    <EditText
+        android:id="@+id/product_name_input"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
+        android:ems="10"
+        android:hint="@string/prod_name_input_hint"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="@+id/price_high_input"
+        app:layout_constraintStart_toStartOf="@+id/txtHeadline"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/price_low_input"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="13dp"
+        android:layout_marginTop="50dp"
+        android:ems="10"
+        android:hint="Low"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toStartOf="@+id/price_high_input"
+        app:layout_constraintStart_toEndOf="@+id/price_lbl"
+        app:layout_constraintTop_toBottomOf="@+id/product_name_input" />
+
+    <EditText
+        android:id="@+id/price_high_input"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="39dp"
+        android:ems="10"
+        android:hint="High"
+        android:inputType="textPersonName"
+        app:layout_constraintBaseline_toBaselineOf="@+id/price_low_input"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/price_low_input" />
+
+    <TextView
+        android:id="@+id/price_lbl"
+        android:layout_width="wrap_content"
+        android:layout_height="26dp"
+        android:layout_marginEnd="14dp"
+        android:layout_marginStart="99dp"
+        android:text="@string/price_lbl_text"
+        app:layout_constraintBottom_toBottomOf="@+id/price_low_input"
+        app:layout_constraintEnd_toStartOf="@+id/price_low_input"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/price_low_input" />
+
+    <TextView
+        android:id="@+id/txtHeadline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="What product are you looking for ?"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btn_submit"
+        android:layout_width="99dp"
+        android:layout_height="72dp"
+        android:layout_marginBottom="100dp"
+        android:layout_marginEnd="28dp"
+        android:layout_marginTop="97dp"
+        android:text="OK"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/price_high_input" />
+
+</android.support.constraint.ConstraintLayout>
