@@ -27,10 +27,8 @@
         <activity android:name=".user.UserLoginActivity" />
         <activity android:name=".user.UserLoggedInActivity" />
         <activity android:name=".user.UserRegisterActivity" />
-        <activity android:name=".user.UserLoggedInActivity" />
         <activity android:name=".user.AddDesireActivity" />
         <activity android:name=".user.DesireListActivity"></activity>
-        <activity android:name=".business.LoggedInActivity" />
         <activity android:name=".business.AddOfferActivity" />
         <activity android:name=".business.MyOffersActivity"
             android:windowSoftInputMode="adjustPan"></activity>

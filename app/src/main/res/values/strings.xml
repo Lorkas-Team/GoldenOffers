@@ -25,7 +25,8 @@
     <string name="logout">LOG OUT</string>
     <string name="addOffer">Add New Offer</string>
     <string name="viewOffers">View My Offers</string>
-    <string name="btn_add_desire_text">ADD NEW DESIRE</string
+    <string name="btn_add_desire_text">ADD NEW DESIRE</string>
+
     //User Register
     <string name="username">Username</string>
 
