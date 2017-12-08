@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import java.util.HashMap;
-
+//test
 public class SQLiteHandler extends SQLiteOpenHelper {
 
     private static final String TAG = SQLiteHandler.class.getSimpleName();
@@ -41,10 +41,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
     private static final String KEY_LONGITUDE = "longitude";
     private static final String KEY_CREATED_AT = "created_at";
 
-    // LOGIN TABLE COLUMNS NAMES FOR USERS
-    private static final String USER_KEY_ID = "id";
-    private static final String USER_KEY_NAME = "username";
-    private static final String USER_KEY_EMAIL = "email";
+
 
 
     // Offers Table Columns names
@@ -120,20 +117,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
         Log.d(TAG, "New user inserted into sqlite: " + id);
     }
 
-    public void addUser(String username, String email) {
-        SQLiteDatabase db = this.getWritableDatabase();
 
-        ContentValues values = new ContentValues();
-        values.put(USER_KEY_NAME, username); // Name
-        values.put(USER_KEY_EMAIL, email); // Email
-
-
-        // Inserting Row
-        long id = db.insert(TABLE_USERS, null, values);
-        db.close(); // Closing database connection
-
-        Log.d(TAG, "New user inserted into sqlite: " + id);
-    }
 
 
     public void addOffer(String business_id, String business_name, String product_name, String regDate, String expDate, String price, String description, String image) {

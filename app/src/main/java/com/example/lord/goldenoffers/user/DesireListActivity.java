@@ -23,10 +23,12 @@ public class DesireListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_desire_list);
 
-        // Session manager
+        SQLiteHandlerForUsers db = new SQLiteHandlerForUsers(getApplicationContext());
         session = new SessionManager(getApplicationContext());
 
-        final List<Desire> listDesires = UserLoggedInActivity.USER.getDesires();
+        /////////////////////////////////////
+
+        final List<Desire> listDesires = db.getDesires();
 
         String[] arrNames = new String[listDesires.size()];
         int pos = 0;
@@ -52,7 +54,7 @@ public class DesireListActivity extends AppCompatActivity {
             }
         });
     }
-
+//test2
     private Desire getDesireByName(List<Desire> listDesires, String name) {
         //TODO is right ?
         for(Desire desire : listDesires){

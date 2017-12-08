@@ -1,5 +1,4 @@
 package com.example.lord.goldenoffers.user;
-
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -127,29 +126,12 @@ public class UserLoginActivity extends AppCompatActivity {
 
                         session.setLogin(true);
 
-                        JSONObject user = jObj.getJSONObject("user_info");
+                        JSONObject user = jObj.getJSONObject("user");
                         String username = user.getString("username");
                         String email = user.getString("email");
                         db.addUser(username, email);
 
-                        JSONArray desires = jObj.getJSONArray("desires");
-                        for(int pos = 0; pos < desires.length(); pos++) {
 
-                            JSONObject desire = desires.getJSONObject(pos);
-
-                            String desireName = desire.getString("product_name");
-                            int desireID = desire.getInt("id");
-                            String strPriceLow = desire.getString("price_low");
-                            String strPriceHigh = desire.getString("price_high");
-
-                            db.addDesire(desireID, desireName, strPriceLow, strPriceHigh);
-
-                            Log.d("DESIRES: ", desires.toString());
-                            Log.d("PRODUCTS ID: ", String.valueOf(desireID));
-                            Log.d("PRODUCTS NAME: ", desireName);
-                            Log.d("PRODUCTS LOW: ", strPriceLow);
-                            Log.d("PRODUCTS HIGH: ", strPriceLow);
-                        }
 
                         // Launch Logged In activity
                         Intent intent = new Intent(UserLoginActivity.this,

@@ -20,7 +20,7 @@ public class UserLoggedInActivity extends AppCompatActivity {
     private SQLiteHandlerForUsers db;
     private SessionManager session;
 
-    protected static User USER;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,62 +40,47 @@ public class UserLoggedInActivity extends AppCompatActivity {
             logoutUser();
         }
 
-        HashMap<String, String> listUserInfo = db.getUserDetails();
-        List<Desire> listDesires = new ArrayList<>();
-        listDesires = db.getDesires();
-        USER = new User(
-                listUserInfo.get("username"),
-                listUserInfo.get("email"),
-                listDesires
-        );
+        // Fetching user details from sqlite
+        HashMap<String, String> user = db.getUserDetails();
 
-        tvName.setText(USER.getUsername());
-        tvEmail.setText(USER.getEmail());
+        String name = user.get("username");
+        String email = user.get("email");
 
+        // Displaying the user details on the screen
+        tvName.setText(name);
+        tvEmail.setText(email);
+
+        //Add New Offer on click event
+        btnAddDesire.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent gotoAddDesire = new Intent(UserLoggedInActivity.this,AddDesireActivity.class);
+                startActivity(gotoAddDesire);
+            }
+        });
+
+
+
+
+        // Logout button click event
         btnLogout.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
                 logoutUser();
             }
         });
 
-        btnAddDesire.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                launchAddDesireActivity();
-            }
-        });
-
-        btnDesiresList.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                launchDesiresListActivity();
-            }
-        });
     }
 
     private void logoutUser() {
         session.setLogin(false);
         db.deleteUsers();
         db.deleteDesires();
-        launchLoginInActivity();
-    }
-
-    private void launchAddDesireActivity() {
-        Intent intent = new Intent(UserLoggedInActivity.this, AddDesireActivity.class);
-        startActivity(intent);
-        finish();
-    }
-
-    private void launchDesiresListActivity() {
-        Intent intent = new Intent(UserLoggedInActivity.this, DesireListActivity.class);
-        startActivity(intent);
-        finish();
-    }
-
-    private void launchLoginInActivity() {
         Intent intent = new Intent(UserLoggedInActivity.this, UserLoginActivity.class);
         startActivity(intent);
         finish();
     }
+
+
 }
