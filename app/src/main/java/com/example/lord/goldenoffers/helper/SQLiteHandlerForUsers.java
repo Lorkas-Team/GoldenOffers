@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.example.lord.goldenoffers.user.Desire;
 
@@ -82,6 +81,26 @@ public class SQLiteHandlerForUsers extends SQLiteOpenHelper {
         Log.d(TAG, "New user inserted into sqlite: " + id);
     }
 
+    public String getUsersEmail() {
+
+        String email;
+
+        String selectQuery = "SELECT " + USER_KEY_EMAIL + " FROM " + TABLE_USERS;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        cursor.moveToFirst();
+        if (cursor != null && cursor.getCount() > 0) {
+            email = cursor.getString(0);
+        } else {
+            email = "";
+        }
+        cursor.close();
+        db.close();
+        Log.d(TAG, "Getting users email from Sqlite: " + email);
+        return email;
+    }
+
     public HashMap<String, String> getUserDetails() {
         HashMap<String, String> user = new HashMap<String, String>();
         String selectQuery = "SELECT  * FROM " + TABLE_USERS;
@@ -95,20 +114,16 @@ public class SQLiteHandlerForUsers extends SQLiteOpenHelper {
         // Move to first row
         cursor.moveToFirst();
 
-        if (cursor != null && cursor.getCount() > 0) {
+        if (cursor.getCount() > 0) {
                 user.put("username", cursor.getString(usernameCol));
                 user.put("email", cursor.getString(emailCol));
-        } else {
-            //nothing to show
         }
         cursor.close();
         db.close();
-        // return user
         Log.d(TAG, "Fetching user from Sqlite: " + user.toString());
 
         return user;
     }
-
     public void deleteUsers() {
         SQLiteDatabase db = this.getWritableDatabase();
         // Delete All Rows
@@ -131,6 +146,12 @@ public class SQLiteHandlerForUsers extends SQLiteOpenHelper {
         db.close(); // Closing database connection
     }
 
+
+
+
+
+
+
     public List<Desire> getDesires() {
 
         List<Desire> listDesires = new ArrayList<>();
@@ -144,7 +165,7 @@ public class SQLiteHandlerForUsers extends SQLiteOpenHelper {
         int priceHighCol = cursor.getColumnIndex(DESIRE_KEY_PRICE_HIGH);
 
         cursor.moveToFirst();
-        if (cursor != null && cursor.getCount() > 0) {
+        if (cursor.getCount() > 0) {
             do {
                 listDesires.add(
                         new Desire(
@@ -155,8 +176,6 @@ public class SQLiteHandlerForUsers extends SQLiteOpenHelper {
                         )
                 );
             } while (cursor.moveToNext());
-        } else {
-            //TODO nothing to show
         }
         cursor.close();
         db.close();

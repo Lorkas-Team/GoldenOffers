@@ -1,6 +1,7 @@
 package com.example.lord.goldenoffers.user;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -60,7 +61,7 @@ public class AddDesireActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                String usersEmail = UserLoggedInActivity.USER.getEmail();
+                String usersEmail = db.getUsersEmail();
                 String strProdName = prodName.getText().toString().trim();
                 String strPriceLow = priceLow.getText().toString().trim();
                 String strPriceHigh = priceHigh.getText().toString().trim();
@@ -103,7 +104,7 @@ public class AddDesireActivity extends AppCompatActivity {
                         db.addDesire(prodID, prodName, priceLow, priceHigh);
                         String msg = "Desire Successfully Added! prods id->"+prodID;
                         Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
-                        //TODO launch home activity
+                        launchHomeActivity();
                     } else {
                         String errorMsg = jObj.getString("error_msg");
                         Toast.makeText(getApplicationContext(),
@@ -147,6 +148,12 @@ public class AddDesireActivity extends AppCompatActivity {
         } else {
             return false;
         }
+    }
+
+    private void launchHomeActivity() {
+        Intent intent = new Intent(AddDesireActivity.this, UserLoggedInActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     private void showDialog() {
