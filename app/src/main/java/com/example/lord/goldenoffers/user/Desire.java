@@ -55,4 +55,9 @@ public class Desire {
     public void setPriceHigh(float priceHigh) {
         this.priceHigh = priceHigh;
     }
+
+    public String toString() {
+
+        return id + " : " + name + " (" + priceLow + " Euros / " + priceHigh + "Euros)";
+    }
 }

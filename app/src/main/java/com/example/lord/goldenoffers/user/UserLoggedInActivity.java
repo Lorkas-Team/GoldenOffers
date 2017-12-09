@@ -1,24 +1,40 @@
 package com.example.lord.goldenoffers.user;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.example.lord.goldenoffers.R;
+import com.example.lord.goldenoffers.app.AppConfig;
+import com.example.lord.goldenoffers.app.AppController;
 import com.example.lord.goldenoffers.helper.SQLiteHandlerForUsers;
 import com.example.lord.goldenoffers.helper.SessionManager;
 
-import java.util.ArrayList;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.HashMap;
-import java.util.List;
+import java.util.Map;
 
 public class UserLoggedInActivity extends AppCompatActivity {
 
     private SQLiteHandlerForUsers db;
     private SessionManager session;
+    private static final String TAG = UserLoggedInActivity.class.getSimpleName();
+    private ProgressDialog pDialog;
+
+    protected static User USER;
 
 
 
@@ -27,42 +43,53 @@ public class UserLoggedInActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_logged_in);
 
-        TextView tvName = (TextView) findViewById(R.id.NameTv);
-        TextView tvEmail = (TextView) findViewById(R.id.EmailTv);
-        Button btnLogout = (Button) findViewById(R.id.LogoutBtn);
+        TextView tvName = (TextView) findViewById(R.id.tv_name);
+        TextView tvEmail = (TextView) findViewById(R.id.tv_email);
+        Button btnLogout = (Button) findViewById(R.id.btn_logout);
         Button btnAddDesire = (Button) findViewById(R.id.btn_add_desire);
         Button btnDesiresList = (Button) findViewById(R.id.btn_desires_list);
 
-        db = new SQLiteHandlerForUsers(getApplicationContext());
-        // session manager
         session = new SessionManager(getApplicationContext());
         if (!session.isLoggedIn()) {
             logoutUser();
         }
 
-        // Fetching user details from sqlite
-        HashMap<String, String> user = db.getUserDetails();
+        db = new SQLiteHandlerForUsers(getApplicationContext());
+        USER = db.getUserDetails();
 
-        String name = user.get("username");
-        String email = user.get("email");
+        String name = USER.getUsername();
+        String email = USER.getEmail();
 
-        // Displaying the user details on the screen
         tvName.setText(name);
         tvEmail.setText(email);
 
-        //Add New Offer on click event
+        pDialog = new ProgressDialog(this);
+        pDialog.setCancelable(false);
+
+        setDesiresToSQLite(String.valueOf(USER.getId()));
+
         btnAddDesire.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent gotoAddDesire = new Intent(UserLoggedInActivity.this,AddDesireActivity.class);
-                startActivity(gotoAddDesire);
+                Intent intent = new Intent(
+                        UserLoggedInActivity.this,
+                        AddDesireActivity.class
+                );
+                startActivity(intent);
             }
         });
 
+        btnDesiresList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(
+                        UserLoggedInActivity.this,
+                        DesireListActivity.class
+                );
+                startActivity(intent);
+            }
+        });
 
-
-
-        // Logout button click event
         btnLogout.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -77,10 +104,85 @@ public class UserLoggedInActivity extends AppCompatActivity {
         session.setLogin(false);
         db.deleteUsers();
         db.deleteDesires();
-        Intent intent = new Intent(UserLoggedInActivity.this, UserLoginActivity.class);
+        //TODO ? delete session
+        Intent intent = new Intent(
+                UserLoggedInActivity.this,
+                UserLoginActivity.class
+        );
         startActivity(intent);
         finish();
     }
 
+    private void setDesiresToSQLite(final String strUsersID) {
 
+        String tag_string_req = "req_get_desires";
+
+        pDialog.setMessage("Getting Users Desires ..");
+        showDialog();
+
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                AppConfig.USER_URL_GET_DESIRES, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                Log.d(TAG, "Getting Desires Response: " + response.toString());
+                hideDialog();
+                try {
+                    JSONObject jObj = new JSONObject(response);
+                    boolean error = jObj.getBoolean("error");
+                    if (!error) {
+
+                        JSONArray jArrDesires = jObj.getJSONArray("desires");
+                        for(int pos = 0; pos < jArrDesires.length(); pos++){
+
+                            JSONArray desire = jArrDesires.getJSONArray(pos);
+
+                            String strPriceLow = desire.getString(1);
+                            String strPriceHigh = desire.getString(2);
+                            int desireID = desire.getInt(3);
+                            String desireName = desire.getString(4);
+
+                            db.addDesire(desireID, desireName, strPriceLow, strPriceHigh);
+
+                        }
+                        makeToast("Getting Desires : Done");
+                    } else {
+                        makeToast(jObj.getString("error_msg"));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "Getting Users Desires Error: " + error.getMessage());
+                makeToast(error.getMessage());
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("users_id", strUsersID);
+                return params;
+            }
+        };
+        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+    }
+
+    private void makeToast(String message) {
+        Toast.makeText(
+                getApplicationContext(),
+                message, Toast.LENGTH_LONG
+        ).show();
+    }
+
+    private void showDialog() {
+        if (!pDialog.isShowing()) pDialog.show();
+    }
+
+    private void hideDialog() {
+        if (pDialog.isShowing()) pDialog.dismiss();
+    }
 }

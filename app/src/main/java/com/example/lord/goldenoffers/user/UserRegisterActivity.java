@@ -31,15 +31,130 @@ import java.util.regex.Pattern;
 public class UserRegisterActivity extends AppCompatActivity {
 
     private static final String TAG = UserRegisterActivity.class.getSimpleName();
-    private Button RegisterBtn;
-    private EditText inputUserName;
+
+    private Button btnRegister;
+    private EditText inputUsername;
     private EditText inputEmail;
     private EditText inputPassword;
-    private EditText inputRepeatPass;
+    private EditText inputPasswordRepeat;
+
     private ProgressDialog pDialog;
     private SessionManager session;
     private SQLiteHandlerForUsers db;
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_user_register);
+
+        inputUsername = (EditText) findViewById(R.id.username_input);
+        inputEmail = (EditText) findViewById(R.id.email_input);
+        inputPassword = (EditText) findViewById(R.id.password_input);
+        inputPasswordRepeat = (EditText) findViewById(R.id.password_repeat_input);
+        btnRegister = (Button) findViewById(R.id.btn_register);
+
+        pDialog = new ProgressDialog(this);
+        pDialog.setCancelable(false);
+
+        db = new SQLiteHandlerForUsers(getApplicationContext());
+        session = new SessionManager(getApplicationContext());
+        if (session.isLoggedIn()) {
+            Intent intent = new Intent(
+                    UserRegisterActivity.this,
+                    UserLoggedInActivity.class
+            );
+            startActivity(intent);
+            finish();
+        }
+
+        btnRegister.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+
+                String username = inputUsername.getText().toString().trim();
+                String email = inputEmail.getText().toString().trim();
+                String strPassword = inputPassword.getText().toString().trim();
+                String strPasswordRepeat = inputPasswordRepeat.getText().toString().trim();
+
+                if (!username.isEmpty() && !email.isEmpty() &&
+                        !strPassword.isEmpty() && !strPasswordRepeat.isEmpty()   ) {
+
+                    if(isEmailValid(email)==true) {
+                        if (!strPassword.equals(strPasswordRepeat)) {
+                            makeToast("Password doesn't match!");
+                        } else {
+                            registerUser(username, email, strPassword);
+                        }
+                    }else{
+                        makeToast("This is not a valid Email address!");
+                    }
+                } else {
+                    makeToast("You must fill in all fields!");
+                }
+            }
+        });
+    }
+
+    private void registerUser(final String username, final String email,final String password) {
+
+        String tag_string_req = "req_register";
+
+        pDialog.setMessage("Registering ...");
+        showDialog();
+
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                AppConfig.USER_URL_REGISTER, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                Log.d(TAG, "Register Response: " + response.toString());
+                hideDialog();
+
+                try {
+                    JSONObject jObj = new JSONObject(response);
+                    boolean error = jObj.getBoolean("error");
+                    if (!error) {
+
+                        JSONObject user = jObj.getJSONObject("user");
+                        int id = user.getInt("id");
+                        String username = user.getString("username");
+                        String email = user.getString("email");
+                        db.addUser(id, username, email);
+
+                        makeToast("User successfully registered.\nTry to login now");
+                        Intent intent = new Intent(
+                                UserRegisterActivity.this,
+                                UserLoginActivity.class
+                        );
+                        startActivity(intent);
+                        finish();
+                    } else {
+                        makeToast(jObj.getString("error_msg"));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "Registration Error: " + error.getMessage());
+                makeToast(error.getMessage());
+                hideDialog();
+            }
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("username", username);
+                params.put("email", email);
+                params.put("password", password);
+                return params;
+            }
+        };
+        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+    }
 
     public final static boolean isEmailValid(String email)
     {
@@ -56,182 +171,25 @@ public class UserRegisterActivity extends AppCompatActivity {
         Pattern pattern = Pattern.compile(regExpn,Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(inputStr);
 
-        if(matcher.matches())
-            return true;
-        else
-            return false;
+        if(matcher.matches()) return true;
+        else return false;
     }
 
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_register);
-
-        inputUserName = (EditText) findViewById(R.id.etUserName);
-        inputEmail = (EditText) findViewById(R.id.etEmail);
-        inputPassword = (EditText) findViewById(R.id.etPassword);
-        inputRepeatPass = (EditText) findViewById(R.id.etRepeatPass);
-        RegisterBtn = (Button) findViewById(R.id.RegisterBtn);
-
-        // Progress dialog
-        pDialog = new ProgressDialog(this);
-        pDialog.setCancelable(false);
-
-        // Session manager
-        session = new SessionManager(getApplicationContext());
-
-        // SQLite database handler
-        db = new SQLiteHandlerForUsers(getApplicationContext());
-
-        // Check if user is already logged in or not
-        if (session.isLoggedIn()) {
-            // User is already logged in. Take him to logged in activity
-            Intent intent = new Intent(UserRegisterActivity.this,
-                    UserLoggedInActivity.class);
-            startActivity(intent);
-            finish();
-        }
-
-
-        // Register Button Click event
-        RegisterBtn.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                String username = inputUserName.getText().toString().trim();
-                String email = inputEmail.getText().toString().trim();
-                String password = inputPassword.getText().toString().trim();
-                String repeatpass = inputRepeatPass.getText().toString().trim();
-
-
-
-                if (!username.isEmpty() && !email.isEmpty() && !password.isEmpty() && !repeatpass.isEmpty()   ) {
-                    if(isEmailValid(email)==true) {
-
-                        if (!password.equals(repeatpass)) {
-                            Toast.makeText(getApplicationContext(),
-                                    "Password doesn't match!", Toast.LENGTH_LONG)
-                                    .show();
-                        } else {
-
-                                registerUser(username, email, password);
-
-
-                        }
-
-                    }else{
-                        Toast.makeText(getApplicationContext(),
-                                "This is not a valid Email address!", Toast.LENGTH_LONG)
-                                .show();
-                    }
-
-
-                } else {
-                    Toast.makeText(getApplicationContext(),
-                            "You must fill in all fields!", Toast.LENGTH_LONG)
-                            .show();
-                }
-            }
-        });
-
-    }
-
-
-    /**
-     * Function to store user in MySQL database will post params(tag, name,
-     * email, password) to register url
-     * */
-    private void registerUser(final String username, final String email,final String password) {
-        // Tag used to cancel the request
-        String tag_string_req = "req_register";
-
-        pDialog.setMessage("Registering ...");
-        showDialog();
-
-        StringRequest strReq = new StringRequest(Request.Method.POST, AppConfig.USER_URL_REGISTER, new Response.Listener<String>() {
-
-            @Override
-            public void onResponse(String response) {
-                Log.d(TAG, "Register Response: " + response.toString());
-                hideDialog();
-
-                try {
-                    JSONObject jObj = new JSONObject(response);
-                    boolean error = jObj.getBoolean("error");
-                    if (!error) {
-                        // User successfully stored in MySQL
-                        // Now store the user in sqlite
-
-
-                        JSONObject user = jObj.getJSONObject("user");
-                        String username = user.getString("username");
-                        String email = user.getString("email");
-
-
-                        // Inserting row in users table
-                        db.addUser(username, email);
-
-                        Toast.makeText(getApplicationContext(), "User successfully registered. Try login now!", Toast.LENGTH_LONG).show();
-
-                        // Launch login activity
-                        Intent intent = new Intent(
-                                UserRegisterActivity.this,
-                                UserLoginActivity.class);
-                        startActivity(intent);
-                        finish();
-                    } else {
-
-                        // Error occurred in registration. Get the error
-                        // message
-                        String errorMsg = jObj.getString("error_msg");
-                        //errorMsg=errorMsg+"paok";
-                        Toast.makeText(getApplicationContext(),
-                                errorMsg, Toast.LENGTH_LONG).show();
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-            }
-        }, new Response.ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e(TAG, "Registration Error: " + error.getMessage());
-                Toast.makeText(getApplicationContext(),
-                        error.getMessage(), Toast.LENGTH_LONG).show();
-                hideDialog();
-            }
-        }) {
-
-            @Override
-            protected Map<String, String> getParams() {
-                // Posting params to register url
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("username", username);
-                params.put("email", email);
-                params.put("password", password);
-
-
-                return params;
-            }
-
-        };
-
-        // Adding request to request queue
-        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+    private void makeToast(String message) {
+        Toast.makeText(
+                getApplicationContext(),
+                message,
+                Toast.LENGTH_LONG
+        ).show();
     }
 
     private void showDialog() {
-        if (!pDialog.isShowing())
-            pDialog.show();
+        if (!pDialog.isShowing()) pDialog.show();
     }
 
     private void hideDialog() {
-        if (pDialog.isShowing())
-            pDialog.dismiss();
+        if (pDialog.isShowing()) pDialog.dismiss();
     }
-
-
 }
 
 
