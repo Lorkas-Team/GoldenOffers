@@ -18,6 +18,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.example.lord.goldenoffers.R;
 import com.example.lord.goldenoffers.app.AppConfig;
 import com.example.lord.goldenoffers.app.AppController;
+import com.example.lord.goldenoffers.helper.InputChecker;
 import com.example.lord.goldenoffers.helper.SQLiteHandler;
 import com.example.lord.goldenoffers.helper.SessionManager;
 
@@ -25,8 +26,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-//20/11/2017
+
 public class BusinessLoginActivity extends Activity {
     private static final String TAG = RegisterActivity.class.getSimpleName();
     private Button LoginBtn;
@@ -42,10 +44,10 @@ public class BusinessLoginActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_business_login);
 
-        inputEmail = (EditText) findViewById(R.id.email);
-        inputPassword = (EditText) findViewById(R.id.password);
-        LoginBtn = (Button) findViewById(R.id.LoginBtn);
-        RegisterTextView = (TextView) findViewById(R.id.RegisterTextView);
+        inputEmail = findViewById(R.id.email);
+        inputPassword = findViewById(R.id.password);
+        LoginBtn = findViewById(R.id.LoginBtn);
+        RegisterTextView = findViewById(R.id.RegisterTextView);
 
         // Progress dialog
         pDialog = new ProgressDialog(this);
@@ -73,14 +75,8 @@ public class BusinessLoginActivity extends Activity {
                 String password = inputPassword.getText().toString().trim();
 
                 // Check for empty data in the form
-                if (!email.isEmpty() && !password.isEmpty()) {
-                    // login user
+                if(isInputValid(email, password)) {
                     checkLogin(email, password);
-                } else {
-                    // Prompt user to enter credentials
-                    Toast.makeText(getApplicationContext(),
-                            "Please enter the credentials!", Toast.LENGTH_LONG)
-                            .show();
                 }
             }
 
@@ -99,6 +95,37 @@ public class BusinessLoginActivity extends Activity {
 
     }
 
+    private boolean isInputValid(String email, String strPassword) {
+        List<Object> response = InputChecker.isLoginInputValid(email, strPassword);
+        boolean error = (boolean) response.get(0);
+        if(error) {
+            String msgError = (String) response.get(1);
+            String unvalidInput = (String) response.get(2);
+            clearUnvalidInput(unvalidInput);
+            Toast.makeText(
+                    getApplicationContext(),
+                    msgError, Toast.LENGTH_LONG
+            ).show();
+            return false;
+        } else return true;
+    }
+
+    private void clearUnvalidInput(String unvalidInput) {
+
+        if (unvalidInput.equalsIgnoreCase("email")) {
+            inputEmail.setText("");
+            inputEmail.requestFocus();
+        } else if(unvalidInput.equalsIgnoreCase("password")){
+            inputPassword.setText("");
+            inputPassword.requestFocus();
+        } else {
+            inputEmail.setText("");
+            inputEmail.requestFocus();
+            inputPassword.setText("");
+            inputPassword.requestFocus();
+        }
+    }
+
     /**
      * function to verify login details in mysql db
      * */
@@ -114,7 +141,7 @@ public class BusinessLoginActivity extends Activity {
 
             @Override
             public void onResponse(String response) {
-                Log.d(TAG, "Login Response: " + response.toString());
+                Log.d(TAG, "Login Response: " + response);
                 hideDialog();
 
                 try {
@@ -151,8 +178,10 @@ public class BusinessLoginActivity extends Activity {
                     } else {
                         // Error in login. Get the error message
                         String errorMsg = jObj.getString("error_msg");
+                        if(errorMsg.contains(email)) clearUnvalidInput("email");
                         Toast.makeText(getApplicationContext(),
                                 errorMsg, Toast.LENGTH_LONG).show();
+                        clearUnvalidInput("both");
                     }
                 } catch (JSONException e) {
                     // JSON error
@@ -175,7 +204,7 @@ public class BusinessLoginActivity extends Activity {
             @Override
             protected Map<String, String> getParams() {
                 // Posting parameters to login url
-                Map<String, String> params = new HashMap<String, String>();
+                Map<String, String> params = new HashMap<>();
                 params.put("email", email);
                 params.put("password", password);
 

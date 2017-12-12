@@ -1,35 +1,32 @@
 package com.example.lord.goldenoffers.user;
 
-import java.util.HashMap;
-import java.util.List;
-
 public class Desire {
 
-    private int id;
+    private int dbID; //id from servers database, NOT from sqlite
     private String name;
     private float priceLow;
     private float priceHigh;
 
     public Desire() {
-        id = -1;
+        dbID = -1;
         name = "";
         priceLow = -1;
         priceHigh = -1;
     }
 
     public Desire(int id, String name, float priceLow, float priceHigh) {
-        this.id = id;
+        this.dbID = id;
         this.name = name;
         this.priceLow = priceLow;
         this.priceHigh = priceHigh;
     }
 
-    public int getId() {
-        return id;
+    public int getDbID() {
+        return dbID;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setDbID(int id) {
+        this.dbID = id;
     }
 
     public String getName() {
@@ -58,6 +55,6 @@ public class Desire {
 
     public String toString() {
 
-        return id + " : " + name + " (" + priceLow + " Euros / " + priceHigh + "Euros)";
+        return dbID + " : " + name + " (" + priceLow + " Euros / " + priceHigh + "Euros)";
     }
 }

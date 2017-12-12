@@ -29,25 +29,23 @@ import java.util.Map;
 
 public class UserLoggedInActivity extends AppCompatActivity {
 
-    private SQLiteHandlerForUsers db;
-    private SessionManager session;
     private static final String TAG = UserLoggedInActivity.class.getSimpleName();
-    private ProgressDialog pDialog;
-
     protected static User USER;
 
-
+    private SQLiteHandlerForUsers db;
+    private SessionManager session;
+    private ProgressDialog pDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_logged_in);
 
-        TextView tvName = (TextView) findViewById(R.id.tv_name);
-        TextView tvEmail = (TextView) findViewById(R.id.tv_email);
-        Button btnLogout = (Button) findViewById(R.id.btn_logout);
-        Button btnAddDesire = (Button) findViewById(R.id.btn_add_desire);
-        Button btnDesiresList = (Button) findViewById(R.id.btn_desires_list);
+        TextView tvName = findViewById(R.id.tv_name);
+        TextView tvEmail = findViewById(R.id.tv_email);
+        Button btnLogout = findViewById(R.id.btn_logout);
+        Button btnAddDesire = findViewById(R.id.btn_add_desire);
+        Button btnDesiresList = findViewById(R.id.btn_desires_list);
 
         session = new SessionManager(getApplicationContext());
         if (!session.isLoggedIn()) {
@@ -66,7 +64,7 @@ public class UserLoggedInActivity extends AppCompatActivity {
         pDialog = new ProgressDialog(this);
         pDialog.setCancelable(false);
 
-        setDesiresToSQLite(String.valueOf(USER.getId()));
+        setDesiresToSQLite(String.valueOf(USER.getDbID()));
 
         btnAddDesire.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,20 +89,17 @@ public class UserLoggedInActivity extends AppCompatActivity {
         });
 
         btnLogout.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 logoutUser();
             }
         });
-
     }
 
     private void logoutUser() {
         session.setLogin(false);
         db.deleteUsers();
         db.deleteDesires();
-        //TODO ? delete session
         Intent intent = new Intent(
                 UserLoggedInActivity.this,
                 UserLoginActivity.class
@@ -113,20 +108,16 @@ public class UserLoggedInActivity extends AppCompatActivity {
         finish();
     }
 
-    private void setDesiresToSQLite(final String strUsersID) {
+    private void setDesiresToSQLite(final String strUsersDbID) {
 
         String tag_string_req = "req_get_desires";
-
-        pDialog.setMessage("Getting Users Desires ..");
-        showDialog();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
                 AppConfig.USER_URL_GET_DESIRES, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
-                Log.d(TAG, "Getting Desires Response: " + response.toString());
-                hideDialog();
+                Log.d(TAG, "Getting Desires Response: " + response);
                 try {
                     JSONObject jObj = new JSONObject(response);
                     boolean error = jObj.getBoolean("error");
@@ -139,15 +130,11 @@ public class UserLoggedInActivity extends AppCompatActivity {
 
                             String strPriceLow = desire.getString(1);
                             String strPriceHigh = desire.getString(2);
-                            int desireID = desire.getInt(3);
+                            int desireDbID = desire.getInt(3);
                             String desireName = desire.getString(4);
 
-                            db.addDesire(desireID, desireName, strPriceLow, strPriceHigh);
-
+                            db.addDesire(desireDbID, desireName, strPriceLow, strPriceHigh);
                         }
-                        makeToast("Getting Desires : Done");
-                    } else {
-                        makeToast(jObj.getString("error_msg"));
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -157,14 +144,14 @@ public class UserLoggedInActivity extends AppCompatActivity {
 
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e(TAG, "Getting Users Desires Error: " + error.getMessage());
+                Log.e(TAG, "Getting Desires Error: " + error.getMessage());
                 makeToast(error.getMessage());
             }
         }) {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
-                params.put("users_id", strUsersID);
+                params.put("users_id", strUsersDbID);
                 return params;
             }
         };

@@ -17,6 +17,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.example.lord.goldenoffers.R;
 import com.example.lord.goldenoffers.app.AppConfig;
 import com.example.lord.goldenoffers.app.AppController;
+import com.example.lord.goldenoffers.helper.InputChecker;
 import com.example.lord.goldenoffers.helper.SQLiteHandlerForUsers;
 import com.example.lord.goldenoffers.helper.SessionManager;
 
@@ -24,6 +25,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class AddDesireActivity extends AppCompatActivity {
@@ -37,16 +39,13 @@ public class AddDesireActivity extends AppCompatActivity {
     private SQLiteHandlerForUsers db;
     private SessionManager session;
 
-    //TODO low < high
-    //TODO regex checks
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_desire);
-        prodNameInput = (EditText) findViewById(R.id.product_name_input);
-        priceLowInput = (EditText) findViewById(R.id.price_low_input);
-        priceHighInput = (EditText) findViewById(R.id.price_high_input);
+        prodNameInput = findViewById(R.id.product_name_input);
+        priceLowInput = findViewById(R.id.price_low_input);
+        priceHighInput = findViewById(R.id.price_high_input);
 
         pDialog = new ProgressDialog(this);
         pDialog.setCancelable(false);
@@ -54,21 +53,19 @@ public class AddDesireActivity extends AppCompatActivity {
 
         session = new SessionManager(getApplicationContext());
 
-        btnSubmit = (Button) findViewById(R.id.btn_submit);
+        btnSubmit = findViewById(R.id.btn_submit);
         btnSubmit.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
 
-                int usersID = UserLoggedInActivity.USER.getId();
-                String strProdName = prodNameInput.getText().toString().trim();
+                int usersDbID = UserLoggedInActivity.USER.getDbID();
+                String nameDesire = prodNameInput.getText().toString().trim();
                 String strPriceLow = priceLowInput.getText().toString().trim();
                 String strPriceHigh = priceHighInput.getText().toString().trim();
 
-                if(allParamsSetted(usersID, strProdName, strPriceLow, strPriceHigh)) {
-                    addNewDesire(String.valueOf(usersID), strProdName, strPriceLow, strPriceHigh);
-                } else {
-                    makeToast("Some fields are empty.");
+                if(usersDbID >= 0 && isInputValid(nameDesire, strPriceLow, strPriceHigh)) {
+                    addNewDesire(String.valueOf(usersDbID), nameDesire, strPriceLow, strPriceHigh);
                 }
             }
         });
@@ -83,12 +80,11 @@ public class AddDesireActivity extends AppCompatActivity {
         finish();
     }
 
-    private void addNewDesire(final String strUsersID, final String prodName,
-                              final String strPriceLow, final String strPriceHigh) {
+    private void addNewDesire(final String strUsersDbID, final String prodName, final String strPriceLow, final String strPriceHigh) {
 
         String tag_string_req = "req_add_desire";
 
-        pDialog.setMessage("Adding New Desire");
+        pDialog.setMessage("Adding");
         showDialog();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
@@ -96,17 +92,17 @@ public class AddDesireActivity extends AppCompatActivity {
 
             @Override
             public void onResponse(String response) {
-                Log.d(TAG, "Adding Desire Response: " + response.toString());
+                Log.d(TAG, "Adding Desire Response: " + response);
                 hideDialog();
                 try {
                     JSONObject jObj = new JSONObject(response);
                     boolean error = jObj.getBoolean("error");
                     if (!error) {
                         JSONObject prod_id = jObj.getJSONObject("prod_id");
-                        int prodID = prod_id.getInt("id");
-                        db.addDesire(prodID, prodName, strPriceLow, strPriceHigh);
+                        int desireDbID = prod_id.getInt("id");
+                        db.addDesire(desireDbID, prodName, strPriceLow, strPriceHigh);
 
-                        makeToast("Desire Successfully Added! prods id->"+prodID);
+                        makeToast("Desire Successfully Added.");
                         launchHomeActivity();
                     } else {
                         makeToast(jObj.getString("error_msg"));
@@ -126,7 +122,7 @@ public class AddDesireActivity extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
-                params.put("users_id", strUsersID);
+                params.put("users_id", strUsersDbID);
                 params.put("prod_name", prodName);
                 params.put("price_low", strPriceLow);
                 params.put("price_high", strPriceHigh);
@@ -136,12 +132,39 @@ public class AddDesireActivity extends AppCompatActivity {
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
     }
 
-    private boolean allParamsSetted(int usersID, String prodName, String priceLow, String priceHigh) {
+    private boolean isInputValid(String nameDesire, String strPriceLow, String strPriceHigh) {
+        List<Object> response = InputChecker.isAddDesireInputValid(nameDesire, strPriceLow, strPriceHigh);
+        boolean error = (boolean) response.get(0);
+        if(error) {
+            String msgError = (String) response.get(1);
+            String unvalidInput = (String) response.get(2);
+            clearUnvalidInput(unvalidInput);
+            makeToast(msgError);
+            return false;
+        } else return true;
+    }
 
-        if(usersID >= 0 && !prodName.isEmpty() &&
-                !priceLow.isEmpty() && !priceHigh.isEmpty()) {
-            return true;
-        } else return false;
+    private void clearUnvalidInput(String unvalidInput) {
+
+        switch(unvalidInput) {
+            case "name" :
+                prodNameInput.setText("");
+                prodNameInput.requestFocus();
+                break;
+            case "price_low" :
+                priceLowInput.setText("");
+                priceLowInput.requestFocus();
+                break;
+            case "price_high" :
+                priceLowInput.setText("");
+                priceLowInput.requestFocus();
+                break;
+            default :
+                priceLowInput.setText("");
+                priceLowInput.requestFocus();
+                priceHighInput.setText("");
+                priceHighInput.requestFocus();
+        }
     }
 
     private void makeToast(String message) {

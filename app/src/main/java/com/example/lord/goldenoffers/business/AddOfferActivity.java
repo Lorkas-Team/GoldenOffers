@@ -1,6 +1,7 @@
 package com.example.lord.goldenoffers.business;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -28,6 +29,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.example.lord.goldenoffers.R;
 import com.example.lord.goldenoffers.app.AppConfig;
 import com.example.lord.goldenoffers.app.AppController;
+import com.example.lord.goldenoffers.helper.InputChecker;
 import com.example.lord.goldenoffers.helper.SQLiteHandler;
 import com.example.lord.goldenoffers.helper.SessionManager;
 
@@ -39,6 +41,7 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class AddOfferActivity extends AppCompatActivity {
@@ -64,13 +67,13 @@ public class AddOfferActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_offer);
 
-        inputProductName = (EditText) findViewById(R.id.etProductName);
-        inputRegDate = (EditText) findViewById(R.id.etRegDate);
-        inputExpDate = (EditText) findViewById(R.id.etExpDate);
-        inputPrice = (EditText) findViewById(R.id.etPrice);
-        inputImage = (ImageView) findViewById(R.id.imageView);
-        inputDescription = (EditText) findViewById(R.id.etDescription);
-        uploadOfferBtn = (Button) findViewById(R.id.uploadBtn);
+        inputProductName = findViewById(R.id.etProductName);
+        inputRegDate = findViewById(R.id.etRegDate);
+        inputExpDate = findViewById(R.id.etExpDate);
+        inputPrice = findViewById(R.id.etPrice);
+        inputImage = findViewById(R.id.imageView);
+        inputDescription = findViewById(R.id.etDescription);
+        uploadOfferBtn = findViewById(R.id.uploadBtn);
 
 
         // Progress dialog
@@ -99,6 +102,7 @@ public class AddOfferActivity extends AppCompatActivity {
                 int mDay = c1.get(Calendar.DAY_OF_MONTH); //current day
 
                 datePickerDialog = new DatePickerDialog(AddOfferActivity.this, new DatePickerDialog.OnDateSetListener() {
+                    @SuppressLint("SetTextI18n")
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                         inputRegDate.setText(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth );
@@ -152,20 +156,10 @@ public class AddOfferActivity extends AppCompatActivity {
                 String price = inputPrice.getText().toString().trim();
                 String description = inputDescription.getText().toString().trim();
 
-
-                    if(!product_name.isEmpty() && !regDate.isEmpty() && !expDate.isEmpty() && !price.isEmpty() && bitmap != null){
-
-                        String image = imageToString(bitmap);
-
-                        offerUpload(business_id, business_name, product_name, regDate, expDate, price, description, image);
-
-                    }else {
-                        Toast.makeText(getApplicationContext(),
-                                "You must fill in all fields with  *  ", Toast.LENGTH_LONG)
-                                .show();
-                    }
-
-
+                if(isInputValid(product_name, price, regDate, expDate, description)) {
+                    String image = imageToString(bitmap);
+                    offerUpload(business_id, business_name, product_name, regDate, expDate, price, description, image);
+                }
             }
         });
 
@@ -209,6 +203,53 @@ public class AddOfferActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
+    private boolean isInputValid(String productName, String strPrice, String strRegistDate, String strExpDate, String description) {
+
+        List<Object> response = InputChecker.isAddOfferInputValid(productName, strPrice, strRegistDate, strExpDate, description);
+        boolean error = (boolean) response.get(0);
+        if(error) {
+            String msgError = (String) response.get(1);
+            String unvalidInput = (String) response.get(2);
+            clearUnvalidInput(unvalidInput);
+            Toast.makeText(
+                    getApplicationContext(),
+                    msgError, Toast.LENGTH_LONG
+            ).show();
+            return false;
+        } else return true;
+    }
+
+    private void clearUnvalidInput(String unvalidInput) {
+
+        switch(unvalidInput) {
+            case "name" :
+                inputProductName.setText("");
+                inputProductName.requestFocus();
+                break;
+            case "price" :
+                inputPrice.setText("");
+                inputPrice.requestFocus();
+                break;
+            case "description" :
+                inputDescription.setText("");
+                inputDescription.requestFocus();
+                break;
+            case "reg_date" :
+                inputRegDate.setText("");
+                inputRegDate.requestFocus();
+                break;
+            case "exp_date" :
+                inputExpDate.setText("");
+                inputExpDate.requestFocus();
+                break;
+            default :
+                inputRegDate.setText("");
+                inputRegDate.requestFocus();
+                inputExpDate.setText("");
+                inputExpDate.requestFocus();
+        }
+    }
+
     private void offerUpload(final String business_id, final String business_name, final String product_name, final String regDate,
                              final String expDate, final String price, final String description, final String image) {
         // Tag used to cancel the request
@@ -222,7 +263,7 @@ public class AddOfferActivity extends AppCompatActivity {
 
             @Override
             public void onResponse(String response) {
-                Log.d(TAG, "Add Offer Response: " + response.toString());
+                Log.d(TAG, "Add Offer Response: " + response);
                 hideDialog();
 
                 try {
@@ -281,7 +322,7 @@ public class AddOfferActivity extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams() {
                 // Posting params to register url
-                Map<String, String> params = new HashMap<String, String>();
+                Map<String, String> params = new HashMap<>();
 
                 params.put("business_id", business_id);
                 params.put("business_name", business_name);

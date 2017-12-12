@@ -18,6 +18,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.example.lord.goldenoffers.R;
 import com.example.lord.goldenoffers.app.AppConfig;
 import com.example.lord.goldenoffers.app.AppController;
+import com.example.lord.goldenoffers.helper.InputChecker;
 import com.example.lord.goldenoffers.helper.SQLiteHandlerForUsers;
 import com.example.lord.goldenoffers.helper.SessionManager;
 
@@ -25,6 +26,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class UserLoginActivity extends AppCompatActivity {
@@ -33,8 +35,7 @@ public class UserLoginActivity extends AppCompatActivity {
 
     private Button btnLogin;
     private TextView tvRegister;
-    private EditText inputEmail;
-    private EditText inputPassword;
+    private EditText inputEmail, inputPassword;
 
     private ProgressDialog pDialog;
     private SessionManager session;
@@ -45,11 +46,10 @@ public class UserLoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_login);
 
-        inputEmail = (EditText) findViewById(R.id.email_input);
-        inputPassword = (EditText) findViewById(R.id.password_input);
-        btnLogin = (Button) findViewById(R.id.btn_login);
-        tvRegister = (TextView) findViewById(R.id.tv_register);
-        //TODO tv_reminder
+        inputEmail = findViewById(R.id.email_input);
+        inputPassword = findViewById(R.id.password_input);
+        btnLogin = findViewById(R.id.btn_login);
+        tvRegister = findViewById(R.id.tv_register);
 
         pDialog = new ProgressDialog(this);
         pDialog.setCancelable(false);
@@ -72,10 +72,8 @@ public class UserLoginActivity extends AppCompatActivity {
                 String email = inputEmail.getText().toString().trim();
                 String password = inputPassword.getText().toString().trim();
 
-                if (!email.isEmpty() && !password.isEmpty()) {
-                    checkLogin(email, password);
-                } else {
-                    makeToast("Please enter the credentials!");
+                if(isInputValid(email, password)) {
+                    doLogin(email, password);
                 }
             }
 
@@ -94,18 +92,18 @@ public class UserLoginActivity extends AppCompatActivity {
         });
     }
 
-    private void checkLogin(final String email, final String password) {
+    private void doLogin(final String email, final String password) {
 
         String tag_string_req = "req_login";
 
-        pDialog.setMessage("Logging in ...");
+        pDialog.setMessage("Logging in");
         showDialog();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
                 AppConfig.USER_URL_LOGIN, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Log.d(TAG, "Login Response: " + response.toString());
+                Log.d(TAG, "Login Response: " + response);
                 hideDialog();
 
                 try {
@@ -116,10 +114,10 @@ public class UserLoginActivity extends AppCompatActivity {
                         session.setLogin(true);
 
                         JSONObject user = jObj.getJSONObject("user");
-                        int userID = user.getInt("id");
+                        int usersDbID = user.getInt("id");
                         String username = user.getString("username");
                         String email = user.getString("email");
-                        db.addUser(userID, username, email);
+                        db.addUser(usersDbID, username, email);
 
                         Intent intent = new Intent(
                                 UserLoginActivity.this,
@@ -128,6 +126,7 @@ public class UserLoginActivity extends AppCompatActivity {
                         startActivity(intent);
                         finish();
                     } else {
+                        clearUnvalidInput("both");
                         makeToast(jObj.getString("error_msg"));
                     }
                 } catch (JSONException e) {
@@ -145,13 +144,41 @@ public class UserLoginActivity extends AppCompatActivity {
         }) {
             @Override
             protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<String, String>();
+                Map<String, String> params = new HashMap<>();
                 params.put("email", email);
                 params.put("password", password);
                 return params;
             }
         };
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+    }
+
+    private boolean isInputValid(String email, String strPassword) {
+        List<Object> response = InputChecker.isLoginInputValid(email, strPassword);
+        boolean error = (boolean) response.get(0);
+        if(error) {
+            String msgError = (String) response.get(1);
+            String unvalidInput = (String) response.get(2);
+            clearUnvalidInput(unvalidInput);
+            makeToast(msgError);
+            return false;
+        } else return true;
+    }
+
+    private void clearUnvalidInput(String unvalidInput) {
+
+        if (unvalidInput.equalsIgnoreCase("email")) {
+            inputEmail.setText("");
+            inputEmail.requestFocus();
+        } else if(unvalidInput.equalsIgnoreCase("password")){
+            inputPassword.setText("");
+            inputPassword.requestFocus();
+        } else {
+            inputEmail.setText("");
+            inputEmail.requestFocus();
+            inputPassword.setText("");
+            inputPassword.requestFocus();
+        }
     }
 
     private void makeToast(String message) {

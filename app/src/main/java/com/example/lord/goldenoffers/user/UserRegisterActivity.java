@@ -17,6 +17,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.example.lord.goldenoffers.R;
 import com.example.lord.goldenoffers.app.AppConfig;
 import com.example.lord.goldenoffers.app.AppController;
+import com.example.lord.goldenoffers.helper.InputChecker;
 import com.example.lord.goldenoffers.helper.SQLiteHandlerForUsers;
 import com.example.lord.goldenoffers.helper.SessionManager;
 
@@ -24,19 +25,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class UserRegisterActivity extends AppCompatActivity {
 
     private static final String TAG = UserRegisterActivity.class.getSimpleName();
 
     private Button btnRegister;
-    private EditText inputUsername;
-    private EditText inputEmail;
-    private EditText inputPassword;
-    private EditText inputPasswordRepeat;
+    private EditText inputUsername, inputEmail, inputPassword, inputPasswordRepeat;
 
     private ProgressDialog pDialog;
     private SessionManager session;
@@ -47,11 +44,11 @@ public class UserRegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_register);
 
-        inputUsername = (EditText) findViewById(R.id.username_input);
-        inputEmail = (EditText) findViewById(R.id.email_input);
-        inputPassword = (EditText) findViewById(R.id.password_input);
-        inputPasswordRepeat = (EditText) findViewById(R.id.password_repeat_input);
-        btnRegister = (Button) findViewById(R.id.btn_register);
+        inputUsername = findViewById(R.id.username_input);
+        inputEmail = findViewById(R.id.email_input);
+        inputPassword = findViewById(R.id.password_input);
+        inputPasswordRepeat = findViewById(R.id.password_repeat_input);
+        btnRegister = findViewById(R.id.btn_register);
 
         pDialog = new ProgressDialog(this);
         pDialog.setCancelable(false);
@@ -74,21 +71,8 @@ public class UserRegisterActivity extends AppCompatActivity {
                 String email = inputEmail.getText().toString().trim();
                 String strPassword = inputPassword.getText().toString().trim();
                 String strPasswordRepeat = inputPasswordRepeat.getText().toString().trim();
-
-                if (!username.isEmpty() && !email.isEmpty() &&
-                        !strPassword.isEmpty() && !strPasswordRepeat.isEmpty()   ) {
-
-                    if(isEmailValid(email)==true) {
-                        if (!strPassword.equals(strPasswordRepeat)) {
-                            makeToast("Password doesn't match!");
-                        } else {
-                            registerUser(username, email, strPassword);
-                        }
-                    }else{
-                        makeToast("This is not a valid Email address!");
-                    }
-                } else {
-                    makeToast("You must fill in all fields!");
+                if(isInputValid(username, email, strPassword, strPasswordRepeat)) {
+                    registerUser(username, email, strPassword);
                 }
             }
         });
@@ -98,7 +82,7 @@ public class UserRegisterActivity extends AppCompatActivity {
 
         String tag_string_req = "req_register";
 
-        pDialog.setMessage("Registering ...");
+        pDialog.setMessage("Registration");
         showDialog();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
@@ -106,7 +90,7 @@ public class UserRegisterActivity extends AppCompatActivity {
 
             @Override
             public void onResponse(String response) {
-                Log.d(TAG, "Register Response: " + response.toString());
+                Log.d(TAG, "Register Response: " + response);
                 hideDialog();
 
                 try {
@@ -115,12 +99,12 @@ public class UserRegisterActivity extends AppCompatActivity {
                     if (!error) {
 
                         JSONObject user = jObj.getJSONObject("user");
-                        int id = user.getInt("id");
+                        int usersDbID = user.getInt("id");
                         String username = user.getString("username");
                         String email = user.getString("email");
-                        db.addUser(id, username, email);
+                        db.addUser(usersDbID, username, email);
 
-                        makeToast("User successfully registered.\nTry to login now");
+                        makeToast("Registration Done.\nNow Login.");
                         Intent intent = new Intent(
                                 UserRegisterActivity.this,
                                 UserLoginActivity.class
@@ -128,7 +112,9 @@ public class UserRegisterActivity extends AppCompatActivity {
                         startActivity(intent);
                         finish();
                     } else {
-                        makeToast(jObj.getString("error_msg"));
+                        String msgError = jObj.getString("error_msg");
+                        if(msgError.contains(email)) clearUnvalidInput("email");
+                        makeToast(msgError);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -156,30 +142,42 @@ public class UserRegisterActivity extends AppCompatActivity {
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
     }
 
-    public final static boolean isEmailValid(String email)
-    {
-        String regExpn =
-                "^(([\\w-]+\\.)+[\\w-]+|([a-zA-Z]{1}|[\\w-]{2,}))@"
-                        +"((([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
-                        +"[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\."
-                        +"([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
-                        +"[0-9]{1,2}|25[0-5]|2[0-4][0-9])){1}|"
-                        +"([a-zA-Z]+[\\w-]+\\.)+[a-zA-Z]{2,4})$";
+    private boolean isInputValid(String username, String email, String strPassword, String strPasswordRepeat) {
+        List<Object> response = InputChecker.isUserRegisterInputValid(
+                username, email, strPassword, strPasswordRepeat
+        );
+        boolean error = (boolean) response.get(0);
+        if(error) {
+            String msgError = (String) response.get(1);
+            String unvalidInput = (String) response.get(2);
+            clearUnvalidInput(unvalidInput);
+            makeToast(msgError);
+            return false;
+        } else return true;
+    }
 
-        CharSequence inputStr = email;
+    private void clearUnvalidInput(String unvalidInput) {
 
-        Pattern pattern = Pattern.compile(regExpn,Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(inputStr);
-
-        if(matcher.matches()) return true;
-        else return false;
+        switch(unvalidInput) {
+            case "username" :
+                inputUsername.setText("");
+                inputUsername.requestFocus();
+                break;
+            case "email" :
+                inputEmail.setText("");
+                inputEmail.requestFocus();
+                break;
+            default :
+                inputPassword.setText("");
+                inputPasswordRepeat.setText("");
+                inputPassword.requestFocus();
+        }
     }
 
     private void makeToast(String message) {
         Toast.makeText(
                 getApplicationContext(),
-                message,
-                Toast.LENGTH_LONG
+                message, Toast.LENGTH_LONG
         ).show();
     }
 
@@ -191,5 +189,4 @@ public class UserRegisterActivity extends AppCompatActivity {
         if (pDialog.isShowing()) pDialog.dismiss();
     }
 }
-
 

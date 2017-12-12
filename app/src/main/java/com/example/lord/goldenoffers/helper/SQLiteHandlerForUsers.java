@@ -23,18 +23,18 @@ public class SQLiteHandlerForUsers extends SQLiteOpenHelper {
 
     //user table
     private static final String TABLE_USERS = "users";
-    private static final String USER_KEY_ID = "user_id";
+    private static final String USER_KEY_ID = "id";
+    private static final String USER_KEY_DB_ID = "db_id";
     private static final String USER_KEY_NAME = "username";
     private static final String USER_KEY_EMAIL = "email";
 
     //desires table
     private static final String TABLE_DESIRES = "desires";
-    private static final String DESIRE_KEY_ID = "desire_id";
+    private static final String DESIRE_KEY_ID = "id";
+    private static final String DESIRE_KEY_DB_ID = "db_id";
     private static final String DESIRE_KEY_PROD_NAME = "prod_name";
     private static final String DESIRE_KEY_PRICE_LOW = "price_low";
     private static final String DESIRE_KEY_PRICE_HIGH = "price_high";
-
-    //TODO onDestroy close db
 
     public SQLiteHandlerForUsers(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -43,13 +43,14 @@ public class SQLiteHandlerForUsers extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String CREATE_LOGIN_TABLE = "CREATE TABLE " + TABLE_USERS + "("
-                + USER_KEY_ID + " INTEGER PRIMARY KEY," + USER_KEY_NAME + " TEXT,"
-                + USER_KEY_EMAIL + " TEXT UNIQUE" +")";
+                + USER_KEY_ID + " INTEGER PRIMARY KEY," + USER_KEY_DB_ID + " INTEGER,"
+                + USER_KEY_NAME + " TEXT," + USER_KEY_EMAIL + " TEXT UNIQUE" +")";
         db.execSQL(CREATE_LOGIN_TABLE);
 
         String CREATE_DESIRES_TABLE = "CREATE TABLE " + TABLE_DESIRES + "("
-                + DESIRE_KEY_ID + " INTEGER PRIMARY KEY," + DESIRE_KEY_PROD_NAME + " TEXT UNIQUE,"
-                + DESIRE_KEY_PRICE_LOW + " TEXT," + DESIRE_KEY_PRICE_HIGH + " TEXT" +")";
+                + DESIRE_KEY_ID + " INTEGER PRIMARY KEY," + DESIRE_KEY_DB_ID + " INTEGER,"
+                + DESIRE_KEY_PROD_NAME + " TEXT UNIQUE," + DESIRE_KEY_PRICE_LOW + " TEXT,"
+                + DESIRE_KEY_PRICE_HIGH + " TEXT" +")";
         db.execSQL(CREATE_DESIRES_TABLE);
 
         Log.d(TAG, "Database tables created");
@@ -65,7 +66,8 @@ public class SQLiteHandlerForUsers extends SQLiteOpenHelper {
     public void addUser(int usersID, String username, String email) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(USER_KEY_ID, usersID);
+        values.put(USER_KEY_DB_ID, usersID);
+        //id from servers database, NOT from sqlite
         values.put(USER_KEY_NAME, username);
         values.put(USER_KEY_EMAIL, email);
 
@@ -78,7 +80,8 @@ public class SQLiteHandlerForUsers extends SQLiteOpenHelper {
     public void addDesire(int prodID, String prodName, String priceLow, String priceHigh){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(DESIRE_KEY_ID, prodID);
+        values.put(DESIRE_KEY_DB_ID, prodID);
+        //id from servers database, NOT from sqlite
         values.put(DESIRE_KEY_PROD_NAME, prodName);
         values.put(DESIRE_KEY_PRICE_LOW, priceLow);
         values.put(DESIRE_KEY_PRICE_HIGH, priceHigh);
@@ -87,28 +90,6 @@ public class SQLiteHandlerForUsers extends SQLiteOpenHelper {
         Log.d(TAG, "New desire inserted into sqlite: " + id);
         db.close();
     }
-
-    /*
-    public int getUsersID() {
-
-        int id;
-
-        String selectQuery = "SELECT " + USER_KEY_ID + " FROM " + TABLE_USERS;
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(selectQuery, null);
-
-        cursor.moveToFirst();
-        if (cursor.getCount() > 0) {
-            id = cursor.getInt(0);
-        } else {
-            id = -1;
-        }
-        cursor.close();
-        db.close();
-        Log.d(TAG, "Getting users id from Sqlite: " + id);
-        return id;
-    }
-    */
 
     public User getUserDetails() {
 
@@ -119,17 +100,18 @@ public class SQLiteHandlerForUsers extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
 
-        int idCol = cursor.getColumnIndex(USER_KEY_ID);
+        int dbIdCol = cursor.getColumnIndex(USER_KEY_DB_ID);
+        //id from servers database, NOT from sqlite
         int usernameCol = cursor.getColumnIndex(USER_KEY_NAME);
         int emailCol = cursor.getColumnIndex(USER_KEY_EMAIL);
 
         cursor.moveToFirst();
         if (cursor.getCount() > 0) {
-            int id = cursor.getInt(idCol);
+            int id = cursor.getInt(dbIdCol);
             String username = cursor.getString(usernameCol);
             String email = cursor.getString(emailCol);
 
-            user.setId(id);
+            user.setDbID(id);
             user.setUsername(username);
             user.setEmail(email);
         }
@@ -146,7 +128,8 @@ public class SQLiteHandlerForUsers extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
 
-        int idCol = cursor.getColumnIndex(DESIRE_KEY_ID);
+        int dbIdCol = cursor.getColumnIndex(DESIRE_KEY_DB_ID);
+        //id from servers database, NOT from sqlite
         int nameCol = cursor.getColumnIndex(DESIRE_KEY_PROD_NAME);
         int priceLowCol = cursor.getColumnIndex(DESIRE_KEY_PRICE_LOW);
         int priceHighCol = cursor.getColumnIndex(DESIRE_KEY_PRICE_HIGH);
@@ -154,7 +137,7 @@ public class SQLiteHandlerForUsers extends SQLiteOpenHelper {
         cursor.moveToFirst();
         if (cursor.getCount() > 0) {
             do {
-                int id = cursor.getInt(idCol);
+                int id = cursor.getInt(dbIdCol);
                 String name = cursor.getString(nameCol);
                 float priceLow = cursor.getFloat(priceLowCol);
                 float priceHigh = cursor.getInt(priceHighCol);
@@ -170,7 +153,6 @@ public class SQLiteHandlerForUsers extends SQLiteOpenHelper {
 
     public void deleteUsers() {
         SQLiteDatabase db = this.getWritableDatabase();
-        // Delete All Rows
         db.delete(TABLE_USERS, null, null);
         db.close();
 
@@ -179,7 +161,6 @@ public class SQLiteHandlerForUsers extends SQLiteOpenHelper {
 
     public void deleteDesires() {
         SQLiteDatabase db = this.getWritableDatabase();
-        // Delete All Rows
         db.delete(TABLE_DESIRES, null, null);
         db.close();
         Log.d(TAG, "Deleted all desires from sqlite");
