@@ -17,6 +17,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.example.lord.goldenoffers.R;
 import com.example.lord.goldenoffers.app.AppConfig;
 import com.example.lord.goldenoffers.app.AppController;
+import com.example.lord.goldenoffers.helper.InputChecker;
 import com.example.lord.goldenoffers.helper.SQLiteHandlerForUsers;
 import com.example.lord.goldenoffers.helper.SessionManager;
 
@@ -24,214 +25,168 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class UserRegisterActivity extends AppCompatActivity {
 
     private static final String TAG = UserRegisterActivity.class.getSimpleName();
-    private Button RegisterBtn;
-    private EditText inputUserName;
-    private EditText inputEmail;
-    private EditText inputPassword;
-    private EditText inputRepeatPass;
+
+    private Button btnRegister;
+    private EditText inputUsername, inputEmail, inputPassword, inputPasswordRepeat;
+
     private ProgressDialog pDialog;
     private SessionManager session;
     private SQLiteHandlerForUsers db;
-
-
-    public final static boolean isEmailValid(String email)
-    {
-        String regExpn =
-                "^(([\\w-]+\\.)+[\\w-]+|([a-zA-Z]{1}|[\\w-]{2,}))@"
-                        +"((([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
-                        +"[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\."
-                        +"([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
-                        +"[0-9]{1,2}|25[0-5]|2[0-4][0-9])){1}|"
-                        +"([a-zA-Z]+[\\w-]+\\.)+[a-zA-Z]{2,4})$";
-
-        CharSequence inputStr = email;
-
-        Pattern pattern = Pattern.compile(regExpn,Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(inputStr);
-
-        if(matcher.matches())
-            return true;
-        else
-            return false;
-    }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_register);
 
-        inputUserName = (EditText) findViewById(R.id.etUserName);
-        inputEmail = (EditText) findViewById(R.id.etEmail);
-        inputPassword = (EditText) findViewById(R.id.etPassword);
-        inputRepeatPass = (EditText) findViewById(R.id.etRepeatPass);
-        RegisterBtn = (Button) findViewById(R.id.RegisterBtn);
+        inputUsername = findViewById(R.id.username_input);
+        inputEmail = findViewById(R.id.email_input);
+        inputPassword = findViewById(R.id.password_input);
+        inputPasswordRepeat = findViewById(R.id.password_repeat_input);
+        btnRegister = findViewById(R.id.btn_register);
 
-        // Progress dialog
         pDialog = new ProgressDialog(this);
         pDialog.setCancelable(false);
 
-        // Session manager
-        session = new SessionManager(getApplicationContext());
-
-        // SQLite database handler
         db = new SQLiteHandlerForUsers(getApplicationContext());
-
-        // Check if user is already logged in or not
+        session = new SessionManager(getApplicationContext());
         if (session.isLoggedIn()) {
-            // User is already logged in. Take him to logged in activity
-            Intent intent = new Intent(UserRegisterActivity.this,
-                    UserLoggedInActivity.class);
+            Intent intent = new Intent(
+                    UserRegisterActivity.this,
+                    UserLoggedInActivity.class
+            );
             startActivity(intent);
             finish();
         }
 
-
-        // Register Button Click event
-        RegisterBtn.setOnClickListener(new View.OnClickListener() {
+        btnRegister.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                String username = inputUserName.getText().toString().trim();
+
+                String username = inputUsername.getText().toString().trim();
                 String email = inputEmail.getText().toString().trim();
-                String password = inputPassword.getText().toString().trim();
-                String repeatpass = inputRepeatPass.getText().toString().trim();
-
-
-
-                if (!username.isEmpty() && !email.isEmpty() && !password.isEmpty() && !repeatpass.isEmpty()   ) {
-                    if(isEmailValid(email)==true) {
-
-                        if (!password.equals(repeatpass)) {
-                            Toast.makeText(getApplicationContext(),
-                                    "Password doesn't match!", Toast.LENGTH_LONG)
-                                    .show();
-                        } else {
-
-                                registerUser(username, email, password);
-
-
-                        }
-
-                    }else{
-                        Toast.makeText(getApplicationContext(),
-                                "This is not a valid Email address!", Toast.LENGTH_LONG)
-                                .show();
-                    }
-
-
-                } else {
-                    Toast.makeText(getApplicationContext(),
-                            "You must fill in all fields!", Toast.LENGTH_LONG)
-                            .show();
+                String strPassword = inputPassword.getText().toString().trim();
+                String strPasswordRepeat = inputPasswordRepeat.getText().toString().trim();
+                if(isInputValid(username, email, strPassword, strPasswordRepeat)) {
+                    registerUser(username, email, strPassword);
                 }
             }
         });
-
     }
 
-
-    /**
-     * Function to store user in MySQL database will post params(tag, name,
-     * email, password) to register url
-     * */
     private void registerUser(final String username, final String email,final String password) {
-        // Tag used to cancel the request
+
         String tag_string_req = "req_register";
 
-        pDialog.setMessage("Registering ...");
+        pDialog.setMessage("Registration");
         showDialog();
 
-        StringRequest strReq = new StringRequest(Request.Method.POST, AppConfig.USER_URL_REGISTER, new Response.Listener<String>() {
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                AppConfig.USER_URL_REGISTER, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
-                Log.d(TAG, "Register Response: " + response.toString());
+                Log.d(TAG, "Register Response: " + response);
                 hideDialog();
 
                 try {
                     JSONObject jObj = new JSONObject(response);
                     boolean error = jObj.getBoolean("error");
                     if (!error) {
-                        // User successfully stored in MySQL
-                        // Now store the user in sqlite
-
 
                         JSONObject user = jObj.getJSONObject("user");
+                        int usersDbID = user.getInt("id");
                         String username = user.getString("username");
                         String email = user.getString("email");
+                        db.addUser(usersDbID, username, email);
 
-
-                        // Inserting row in users table
-                        db.addUser(username, email);
-
-                        Toast.makeText(getApplicationContext(), "User successfully registered. Try login now!", Toast.LENGTH_LONG).show();
-
-                        // Launch login activity
+                        makeToast("Registration Done.\nNow Login.");
                         Intent intent = new Intent(
                                 UserRegisterActivity.this,
-                                UserLoginActivity.class);
+                                UserLoginActivity.class
+                        );
                         startActivity(intent);
                         finish();
                     } else {
-
-                        // Error occurred in registration. Get the error
-                        // message
-                        String errorMsg = jObj.getString("error_msg");
-                        //errorMsg=errorMsg+"paok";
-                        Toast.makeText(getApplicationContext(),
-                                errorMsg, Toast.LENGTH_LONG).show();
+                        String msgError = jObj.getString("error_msg");
+                        if(msgError.contains(email)) clearUnvalidInput("email");
+                        makeToast(msgError);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
             }
         }, new Response.ErrorListener() {
 
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e(TAG, "Registration Error: " + error.getMessage());
-                Toast.makeText(getApplicationContext(),
-                        error.getMessage(), Toast.LENGTH_LONG).show();
+                makeToast(error.getMessage());
                 hideDialog();
             }
         }) {
 
             @Override
             protected Map<String, String> getParams() {
-                // Posting params to register url
-                Map<String, String> params = new HashMap<String, String>();
+                Map<String, String> params = new HashMap<>();
                 params.put("username", username);
                 params.put("email", email);
                 params.put("password", password);
-
-
                 return params;
             }
-
         };
-
-        // Adding request to request queue
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
     }
 
+    private boolean isInputValid(String username, String email, String strPassword, String strPasswordRepeat) {
+        List<Object> response = InputChecker.isUserRegisterInputValid(
+                username, email, strPassword, strPasswordRepeat
+        );
+        boolean error = (boolean) response.get(0);
+        if(error) {
+            String msgError = (String) response.get(1);
+            String unvalidInput = (String) response.get(2);
+            clearUnvalidInput(unvalidInput);
+            makeToast(msgError);
+            return false;
+        } else return true;
+    }
+
+    private void clearUnvalidInput(String unvalidInput) {
+
+        switch(unvalidInput) {
+            case "username" :
+                inputUsername.setText("");
+                inputUsername.requestFocus();
+                break;
+            case "email" :
+                inputEmail.setText("");
+                inputEmail.requestFocus();
+                break;
+            default :
+                inputPassword.setText("");
+                inputPasswordRepeat.setText("");
+                inputPassword.requestFocus();
+        }
+    }
+
+    private void makeToast(String message) {
+        Toast.makeText(
+                getApplicationContext(),
+                message, Toast.LENGTH_LONG
+        ).show();
+    }
+
     private void showDialog() {
-        if (!pDialog.isShowing())
-            pDialog.show();
+        if (!pDialog.isShowing()) pDialog.show();
     }
 
     private void hideDialog() {
-        if (pDialog.isShowing())
-            pDialog.dismiss();
+        if (pDialog.isShowing()) pDialog.dismiss();
     }
-
-
 }
-
 

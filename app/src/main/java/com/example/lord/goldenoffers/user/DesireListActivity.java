@@ -1,4 +1,6 @@
 package com.example.lord.goldenoffers.user;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -11,52 +13,60 @@ import com.example.lord.goldenoffers.R;
 import com.example.lord.goldenoffers.helper.SQLiteHandlerForUsers;
 import com.example.lord.goldenoffers.helper.SessionManager;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class DesireListActivity extends AppCompatActivity {
 
-    private SessionManager session;
+    private List<Desire> listDesires;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_desire_list);
 
+        SessionManager session = new SessionManager(getApplicationContext());
+
         SQLiteHandlerForUsers db = new SQLiteHandlerForUsers(getApplicationContext());
-        session = new SessionManager(getApplicationContext());
-
-        /////////////////////////////////////
-
-        final List<Desire> listDesires = db.getDesires();
-
-        String[] arrNames = new String[listDesires.size()];
-        int pos = 0;
-        for(Desire desire : listDesires) {
-            arrNames[pos++] = desire.getName();
-        }
-
-        ListView listView = (ListView) findViewById(R.id.listView1);
-        ListAdapter adapter = new DesireListRowAdapter(this, arrNames);
-        listView.setAdapter(adapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int pos, long l) {
-                String pickedName = String.valueOf(adapterView.getItemAtPosition(pos));
-                Desire pickedDesire = getDesireByName(listDesires, pickedName);
-                if(pickedDesire != null) {
-                    //TODO do stuff
-                    String msg = "Selected item -> " + pickedName;
-                    Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
-                } else {
-                    //TODO error
-                }
+        listDesires = db.getDesires();
+        if(listDesires.size() > 0) {
+            int pos = 0;
+            String[] arrNames = new String[listDesires.size()];
+            for (Desire desire : listDesires) {
+                arrNames[pos++] = desire.getName();
             }
-        });
+
+            ListView listView = findViewById(R.id.listView1);
+            ListAdapter adapter = new DesireListRowAdapter(this, arrNames);
+            listView.setAdapter(adapter);
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int pos, long l) {
+                    String pickedName = String.valueOf(adapterView.getItemAtPosition(pos));
+                    Desire pickedDesire = getDesireByName(pickedName);
+                    if (pickedDesire != null) {
+                        makeToast("Selected item : \n" + pickedDesire.toString());
+                    }
+                }
+            });
+        } else {
+            makeToast("Nothing to show.");
+            Intent intent = new Intent(
+                    DesireListActivity.this,
+                    UserLoggedInActivity.class
+            );
+            startActivity(intent);
+            finish();
+        }
     }
-//test2
-    private Desire getDesireByName(List<Desire> listDesires, String name) {
-        //TODO is right ?
+
+    private void makeToast(String message) {
+        Toast.makeText(
+                getApplicationContext(),
+                message, Toast.LENGTH_LONG
+        ).show();
+    }
+
+    private Desire getDesireByName(String name) {
         for(Desire desire : listDesires){
             if(name.equalsIgnoreCase(desire.getName())){
                 return desire;

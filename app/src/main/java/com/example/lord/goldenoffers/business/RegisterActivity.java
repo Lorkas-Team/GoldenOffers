@@ -1,5 +1,5 @@
 package com.example.lord.goldenoffers.business;
-//lord
+
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -27,6 +27,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.example.lord.goldenoffers.R;
 import com.example.lord.goldenoffers.app.AppConfig;
 import com.example.lord.goldenoffers.app.AppController;
+import com.example.lord.goldenoffers.helper.InputChecker;
 import com.example.lord.goldenoffers.helper.SQLiteHandler;
 import com.example.lord.goldenoffers.helper.SessionManager;
 
@@ -34,6 +35,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -68,30 +70,6 @@ public class RegisterActivity extends Activity {
 
     private String latitude,longitude;
 
-
-
-    public final static boolean isEmailValid(String email)
-    {
-        String regExpn =
-                "^(([\\w-]+\\.)+[\\w-]+|([a-zA-Z]{1}|[\\w-]{2,}))@"
-                        +"((([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
-                        +"[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\."
-                        +"([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
-                        +"[0-9]{1,2}|25[0-5]|2[0-4][0-9])){1}|"
-                        +"([a-zA-Z]+[\\w-]+\\.)+[a-zA-Z]{2,4})$";
-
-        CharSequence inputStr = email;
-
-        Pattern pattern = Pattern.compile(regExpn,Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(inputStr);
-
-        if(matcher.matches())
-            return true;
-        else
-            return false;
-    }
-
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,18 +77,20 @@ public class RegisterActivity extends Activity {
 
         ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
 
-        locationText = (TextView)findViewById(R.id.text_location);
-        locationButton = (Button)findViewById(R.id.button_location);
+        locationText = findViewById(R.id.text_location);
+        locationButton = findViewById(R.id.button_location);
 
         locationButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
 
                 locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-                if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                    buildAlertMessageNoGps();
+                if (locationManager != null) {
+                    if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                        buildAlertMessageNoGps();
 
-                } else if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                    getLocation();
+                    } else if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                        getLocation();
+                    }
                 }
 
             }
@@ -122,13 +102,13 @@ public class RegisterActivity extends Activity {
 
 
 
-        inputFullName = (EditText) findViewById(R.id.etUserName);
-        inputEmail = (EditText) findViewById(R.id.etEmail);
-        inputPassword = (EditText) findViewById(R.id.etPassword);
-        inputRepeatPass = (EditText) findViewById(R.id.etRepeatPass);
-        inputOwner = (EditText) findViewById(R.id.etOwner);
-        inputAfm = (EditText) findViewById(R.id.etAfm);
-        RegisterBtn = (Button) findViewById(R.id.RegisterBtn);
+        inputFullName = findViewById(R.id.etUserName);
+        inputEmail = findViewById(R.id.etEmail);
+        inputPassword = findViewById(R.id.etPassword);
+        inputRepeatPass = findViewById(R.id.etRepeatPass);
+        inputOwner = findViewById(R.id.etOwner);
+        inputAfm = findViewById(R.id.etAfm);
+        RegisterBtn = findViewById(R.id.RegisterBtn);
 
 
 
@@ -162,44 +142,55 @@ public class RegisterActivity extends Activity {
                 String owner = inputOwner.getText().toString().trim();
                 String afm = inputAfm.getText().toString().trim();
 
-
-                if (!name.isEmpty() && !email.isEmpty() && !password.isEmpty() && !repeatpass.isEmpty() && !owner.isEmpty() && !afm.isEmpty()  ) {
-                    if(isEmailValid(email)==true) {
-
-                        if (!password.equals(repeatpass)) {
-                            Toast.makeText(getApplicationContext(),
-                                    "Password doesn't match!", Toast.LENGTH_LONG)
-                                    .show();
-                        } else {
-                            if(afm.matches("[0-9]{9}")) {
-
-                                registerUser(name, email, password, owner, afm, latitude, longitude);
-
-                            }else {
-                                Toast.makeText(getApplicationContext(),
-                                        "AFM must contain 9 numbers exactly!", Toast.LENGTH_LONG)
-                                        .show();
-                            }
-
-                        }
-
-                    }else{
-                        Toast.makeText(getApplicationContext(),
-                                "This is not a valid Email address!", Toast.LENGTH_LONG)
-                                .show();
-                    }
-
-
-                } else {
-                    Toast.makeText(getApplicationContext(),
-                            "You must fill in all fields!", Toast.LENGTH_LONG)
-                            .show();
+                if(isInputValid(name, email, password, repeatpass, owner, afm)) {
+                    registerUser(name, email, password, owner, afm, latitude, longitude);
                 }
             }
         });
 
     }
 
+    private boolean isInputValid(String name, String email, String strPassword, String strPasswordRepeat, String owner, String strAFM) {
+
+        List<Object> response = InputChecker.isBusinessRegisterInputValid(name, email, strPassword, strPasswordRepeat, owner, strAFM);
+        boolean error = (boolean) response.get(0);
+        if(error) {
+            String msgError = (String) response.get(1);
+            String unvalidInput = (String) response.get(2);
+            clearUnvalidInput(unvalidInput);
+            Toast.makeText(
+                    getApplicationContext(),
+                    msgError, Toast.LENGTH_LONG
+            ).show();
+            return false;
+        } else return true;
+    }
+
+    private void clearUnvalidInput(String unvalidInput) {
+
+        switch(unvalidInput) {
+            case "name" :
+                inputFullName.setText("");
+                inputFullName.requestFocus();
+                break;
+            case "email" :
+                inputEmail.setText("");
+                inputEmail.requestFocus();
+                break;
+            case "password" :
+                inputPassword.setText("");
+                inputRepeatPass.setText("");
+                inputPassword.requestFocus();
+                break;
+            case "owner" :
+                inputOwner.setText("");
+                inputOwner.requestFocus();
+                break;
+            default :
+                inputAfm.setText("");
+                inputAfm.requestFocus();
+        }
+    }
 
     /**
      * Function to store user in MySQL database will post params(tag, name,
@@ -218,7 +209,7 @@ public class RegisterActivity extends Activity {
 
             @Override
             public void onResponse(String response) {
-                Log.d(TAG, "Register Response: " + response.toString());
+                Log.d(TAG, "Register Response: " + response);
                 hideDialog();
 
                 try {
@@ -255,6 +246,7 @@ public class RegisterActivity extends Activity {
                         // Error occurred in registration. Get the error
                         // message
                         String errorMsg = jObj.getString("error_msg");
+                        if(errorMsg.contains(email)) clearUnvalidInput("email");
                         Toast.makeText(getApplicationContext(),
                                 errorMsg, Toast.LENGTH_LONG).show();
                     }
@@ -277,7 +269,7 @@ public class RegisterActivity extends Activity {
             @Override
             protected Map<String, String> getParams() {
                 // Posting params to register url
-                Map<String, String> params = new HashMap<String, String>();
+                Map<String, String> params = new HashMap<>();
                 params.put("name", name);
                 params.put("email", email);
                 params.put("password", password);

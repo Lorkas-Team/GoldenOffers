@@ -1,30 +1,29 @@
 package com.example.lord.goldenoffers.user;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class User {
 
+    private int dbID; //id from servers database, NOT from sqlite
     private String username;
     private String email;
-    private List<Desire> desires;
 
     public User() {
+        dbID = -1;
         username = "";
         email = "";
-        desires = new ArrayList<>();
     }
 
-    public User(String username, String email) {
+    public User(int id, String username, String email) {
+        this.dbID = id;
         this.username = username;
         this.email = email;
-        this.desires = new ArrayList<>();
     }
 
-    public User(String username, String email, List<Desire> desires) {
-        this.username = username;
-        this.email = email;
-        this.desires = desires;
+    public int getDbID() {
+        return dbID;
+    }
+
+    public void setDbID(int id) {
+        this.dbID = id;
     }
 
     public String getUsername() {
@@ -43,11 +42,7 @@ public class User {
         this.email = email;
     }
 
-    public List<Desire> getDesires() {
-        return desires;
-    }
-
-    public void setDesires(List<Desire> desires) {
-        this.desires = desires;
+    public String toString() {
+        return dbID + " : " + username + " (" + email + ")";
     }
 }
