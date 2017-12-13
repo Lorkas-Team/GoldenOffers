@@ -1,20 +1,21 @@
-package com.example.lord.goldenoffers.user;
+package com.example.lord.goldenoffers.helper;
 
 public class User {
 
-    private int dbID; //id from servers database, NOT from sqlite
-    private String username;
+    private int dbID;
+    //id from servers database, NOT from sqlite
+    private String name;
     private String email;
 
     public User() {
         dbID = -1;
-        username = "";
+        name = "";
         email = "";
     }
 
     public User(int id, String username, String email) {
         this.dbID = id;
-        this.username = username;
+        this.name = username;
         this.email = email;
     }
 
@@ -26,12 +27,12 @@ public class User {
         this.dbID = id;
     }
 
-    public String getUsername() {
-        return username;
+    public String getName() {
+        return name;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setName(String username) {
+        this.name = username;
     }
 
     public String getEmail() {
@@ -43,6 +44,6 @@ public class User {
     }
 
     public String toString() {
-        return dbID + " : " + username + " (" + email + ")";
+        return dbID + " : " + name + " (" + email + ")";
     }
 }

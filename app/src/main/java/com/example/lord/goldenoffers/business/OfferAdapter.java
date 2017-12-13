@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.lord.goldenoffers.R;
+import com.example.lord.goldenoffers.helper.Offer;
 
 import java.util.List;
 
@@ -38,9 +39,9 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ProductViewH
         Offer offer = offerList.get(position);
 
         //loading the image
-        Glide.with(mCtx).load(offer.getPhoto()).into(holder.imageView);
+        Glide.with(mCtx).load(offer.getImage()).into(holder.imageView);
 
-        holder.textViewTitle.setText(offer.getProduct_name());
+        holder.textViewTitle.setText(offer.getProductName());
         holder.textViewShortDesc.setText(offer.getDescription());
         holder.textViewPrice.setText(String.valueOf(offer.getPrice()));
         holder.textViewRegDate.setText(String.valueOf(offer.getRegDate()));

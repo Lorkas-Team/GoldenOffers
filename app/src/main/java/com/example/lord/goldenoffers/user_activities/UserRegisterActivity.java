@@ -1,4 +1,4 @@
-package com.example.lord.goldenoffers.user;
+package com.example.lord.goldenoffers.user_activities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -56,12 +56,7 @@ public class UserRegisterActivity extends AppCompatActivity {
         db = new SQLiteHandlerForUsers(getApplicationContext());
         session = new SessionManager(getApplicationContext());
         if (session.isLoggedIn()) {
-            Intent intent = new Intent(
-                    UserRegisterActivity.this,
-                    UserLoggedInActivity.class
-            );
-            startActivity(intent);
-            finish();
+            lauchHomeActivity();
         }
 
         btnRegister.setOnClickListener(new View.OnClickListener() {
@@ -97,23 +92,16 @@ public class UserRegisterActivity extends AppCompatActivity {
                     JSONObject jObj = new JSONObject(response);
                     boolean error = jObj.getBoolean("error");
                     if (!error) {
-
-                        JSONObject user = jObj.getJSONObject("user");
-                        int usersDbID = user.getInt("id");
-                        String username = user.getString("username");
-                        String email = user.getString("email");
-                        db.addUser(usersDbID, username, email);
-
-                        makeToast("Registration Done.\nNow Login.");
-                        Intent intent = new Intent(
-                                UserRegisterActivity.this,
-                                UserLoginActivity.class
+                        JSONObject userJ = jObj.getJSONObject("user");
+                        db.addUser(
+                                userJ.getInt("id"),
+                                userJ.getString("username"),
+                                userJ.getString("email")
                         );
-                        startActivity(intent);
-                        finish();
+                        lauchHomeActivity();
                     } else {
                         String msgError = jObj.getString("error_msg");
-                        if(msgError.contains(email)) clearUnvalidInput("email");
+                        if(msgError.contains("mail")) clearUnvalidInput("email");
                         makeToast(msgError);
                     }
                 } catch (JSONException e) {
@@ -125,7 +113,6 @@ public class UserRegisterActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e(TAG, "Registration Error: " + error.getMessage());
-                makeToast(error.getMessage());
                 hideDialog();
             }
         }) {
@@ -174,6 +161,17 @@ public class UserRegisterActivity extends AppCompatActivity {
         }
     }
 
+    private void lauchHomeActivity() {
+        session.setLogin(true);
+        Intent intent = new Intent(
+                UserRegisterActivity.this,
+                UserHomeActivity.class
+        );
+        intent.putExtra("from", "register");
+        startActivity(intent);
+        finish();
+    }
+
     private void makeToast(String message) {
         Toast.makeText(
                 getApplicationContext(),
@@ -184,7 +182,6 @@ public class UserRegisterActivity extends AppCompatActivity {
     private void showDialog() {
         if (!pDialog.isShowing()) pDialog.show();
     }
-
     private void hideDialog() {
         if (pDialog.isShowing()) pDialog.dismiss();
     }

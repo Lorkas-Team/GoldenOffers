@@ -5,9 +5,6 @@ android:layout_width="match_parent"
 android:layout_height="match_parent"
 android:orientation="horizontal">
 
-<!-- Image for each ListItem row
-We can refer to images in our drawable folder with
-@drawable/dot for the image named dot.png -->
 <ImageView
     android:id="@+id/imageView1"
     android:layout_width="25dp"
@@ -16,7 +13,6 @@ We can refer to images in our drawable folder with
     android:layout_marginTop="25dp"
     android:src="@drawable/dot" />
 
-<!-- Used to define a custom ListView row -->
 <TextView
     android:id="@+id/txtView"
     android:layout_width="wrap_content"
@@ -24,4 +20,5 @@ We can refer to images in our drawable folder with
     android:textSize="30sp"
     android:textStyle="bold"
     android:padding="15dp" />
+
 </LinearLayout>

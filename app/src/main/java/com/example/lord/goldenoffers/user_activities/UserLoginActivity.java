@@ -1,4 +1,4 @@
-package com.example.lord.goldenoffers.user;
+package com.example.lord.goldenoffers.user_activities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -60,7 +60,7 @@ public class UserLoginActivity extends AppCompatActivity {
         if (session.isLoggedIn()) {
             Intent intent = new Intent(
                     UserLoginActivity.this,
-                    UserLoggedInActivity.class
+                    UserHomeActivity.class
             );
             startActivity(intent);
             finish();
@@ -92,67 +92,6 @@ public class UserLoginActivity extends AppCompatActivity {
         });
     }
 
-    private void doLogin(final String email, final String password) {
-
-        String tag_string_req = "req_login";
-
-        pDialog.setMessage("Logging in");
-        showDialog();
-
-        StringRequest strReq = new StringRequest(Request.Method.POST,
-                AppConfig.USER_URL_LOGIN, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Log.d(TAG, "Login Response: " + response);
-                hideDialog();
-
-                try {
-                    JSONObject jObj = new JSONObject(response);
-                    boolean error = jObj.getBoolean("error");
-                    if (!error) {
-
-                        session.setLogin(true);
-
-                        JSONObject user = jObj.getJSONObject("user");
-                        int usersDbID = user.getInt("id");
-                        String username = user.getString("username");
-                        String email = user.getString("email");
-                        db.addUser(usersDbID, username, email);
-
-                        Intent intent = new Intent(
-                                UserLoginActivity.this,
-                                UserLoggedInActivity.class
-                        );
-                        startActivity(intent);
-                        finish();
-                    } else {
-                        clearUnvalidInput("both");
-                        makeToast(jObj.getString("error_msg"));
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    makeToast("JSon Error : " + e.getMessage());
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e(TAG, "Login Error: " + error.getMessage());
-                makeToast(error.getMessage());
-                hideDialog();
-            }
-        }) {
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<>();
-                params.put("email", email);
-                params.put("password", password);
-                return params;
-            }
-        };
-        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
-    }
-
     private boolean isInputValid(String email, String strPassword) {
         List<Object> response = InputChecker.isLoginInputValid(email, strPassword);
         boolean error = (boolean) response.get(0);
@@ -181,6 +120,17 @@ public class UserLoginActivity extends AppCompatActivity {
         }
     }
 
+    private void launchHomeActivity() {
+        session.setLogin(true);
+        Intent intent = new Intent(
+                UserLoginActivity.this,
+                UserHomeActivity.class
+        );
+        intent.putExtra("from", "login");
+        startActivity(intent);
+        finish();
+    }
+
     private void makeToast(String message) {
         Toast.makeText(
                 getApplicationContext(),
@@ -194,5 +144,57 @@ public class UserLoginActivity extends AppCompatActivity {
 
     private void hideDialog() {
         if (pDialog.isShowing()) pDialog.dismiss();
+    }
+
+    private void doLogin(final String email, final String password) {
+
+        String tag_string_req = "req_login";
+
+        pDialog.setMessage("Login");
+        showDialog();
+
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                AppConfig.USER_URL_LOGIN, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+                hideDialog();
+                Log.d(TAG, "LOGIN RESPONSE : " + response);
+                try {
+                    JSONObject jObj = new JSONObject(response);
+                    boolean error = jObj.getBoolean("error");
+                    if (!error) {
+                        JSONObject userJ = jObj.getJSONObject("user");
+                        db.addUser(
+                                userJ.getInt("id"),
+                                userJ.getString("username"),
+                                userJ.getString("email")
+                        );
+                        launchHomeActivity();
+                    } else {
+                        clearUnvalidInput("both");
+                        makeToast(jObj.getString("error_msg"));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Log.d(TAG, e.getMessage());
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d(TAG, error.getMessage());
+                hideDialog();
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("email", email);
+                params.put("password", password);
+                return params;
+            }
+        };
+        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
     }
 }

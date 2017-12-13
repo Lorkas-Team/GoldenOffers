@@ -1,4 +1,4 @@
-package com.example.lord.goldenoffers.user;
+package com.example.lord.goldenoffers.user_activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,12 +10,13 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.lord.goldenoffers.R;
+import com.example.lord.goldenoffers.helper.Desire;
 import com.example.lord.goldenoffers.helper.SQLiteHandlerForUsers;
 import com.example.lord.goldenoffers.helper.SessionManager;
 
 import java.util.List;
 
-public class DesireListActivity extends AppCompatActivity {
+public class ViewDesiresActivity extends AppCompatActivity {
 
     private List<Desire> listDesires;
 
@@ -51,8 +52,8 @@ public class DesireListActivity extends AppCompatActivity {
         } else {
             makeToast("Nothing to show.");
             Intent intent = new Intent(
-                    DesireListActivity.this,
-                    UserLoggedInActivity.class
+                    ViewDesiresActivity.this,
+                    UserHomeActivity.class
             );
             startActivity(intent);
             finish();

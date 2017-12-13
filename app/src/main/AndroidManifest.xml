@@ -25,14 +25,16 @@
         <activity android:name=".business.BusinessLoginActivity" />
         <activity android:name=".business.RegisterActivity" />
         <activity android:name=".business.LoggedInActivity" />
-        <activity android:name=".user.UserLoginActivity" />
-        <activity android:name=".user.UserLoggedInActivity" />
-        <activity android:name=".user.UserRegisterActivity" />
-        <activity android:name=".user.AddDesireActivity" />
-        <activity android:name=".user.DesireListActivity"></activity>
+        <activity android:name=".user_activities.UserLoginActivity" />
+        <activity android:name=".user_activities.UserHomeActivity" />
+        <activity android:name=".user_activities.UserRegisterActivity" />
+        <activity android:name=".user_activities.AddDesireActivity" />
+        <activity android:name=".user_activities.ViewDesiresActivity" />
         <activity android:name=".business.AddOfferActivity" />
-        <activity android:name=".business.MyOffersActivity"
-            android:windowSoftInputMode="adjustPan"></activity>
+        <activity
+            android:name=".business.MyOffersActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity android:name=".user_activities.ViewOffersActivity"></activity>
     </application>
 
 </manifest>

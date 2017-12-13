@@ -60,4 +60,5 @@
     <string name="price_high_hint">High</string>
     <string name="add_desire_headline">What product are you looking for ?</string>
     <string name="add_desire_btn_sub_text">OK</string>
+    <string name="btn_view_offers_text">VIEW OFFERS</string>
 </resources>

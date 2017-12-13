@@ -1,4 +1,4 @@
-package com.example.lord.goldenoffers.user;
+package com.example.lord.goldenoffers.user_activities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -19,6 +19,7 @@ import com.example.lord.goldenoffers.app.AppConfig;
 import com.example.lord.goldenoffers.app.AppController;
 import com.example.lord.goldenoffers.helper.SQLiteHandlerForUsers;
 import com.example.lord.goldenoffers.helper.SessionManager;
+import com.example.lord.goldenoffers.helper.User;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -27,9 +28,9 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-public class UserLoggedInActivity extends AppCompatActivity {
+public class UserHomeActivity extends AppCompatActivity {
 
-    private static final String TAG = UserLoggedInActivity.class.getSimpleName();
+    private static final String TAG = UserHomeActivity.class.getSimpleName();
     protected static User USER;
 
     private SQLiteHandlerForUsers db;
@@ -38,39 +39,45 @@ public class UserLoggedInActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_logged_in);
-
-        TextView tvName = findViewById(R.id.tv_name);
-        TextView tvEmail = findViewById(R.id.tv_email);
-        Button btnLogout = findViewById(R.id.btn_logout);
-        Button btnAddDesire = findViewById(R.id.btn_add_desire);
-        Button btnDesiresList = findViewById(R.id.btn_desires_list);
 
         session = new SessionManager(getApplicationContext());
         if (!session.isLoggedIn()) {
             logoutUser();
         }
 
+        TextView tvName = findViewById(R.id.tv_name);
+        TextView tvEmail = findViewById(R.id.tv_email);
+        Button btnLogout = findViewById(R.id.btn_logout);
+        Button btnAddDesire = findViewById(R.id.btn_add_desire);
+        Button btnDesiresList = findViewById(R.id.btn_desires_list);
+        Button btnViewOffers = findViewById(R.id.btn_view_offers);
+
         db = new SQLiteHandlerForUsers(getApplicationContext());
-        USER = db.getUserDetails();
 
-        String name = USER.getUsername();
-        String email = USER.getEmail();
+        Bundle extras = getIntent().getExtras();
+        if(extras != null) {
+            String from = extras.getString("from");
+            if(from.equalsIgnoreCase("register") ||
+                        from.equalsIgnoreCase("login")) {
+                USER = db.getUserDetails();
+                setDesiresToSQLite(String.valueOf(USER.getDbID()));
+            }
+        }
 
-        tvName.setText(name);
-        tvEmail.setText(email);
+        tvName.setText(USER.getName());
+        tvEmail.setText(USER.getEmail());
 
         pDialog = new ProgressDialog(this);
         pDialog.setCancelable(false);
-
-        setDesiresToSQLite(String.valueOf(USER.getDbID()));
 
         btnAddDesire.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(
-                        UserLoggedInActivity.this,
+                        UserHomeActivity.this,
                         AddDesireActivity.class
                 );
                 startActivity(intent);
@@ -81,8 +88,19 @@ public class UserLoggedInActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(
-                        UserLoggedInActivity.this,
-                        DesireListActivity.class
+                        UserHomeActivity.this,
+                        ViewDesiresActivity.class
+                );
+                startActivity(intent);
+            }
+        });
+
+        btnViewOffers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(
+                        UserHomeActivity.this,
+                        ViewOffersActivity.class
                 );
                 startActivity(intent);
             }
@@ -97,11 +115,11 @@ public class UserLoggedInActivity extends AppCompatActivity {
     }
 
     private void logoutUser() {
+        //TODO need to delete session ?
         session.setLogin(false);
-        db.deleteUsers();
-        db.deleteDesires();
+        db.deleteAll();
         Intent intent = new Intent(
-                UserLoggedInActivity.this,
+                UserHomeActivity.this,
                 UserLoginActivity.class
         );
         startActivity(intent);
@@ -132,8 +150,9 @@ public class UserLoggedInActivity extends AppCompatActivity {
                             String strPriceHigh = desire.getString(2);
                             int desireDbID = desire.getInt(3);
                             String desireName = desire.getString(4);
-
-                            db.addDesire(desireDbID, desireName, strPriceLow, strPriceHigh);
+                            db.addDesire(desireDbID, desireName,
+                                    strPriceLow, strPriceHigh
+                            );
                         }
                     }
                 } catch (JSONException e) {
@@ -145,7 +164,6 @@ public class UserLoggedInActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e(TAG, "Getting Desires Error: " + error.getMessage());
-                makeToast(error.getMessage());
             }
         }) {
             @Override
@@ -168,7 +186,6 @@ public class UserLoggedInActivity extends AppCompatActivity {
     private void showDialog() {
         if (!pDialog.isShowing()) pDialog.show();
     }
-
     private void hideDialog() {
         if (pDialog.isShowing()) pDialog.dismiss();
     }

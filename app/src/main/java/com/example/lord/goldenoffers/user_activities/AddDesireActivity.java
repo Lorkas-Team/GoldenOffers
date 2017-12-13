@@ -1,4 +1,4 @@
-package com.example.lord.goldenoffers.user;
+package com.example.lord.goldenoffers.user_activities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -59,7 +59,7 @@ public class AddDesireActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                int usersDbID = UserLoggedInActivity.USER.getDbID();
+                int usersDbID = UserHomeActivity.USER.getDbID();
                 String nameDesire = prodNameInput.getText().toString().trim();
                 String strPriceLow = priceLowInput.getText().toString().trim();
                 String strPriceHigh = priceHighInput.getText().toString().trim();
@@ -74,7 +74,7 @@ public class AddDesireActivity extends AppCompatActivity {
     private void launchHomeActivity() {
         Intent intent = new Intent(
                 AddDesireActivity.this,
-                UserLoggedInActivity.class
+                UserHomeActivity.class
         );
         startActivity(intent);
         finish();

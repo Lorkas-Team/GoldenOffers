@@ -1,4 +1,4 @@
-package com.example.lord.goldenoffers.user;
+package com.example.lord.goldenoffers.user_activities;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,10 +23,10 @@ class DesireListRowAdapter extends ArrayAdapter<String> {
 
         String item = getItem(position);
 
-        TextView txtView = (TextView) view.findViewById(R.id.txtView);
+        TextView txtView = view.findViewById(R.id.txtView);
         txtView.setText(item);
 
-        ImageView imgView = (ImageView) view.findViewById(R.id.imageView1);
+        ImageView imgView = view.findViewById(R.id.imageView1);
         imgView.setImageResource(R.drawable.dot);
 
         return view;

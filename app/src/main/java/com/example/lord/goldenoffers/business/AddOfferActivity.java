@@ -86,11 +86,8 @@ public class AddOfferActivity extends AppCompatActivity {
         // SQLite database handler
         db = new SQLiteHandler(getApplicationContext());
 
-        // Fetching user details from sqlite
-        HashMap<String, String> user = db.getUserDetails();
-
-        final String business_id = user.get("uid");
-        final String business_name = user.get("name");
+        final String business_id = LoggedInActivity.BUSINESS.getUid();
+        final String business_name = LoggedInActivity.BUSINESS.getName();
 
 
         inputRegDate.setOnClickListener(new View.OnClickListener() {
