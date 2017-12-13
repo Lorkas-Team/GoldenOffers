@@ -14,34 +14,63 @@
             android:layout_width="120dp"
             android:layout_height="90dp"
             android:padding="4dp" />
-
+        <TextView
+            android:id="@+id/textTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@id/imageView"
+            android:text="Product name: "
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+            android:textColor="#000000" />
         <TextView
             android:id="@+id/textViewTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:layout_toRightOf="@id/imageView"
+            android:layout_below="@+id/textTitle"
             android:text="Apple MacBook Air Core i5 5th Gen - (8 GB/128 GB SSD/Mac OS Sierra)"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
             android:textColor="#000000" />
 
+        <TextView
+            android:id="@+id/textDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/textViewTitle"
+            android:layout_alignStart="@+id/textViewTitle"
+            android:layout_toRightOf="@id/imageView"
+            android:layout_below="@+id/textViewTitle"
+            android:text="Description:"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small" />
         <TextView
             android:id="@+id/textViewShortDesc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/textViewTitle"
             android:layout_alignStart="@+id/textViewTitle"
-            android:layout_below="@+id/textViewTitle"
+            android:layout_below="@+id/textDescription"
             android:text="13.3 Inch, 256 GB"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Small" />
 
 
-
+        <TextView
+            android:id="@+id/textPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textViewShortDesc"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_toRightOf="@id/imageView"
+            android:text="Price: "
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+            android:textStyle="bold" />
         <TextView
             android:id="@+id/textViewPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/textViewShortDesc"
+            android:layout_below="@id/textPrice"
             android:layout_marginLeft="5dp"
             android:layout_marginTop="5dp"
             android:layout_toRightOf="@id/imageView"
@@ -50,26 +79,58 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/regDate"
+            android:id="@+id/textReg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/textViewPrice"
             android:layout_marginLeft="5dp"
             android:layout_marginTop="5dp"
             android:layout_toRightOf="@id/imageView"
-            android:text="REGDATE"
+            android:text="Registration date: "
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/expDate"
+            android:id="@+id/regDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textReg"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_toRightOf="@id/imageView"
+            android:text="REGDATE"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+            android:textStyle="bold" />
+        <TextView
+            android:id="@+id/textExp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/regDate"
             android:layout_marginLeft="5dp"
             android:layout_marginTop="5dp"
             android:layout_toRightOf="@id/imageView"
+            android:text="Expiration date: "
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+            android:textStyle="bold" />
+        <TextView
+            android:id="@+id/expDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textExp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_toRightOf="@id/imageView"
             android:text="EXPDATE"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+            android:textStyle="bold" />
+        <TextView
+            android:id="@+id/text123"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/expDate"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:text="======================================================"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
             android:textStyle="bold" />
 

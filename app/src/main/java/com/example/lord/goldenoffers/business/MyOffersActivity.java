@@ -2,6 +2,8 @@ package com.example.lord.goldenoffers.business;
 
 
 import android.app.ProgressDialog;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
@@ -12,6 +14,7 @@ import java.util.List;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Base64;
 import android.widget.ExpandableListView;
 
 
@@ -40,7 +43,7 @@ public class MyOffersActivity extends AppCompatActivity {
 
     private SessionManager session;
     private SQLiteHandler db;
-
+    private ProgressDialog pDialog;
     List<Offer> offerList;
     RecyclerView recyclerView;
 
@@ -60,7 +63,9 @@ public class MyOffersActivity extends AppCompatActivity {
 
         // SQLite database handler
         db = new SQLiteHandler(getApplicationContext());
-
+        // Progress dialog
+        pDialog = new ProgressDialog(this);
+        pDialog.setCancelable(false);
         // Fetching user details from sqlite
         HashMap<String, String> user = db.getUserDetails();
 
@@ -78,13 +83,16 @@ public class MyOffersActivity extends AppCompatActivity {
      * Preparing the list data
      */
     private void prepareListData(final String business_id) {
+        pDialog.setMessage("Trying to get your offers from database ...");
+        showDialog();
 
-
+        
 
         final StringRequest stringRequest = new StringRequest(Request.Method.GET, URL_MY_OFFERS,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                        hideDialog();
                         try {
                             //converting the string to json array object
                             JSONArray array = new JSONArray(response);
@@ -98,12 +106,11 @@ public class MyOffersActivity extends AppCompatActivity {
                                     //adding the product to product list
                                     offerList.add(new Offer(
                                             offer.getInt("id"),
-                                            offer.getInt("business_id"),
                                             offer.getString("uid"),
                                             offer.getString("product_name"),
                                             offer.getString("price"),
                                             offer.getString("description"),
-                                            offer.getString("photo"),
+                                            StringToBitMap(offer.getString("image")),
                                             offer.getString("regDate"),
                                             offer.getString("expDate")
                                     ));
@@ -132,6 +139,30 @@ public class MyOffersActivity extends AppCompatActivity {
 
 
 
+    }
+    /**
+     * @param encodedString
+     * @return bitmap (from given string)
+     */
+    public Bitmap StringToBitMap(String encodedString){
+        try{
+            byte [] encodeByte= Base64.decode(encodedString,Base64.DEFAULT);
+            Bitmap bitmap= BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+            return bitmap;
+        }catch(Exception e){
+            e.getMessage();
+            return null;
+        }
+    }
+
+    private void showDialog() {
+        if (!pDialog.isShowing())
+            pDialog.show();
+    }
+
+    private void hideDialog() {
+        if (pDialog.isShowing())
+            pDialog.dismiss();
     }
 }
 

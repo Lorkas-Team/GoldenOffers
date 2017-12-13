@@ -38,8 +38,8 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ProductViewH
         Offer offer = offerList.get(position);
 
         //loading the image
-        Glide.with(mCtx).load(offer.getPhoto()).into(holder.imageView);
-
+        //Glide.with(mCtx).load(offer.getPhoto()).into(holder.imageView);
+        holder.imageView.setImageBitmap(offer.getPhoto());
         holder.textViewTitle.setText(offer.getProduct_name());
         holder.textViewShortDesc.setText(offer.getDescription());
         holder.textViewPrice.setText(String.valueOf(offer.getPrice()));

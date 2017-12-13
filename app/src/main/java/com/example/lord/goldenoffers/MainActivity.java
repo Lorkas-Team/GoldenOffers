@@ -8,13 +8,11 @@ import android.widget.Button;
 
 import com.example.lord.goldenoffers.business.BusinessLoginActivity;
 import com.example.lord.goldenoffers.user.UserLoginActivity;
-import com.example.lord.goldenoffers.user.UserRegisterActivity;
 
 public class MainActivity extends AppCompatActivity {
 
     public Button businessButton ;
     public Button userButton;
-
     //test-lord112345
     public void init(){
         businessButton=(Button)findViewById(R.id.businessButton);
