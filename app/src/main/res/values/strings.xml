@@ -1,0 +1,63 @@
+<resources>
+    <string name="app_name">GoldenOffers</string>
+
+    //Main Activity
+    <string name="users_port">Users Port</string>
+    <string name="business_port">Business Port</string>
+
+    //Business Register
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="rPassword">Repeat Password</string>
+    <string name="owner">Owner</string>
+    <string name="name">Name</string>
+    <string name="afm">Afm</string>
+    <string name="getLocation">Get Location</string>
+    <string name="register">Register</string>
+
+    //Business Login
+    <string name="login">LOG IN</string>
+    <string name="passReminder">Can\'t remember password? Click Here</string>
+    <string name="singup">Not Signed up yet? Register Here</string>
+
+    //Logged In
+    <string name="welcome">Welcome</string>
+    <string name="logout">LOG OUT</string>
+    <string name="addOffer">Add New Offer</string>
+    <string name="viewOffers">View My Offers</string>
+    <string name="btn_add_desire_text">ADD NEW DESIRE</string>
+
+    //User Register
+    <string name="username">Username</string>
+
+    //Add Desire (User)
+    <string name="btn_submit_text">ADD</string>
+    <string name="prod_name_input_hint">Products Name</string>
+    <string name="prod_descr_input_hint">Products Description</string>
+    <string name="price_low_txt">LOW :</string>
+    <string name="price_high_txt">HIGH :</string>
+    <string name="price_lbl_text">PRICE :</string>
+
+    //Error
+    <string name="error">Unexpected Error</string>
+
+    //Add Offer
+    <string name="productName">Product Name*</string>
+    <string name="productType">Product Type*</string>
+    <string name="regDate">Registration Date*</string>
+    <string name="expDate">Expiration Date*</string>
+    <string name="price">Price*</string>
+    <string name="photo">Insert Photo*</string>
+    <string name="description">Add a description for the product</string>
+    <string name="uploadbtn">Upload Offer</string>
+
+
+    <string name="title_activity_add_offer">AddOfferActivity</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_desires_list">DesiresListActivity</string>
+    <string name="view_your_desires">VIEW DESIRES</string>
+    <string name="input_low_price_hint">Low</string>
+    <string name="price_high_hint">High</string>
+    <string name="add_desire_headline">What product are you looking for ?</string>
+    <string name="add_desire_btn_sub_text">OK</string>
+</resources>
