@@ -18,7 +18,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
 
     // Database Name
-    private static final String DATABASE_NAME = "id3430729_database";
+    private static final String DATABASE_NAME = "business_database";
 
     // Login table name
     private static final String TABLE_BUSINESS = "business";
@@ -26,8 +26,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
     // Offers table name
     private static final String TABLE_OFFERS = "items";
 
-    //Login table name for user
-    private static final String TABLE_USERS = "users";
+
 
 
     // Login Table Columns names FOR BUSINESS

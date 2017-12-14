@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -37,8 +38,7 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ProductViewH
     public void onBindViewHolder(ProductViewHolder holder, int position) {
         Offer offer = offerList.get(position);
 
-        //loading the image
-        //Glide.with(mCtx).load(offer.getPhoto()).into(holder.imageView);
+
         holder.imageView.setImageBitmap(offer.getPhoto());
         holder.textViewTitle.setText(offer.getProduct_name());
         holder.textViewShortDesc.setText(offer.getDescription());
@@ -55,7 +55,7 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ProductViewH
 
     class ProductViewHolder extends RecyclerView.ViewHolder {
 
-        TextView textViewTitle, textViewShortDesc, textViewPrice, textViewRegDate , textViewExpDate;
+        EditText textViewTitle, textViewShortDesc, textViewPrice, textViewRegDate , textViewExpDate;
         ImageView imageView;
 
         public ProductViewHolder(View itemView) {

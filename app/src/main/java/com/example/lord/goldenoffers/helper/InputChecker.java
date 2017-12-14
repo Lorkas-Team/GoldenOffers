@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 
 public class InputChecker {
 
-    private static final String REGEX_NAME = "^[A-Za-z0-9._ -]{4,15}$";
+    private static final String REGEX_NAME = "^[A-Za-z0-9._ -]{4,30}$";
     private static final String REGEX_DESCRIPTION = "^[A-Za-z0-9,._ -]+$";
     private static final String REGEX_EMAIL = "^[A-Za-z0-9._-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$";
     private static final String REGEX_PASSWORD = "^[A-Za-z0-9.!@#$&-]{6,20}$";

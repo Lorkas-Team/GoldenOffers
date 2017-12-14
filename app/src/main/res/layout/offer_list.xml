@@ -23,7 +23,7 @@
             android:text="Product name: "
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
             android:textColor="#000000" />
-        <TextView
+        <EditText
             android:id="@+id/textViewTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -44,7 +44,7 @@
             android:layout_below="@+id/textViewTitle"
             android:text="Description:"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Small" />
-        <TextView
+        <EditText
             android:id="@+id/textViewShortDesc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -66,7 +66,7 @@
             android:text="Price: "
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
             android:textStyle="bold" />
-        <TextView
+        <EditText
             android:id="@+id/textViewPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -90,7 +90,7 @@
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
             android:textStyle="bold" />
 
-        <TextView
+        <EditText
             android:id="@+id/regDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -112,7 +112,7 @@
             android:text="Expiration date: "
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
             android:textStyle="bold" />
-        <TextView
+        <EditText
             android:id="@+id/expDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

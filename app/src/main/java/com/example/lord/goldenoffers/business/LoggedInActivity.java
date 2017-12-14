@@ -93,7 +93,7 @@ public class LoggedInActivity extends Activity {
         session.setLogin(false);
 
         db.deleteUsers();
-
+        db.deleteOffers();
         // Launching the login activity
         Intent intent = new Intent(LoggedInActivity.this, BusinessLoginActivity.class);
         startActivity(intent);

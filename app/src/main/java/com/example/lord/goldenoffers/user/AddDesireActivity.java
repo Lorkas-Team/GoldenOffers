@@ -20,6 +20,7 @@ import com.example.lord.goldenoffers.app.AppController;
 import com.example.lord.goldenoffers.helper.InputChecker;
 import com.example.lord.goldenoffers.helper.SQLiteHandlerForUsers;
 import com.example.lord.goldenoffers.helper.SessionManager;
+import com.example.lord.goldenoffers.helper.SessionManagerForUsers;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -37,7 +38,7 @@ public class AddDesireActivity extends AppCompatActivity {
 
     private ProgressDialog pDialog;
     private SQLiteHandlerForUsers db;
-    private SessionManager session;
+    private SessionManagerForUsers session;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +52,7 @@ public class AddDesireActivity extends AppCompatActivity {
         pDialog.setCancelable(false);
         db = new SQLiteHandlerForUsers(getApplicationContext());
 
-        session = new SessionManager(getApplicationContext());
+        session = new SessionManagerForUsers(getApplicationContext());
 
         btnSubmit = findViewById(R.id.btn_submit);
         btnSubmit.setOnClickListener(new View.OnClickListener() {

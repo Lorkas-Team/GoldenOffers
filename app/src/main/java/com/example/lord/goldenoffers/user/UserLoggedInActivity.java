@@ -18,7 +18,7 @@ import com.example.lord.goldenoffers.R;
 import com.example.lord.goldenoffers.app.AppConfig;
 import com.example.lord.goldenoffers.app.AppController;
 import com.example.lord.goldenoffers.helper.SQLiteHandlerForUsers;
-import com.example.lord.goldenoffers.helper.SessionManager;
+import com.example.lord.goldenoffers.helper.SessionManagerForUsers;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -33,7 +33,7 @@ public class UserLoggedInActivity extends AppCompatActivity {
     protected static User USER;
 
     private SQLiteHandlerForUsers db;
-    private SessionManager session;
+    private SessionManagerForUsers session;
     private ProgressDialog pDialog;
 
     @Override
@@ -47,7 +47,7 @@ public class UserLoggedInActivity extends AppCompatActivity {
         Button btnAddDesire = findViewById(R.id.btn_add_desire);
         Button btnDesiresList = findViewById(R.id.btn_desires_list);
 
-        session = new SessionManager(getApplicationContext());
+        session = new SessionManagerForUsers(getApplicationContext());
         if (!session.isLoggedIn()) {
             logoutUser();
         }

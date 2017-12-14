@@ -19,7 +19,7 @@ public class SQLiteHandlerForUsers extends SQLiteOpenHelper {
     private static final String TAG = SQLiteHandlerForUsers.class.getSimpleName();
 
     private static final int DATABASE_VERSION = 1;
-    private static final String DATABASE_NAME = "id3430729_database";
+    private static final String DATABASE_NAME = "users_database";
 
     //user table
     private static final String TABLE_USERS = "users";

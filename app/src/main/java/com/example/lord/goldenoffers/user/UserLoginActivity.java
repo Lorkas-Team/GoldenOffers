@@ -20,7 +20,7 @@ import com.example.lord.goldenoffers.app.AppConfig;
 import com.example.lord.goldenoffers.app.AppController;
 import com.example.lord.goldenoffers.helper.InputChecker;
 import com.example.lord.goldenoffers.helper.SQLiteHandlerForUsers;
-import com.example.lord.goldenoffers.helper.SessionManager;
+import com.example.lord.goldenoffers.helper.SessionManagerForUsers;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -38,7 +38,7 @@ public class UserLoginActivity extends AppCompatActivity {
     private EditText inputEmail, inputPassword;
 
     private ProgressDialog pDialog;
-    private SessionManager session;
+    private SessionManagerForUsers session;
     private SQLiteHandlerForUsers db;
 
     @Override
@@ -55,7 +55,7 @@ public class UserLoginActivity extends AppCompatActivity {
         pDialog.setCancelable(false);
 
         db = new SQLiteHandlerForUsers(getApplicationContext());
-        session = new SessionManager(getApplicationContext());
+        session = new SessionManagerForUsers(getApplicationContext());
 
         if (session.isLoggedIn()) {
             Intent intent = new Intent(
