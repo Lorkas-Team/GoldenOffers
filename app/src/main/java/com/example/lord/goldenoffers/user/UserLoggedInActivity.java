@@ -82,7 +82,7 @@ public class UserLoggedInActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(
                         UserLoggedInActivity.this,
-                        DesireListActivity.class
+                        MyDesiresActivity.class
                 );
                 startActivity(intent);
             }

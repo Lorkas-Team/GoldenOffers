@@ -3,10 +3,9 @@ package com.example.lord.goldenoffers.user;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListAdapter;
-import android.widget.ListView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+
 import android.widget.Toast;
 
 import com.example.lord.goldenoffers.R;
@@ -15,43 +14,35 @@ import com.example.lord.goldenoffers.helper.SessionManager;
 
 import java.util.List;
 
-public class DesireListActivity extends AppCompatActivity {
+public class MyDesiresActivity extends AppCompatActivity {
 
     private List<Desire> listDesires;
+    RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_desire_list);
 
+        //getting the recyclerview from xml
+        recyclerView = findViewById(R.id.recylcerView);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
         SessionManager session = new SessionManager(getApplicationContext());
 
         SQLiteHandlerForUsers db = new SQLiteHandlerForUsers(getApplicationContext());
         listDesires = db.getDesires();
         if(listDesires.size() > 0) {
-            int pos = 0;
-            String[] arrNames = new String[listDesires.size()];
-            for (Desire desire : listDesires) {
-                arrNames[pos++] = desire.getName();
-            }
 
-            ListView listView = findViewById(R.id.listView1);
-            ListAdapter adapter = new DesireListRowAdapter(this, arrNames);
-            listView.setAdapter(adapter);
-            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> adapterView, View view, int pos, long l) {
-                    String pickedName = String.valueOf(adapterView.getItemAtPosition(pos));
-                    Desire pickedDesire = getDesireByName(pickedName);
-                    if (pickedDesire != null) {
-                        makeToast("Selected item : \n" + pickedDesire.toString());
-                    }
-                }
-            });
+            //creating adapter object and setting it to recyclerview
+            DesireAdapter adapter = new DesireAdapter(MyDesiresActivity.this, listDesires);
+            recyclerView.setAdapter(adapter);
+
         } else {
             makeToast("Nothing to show.");
             Intent intent = new Intent(
-                    DesireListActivity.this,
+                    MyDesiresActivity.this,
                     UserLoggedInActivity.class
             );
             startActivity(intent);

@@ -9,17 +9,12 @@
         android:layout_height="wrap_content"
         android:padding="8dp">
 
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="120dp"
-            android:layout_height="90dp"
-            android:padding="4dp" />
+
         <TextView
             android:id="@+id/textTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
-            android:layout_toRightOf="@id/imageView"
             android:text="Product name: "
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
             android:textColor="#000000" />
@@ -28,106 +23,62 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
-            android:layout_toRightOf="@id/imageView"
             android:layout_below="@+id/textTitle"
             android:text="Apple MacBook Air Core i5 5th Gen - (8 GB/128 GB SSD/Mac OS Sierra)"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
             android:textColor="#000000" />
 
-        <TextView
-            android:id="@+id/textDescription"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/textViewTitle"
-            android:layout_alignStart="@+id/textViewTitle"
-            android:layout_toRightOf="@id/imageView"
-            android:layout_below="@+id/textViewTitle"
-            android:text="Description:"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
-        <EditText
-            android:id="@+id/textViewShortDesc"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/textViewTitle"
-            android:layout_alignStart="@+id/textViewTitle"
-            android:layout_below="@+id/textDescription"
-            android:text="13.3 Inch, 256 GB"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
+
 
 
         <TextView
-            android:id="@+id/textPrice"
+            android:id="@+id/textMinPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/textViewShortDesc"
+            android:layout_below="@id/textViewTitle"
             android:layout_marginLeft="5dp"
             android:layout_marginTop="5dp"
-            android:layout_toRightOf="@id/imageView"
-            android:text="Price: "
+            android:text="Min Price(euros): "
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
             android:textStyle="bold" />
         <EditText
-            android:id="@+id/textViewPrice"
+            android:id="@+id/textViewMinPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/textPrice"
+            android:layout_below="@id/textMinPrice"
             android:layout_marginLeft="5dp"
             android:layout_marginTop="5dp"
-            android:layout_toRightOf="@id/imageView"
+            android:text="PRICE"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+            android:textStyle="bold" />
+
+
+        <TextView
+            android:id="@+id/textMaxPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textViewMinPrice"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:text="Max Price(euros): "
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+            android:textStyle="bold" />
+        <EditText
+            android:id="@+id/textViewMaxPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textMaxPrice"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
             android:text="PRICE"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/textReg"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/textViewPrice"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="5dp"
-            android:layout_toRightOf="@id/imageView"
-            android:text="Registration date: "
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-            android:textStyle="bold" />
-
-        <EditText
-            android:id="@+id/regDate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/textReg"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="5dp"
-            android:layout_toRightOf="@id/imageView"
-            android:text="REGDATE"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-            android:textStyle="bold" />
-        <TextView
-            android:id="@+id/textExp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/regDate"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="5dp"
-            android:layout_toRightOf="@id/imageView"
-            android:text="Expiration date: "
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-            android:textStyle="bold" />
-        <EditText
-            android:id="@+id/expDate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/textExp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="5dp"
-            android:layout_toRightOf="@id/imageView"
-            android:text="EXPDATE"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-            android:textStyle="bold" />
-        <TextView
             android:id="@+id/text123"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/expDate"
+            android:layout_below="@id/textViewMaxPrice"
             android:layout_marginLeft="5dp"
             android:layout_marginTop="5dp"
             android:text="======================================================"
