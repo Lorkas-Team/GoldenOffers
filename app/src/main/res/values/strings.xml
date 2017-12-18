@@ -60,4 +60,6 @@
     <string name="price_high_hint">High</string>
     <string name="add_desire_headline">What product are you looking for ?</string>
     <string name="add_desire_btn_sub_text">OK</string>
+    <string name="title_activity_offers_maps">Map</string>
+    <string name="title_activity_test_maps">Map</string>
 </resources>
