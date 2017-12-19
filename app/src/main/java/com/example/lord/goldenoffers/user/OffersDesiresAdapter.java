@@ -1,5 +1,7 @@
 package com.example.lord.goldenoffers.user;
 
+import android.content.ActivityNotFoundException;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -21,7 +23,7 @@ import java.util.Locale;
 
 
 public class OffersDesiresAdapter extends RecyclerView.Adapter<OffersDesiresAdapter.ProductViewHolder> {
-    AppCompatActivity appCompatActivity;
+
     private Context mCtx;
     private List<Offer> offerList;
 
@@ -47,14 +49,27 @@ public class OffersDesiresAdapter extends RecyclerView.Adapter<OffersDesiresAdap
         holder.textViewShortDesc.setText(offer.getDescription());
         holder.textViewPrice.setText(String.valueOf(offer.getPrice()));
         holder.textViewExpDate.setText(String.valueOf(offer.getExpDate()));
-        
+
         holder.mapButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
+
+                /*
                 String uri = String.format(Locale.ENGLISH, "geo:%f,%f", Double.parseDouble(offer.getLatitude()),Double.parseDouble(offer.getLongitude()) );
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
-                appCompatActivity.startActivity(intent);
+                mCtx.startActivity(intent);
+                */
+
+                String label =  "Business name: " + offer.getBusiness_name() +"\t\n,Product name: "+offer.getProduct_name() + "\t\n,Price: " + offer.getPrice()   ;
+                String uri = String.format(Locale.ENGLISH, "geo:%f,%f?z=%d&q=%f,%f (%s)", Double.parseDouble(offer.getLatitude()), Double.parseDouble(offer.getLongitude()), 10,Double.parseDouble(offer.getLatitude()), Double.parseDouble(offer.getLongitude()), label );
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+                mCtx.startActivity(intent);
+
+
+
+
+
             }
         });
 
@@ -83,4 +98,6 @@ public class OffersDesiresAdapter extends RecyclerView.Adapter<OffersDesiresAdap
             mapButton = itemView.findViewById(R.id.openMap);
         }
     }
+
+
 }
