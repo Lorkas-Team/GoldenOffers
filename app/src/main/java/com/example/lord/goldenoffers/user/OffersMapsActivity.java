@@ -10,6 +10,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Base64;
@@ -43,7 +44,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class OffersMapsActivity extends FragmentActivity implements OnMapReadyCallback {
+public class OffersMapsActivity extends AppCompatActivity {
 
     private  List<Offer> offerList;
     private static final String TAG = OffersMapsActivity.class.getSimpleName();
@@ -56,7 +57,7 @@ public class OffersMapsActivity extends FragmentActivity implements OnMapReadyCa
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_my_offers);
+        setContentView(R.layout.offers_desires);
         //getting the recyclerview from xml
         recyclerView = findViewById(R.id.recylcerView);
         recyclerView.setHasFixedSize(true);
@@ -88,13 +89,14 @@ public class OffersMapsActivity extends FragmentActivity implements OnMapReadyCa
 
                         //getting product object from json array
                         JSONObject offer = array.getJSONObject(i);
-                        //adding the product to product list
+                        //adding the offer to offer list
                         offerList.add(new Offer(
                                         offer.getInt("id"),
                                         offer.getString("uid"),
                                         offer.getString("product_name"),
                                         offer.getString("price"),
                                         offer.getString("description"),
+                                        StringToBitMap(offer.getString("image")),
                                         offer.getString("regDate"),
                                         offer.getString("expDate"),
                                         offer.getString("name"),
@@ -106,8 +108,8 @@ public class OffersMapsActivity extends FragmentActivity implements OnMapReadyCa
 
                     }
                     //creating adapter object and setting it to recyclerview
-                    //OfferAdapter adapter = new OfferAdapter(OffersMapsActivity.this, offerList);
-                    //recyclerView.setAdapter(adapter);
+                    OffersDesiresAdapter adapter = new OffersDesiresAdapter(OffersMapsActivity.this, offerList);
+                    recyclerView.setAdapter(adapter);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -141,33 +143,10 @@ public class OffersMapsActivity extends FragmentActivity implements OnMapReadyCa
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
 
 
-        setContentView(R.layout.activity_offers_maps);
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
+
     }
 
-        @Override
-        public void onMapReady (GoogleMap googleMap){
-            mMap = googleMap;
 
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                    == PackageManager.PERMISSION_GRANTED) {
-                mMap.setMyLocationEnabled(true);
-            }
-
-
-
-            //no working TODO
-            for(Offer offer: offerList){
-                LatLng latLng = new LatLng( Double.parseDouble(offer.getLongitude()),Double.parseDouble(offer.getLatitude()));
-                mMap.addMarker(new MarkerOptions().position(latLng).title("Offer name: " + offer.getProduct_name() +" , price: " + offer.getPrice() + " , Business name: " + offer.getBusiness_name()));
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-
-            }
-
-        }
 
 
 

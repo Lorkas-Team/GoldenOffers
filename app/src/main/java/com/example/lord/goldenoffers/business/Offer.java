@@ -6,13 +6,13 @@ import android.media.Image;
 
 public class Offer {
 
-    public Offer(int id, String uid, String product_name, String price, String description,  String regDate, String expDate, String business_name, String longitude, String latitude) {
+    public Offer(int id, String uid, String product_name, String price, String description,Bitmap image,  String regDate, String expDate, String business_name, String longitude, String latitude) {
         this.id = id;
         this.uid = uid;
         this.product_name = product_name;
         this.price = price;
         this.description = description;
-        //this.image = image;
+        this.image = image;
         this.regDate = regDate;
         this.expDate = expDate;
         this.business_name = business_name;
