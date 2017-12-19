@@ -1,15 +1,19 @@
 package com.example.lord.goldenoffers.user;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentActivity;
+import android.location.LocationManager;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
+import android.provider.Settings;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -37,16 +41,38 @@ import java.util.List;
 import java.util.Map;
 
 public class OffersMapsActivity extends AppCompatActivity {
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
 
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
+    private String latitude,longitude;
     private  List<Offer> offerList;
     private static final String TAG = OffersMapsActivity.class.getSimpleName();
     RecyclerView recyclerView;
 
+    private LocationManager locationManager;
+
+    private static final int REQUEST_LOCATION = 1;
     private ProgressDialog pDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
+
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        if (locationManager != null) {
+            if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                buildAlertMessageNoGps();
+
+            } else if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                getLocation();
+            }
+        }
 
         setContentView(R.layout.offers_desires);
         //getting the recyclerview from xml
@@ -124,7 +150,8 @@ public class OffersMapsActivity extends AppCompatActivity {
                 // Posting params to register url
                 Map<String, String> params = new HashMap<>();
                 params.put("users_id", users_id);
-
+                params.put("user_longitude",longitude);
+                params.put("user_latitude",latitude);
 
                 return params;
             }
@@ -167,6 +194,49 @@ public class OffersMapsActivity extends AppCompatActivity {
     private void hideDialog() {
         if (pDialog.isShowing())
             pDialog.dismiss();
+    }
+    private void getLocation() {
+        if (ActivityCompat.checkSelfPermission(OffersMapsActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission
+                (OffersMapsActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(OffersMapsActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
+
+        } else {
+            Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+
+            if (location != null) {
+                double latti = location.getLatitude();
+                double longi = location.getLongitude();
+
+                latitude = String.valueOf(latti);
+                setLatitude(latitude);
+                longitude = String.valueOf(longi);
+                setLongitude(longitude);
+
+
+            }else{
+                Toast.makeText(this,"Unable to Trace your location please try again soon",Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+    protected void buildAlertMessageNoGps() {
+
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Please Turn ON your GPS Connection")
+                .setCancelable(false)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialog, final int id) {
+                        startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialog, final int id) {
+                        dialog.cancel();
+                    }
+                });
+        final AlertDialog alert = builder.create();
+        alert.show();
     }
 
 

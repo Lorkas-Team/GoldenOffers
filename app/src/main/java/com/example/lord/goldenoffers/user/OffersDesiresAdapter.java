@@ -54,22 +54,10 @@ public class OffersDesiresAdapter extends RecyclerView.Adapter<OffersDesiresAdap
 
             @Override
             public void onClick(View v) {
-
-                /*
-                String uri = String.format(Locale.ENGLISH, "geo:%f,%f", Double.parseDouble(offer.getLatitude()),Double.parseDouble(offer.getLongitude()) );
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
-                mCtx.startActivity(intent);
-                */
-
                 String label =  "Business name: " + offer.getBusiness_name() +"\t\n,Product name: "+offer.getProduct_name() + "\t\n,Price: " + offer.getPrice()   ;
                 String uri = String.format(Locale.ENGLISH, "geo:%f,%f?z=%d&q=%f,%f (%s)", Double.parseDouble(offer.getLatitude()), Double.parseDouble(offer.getLongitude()), 10,Double.parseDouble(offer.getLatitude()), Double.parseDouble(offer.getLongitude()), label );
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
                 mCtx.startActivity(intent);
-
-
-
-
-
             }
         });
 
