@@ -1,10 +1,14 @@
 package com.example.lord.goldenoffers.user;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -13,11 +17,11 @@ import com.example.lord.goldenoffers.R;
 import com.example.lord.goldenoffers.business.Offer;
 
 import java.util.List;
+import java.util.Locale;
 
 
-
-public class OffersDesiresAdapter extends RecyclerView.Adapter<OffersDesiresAdapter.ProductViewHolder>{
-
+public class OffersDesiresAdapter extends RecyclerView.Adapter<OffersDesiresAdapter.ProductViewHolder> {
+    AppCompatActivity appCompatActivity;
     private Context mCtx;
     private List<Offer> offerList;
 
@@ -34,8 +38,8 @@ public class OffersDesiresAdapter extends RecyclerView.Adapter<OffersDesiresAdap
     }
 
     @Override
-    public void onBindViewHolder(OffersDesiresAdapter.ProductViewHolder holder, int position) {
-        Offer offer = offerList.get(position);
+    public void onBindViewHolder(OffersDesiresAdapter.ProductViewHolder holder, final int position) {
+        final Offer offer = offerList.get(position);
 
 
         holder.imageView.setImageBitmap(offer.getPhoto());
@@ -43,7 +47,16 @@ public class OffersDesiresAdapter extends RecyclerView.Adapter<OffersDesiresAdap
         holder.textViewShortDesc.setText(offer.getDescription());
         holder.textViewPrice.setText(String.valueOf(offer.getPrice()));
         holder.textViewExpDate.setText(String.valueOf(offer.getExpDate()));
+        
+        holder.mapButton.setOnClickListener(new View.OnClickListener() {
 
+            @Override
+            public void onClick(View v) {
+                String uri = String.format(Locale.ENGLISH, "geo:%f,%f", Double.parseDouble(offer.getLatitude()),Double.parseDouble(offer.getLongitude()) );
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+                appCompatActivity.startActivity(intent);
+            }
+        });
 
     }
 
@@ -56,6 +69,7 @@ public class OffersDesiresAdapter extends RecyclerView.Adapter<OffersDesiresAdap
 
         TextView textViewTitle, textViewShortDesc, textViewPrice, textViewRegDate, textViewExpDate;
         ImageView imageView;
+        Button mapButton;
 
         public ProductViewHolder(View itemView) {
             super(itemView);
@@ -66,6 +80,7 @@ public class OffersDesiresAdapter extends RecyclerView.Adapter<OffersDesiresAdap
             imageView = itemView.findViewById(R.id.imageView);
             textViewExpDate = itemView.findViewById(R.id.expDate);
             textViewRegDate = itemView.findViewById(R.id.regDate);
+            mapButton = itemView.findViewById(R.id.openMap);
         }
     }
 }

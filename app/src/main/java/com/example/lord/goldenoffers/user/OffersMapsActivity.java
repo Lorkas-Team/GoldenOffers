@@ -24,16 +24,8 @@ import com.android.volley.toolbox.StringRequest;
 import com.example.lord.goldenoffers.R;
 import com.example.lord.goldenoffers.app.AppConfig;
 import com.example.lord.goldenoffers.app.AppController;
-import com.example.lord.goldenoffers.business.MyOffersActivity;
 import com.example.lord.goldenoffers.business.Offer;
-import com.example.lord.goldenoffers.business.OfferAdapter;
 import com.example.lord.goldenoffers.helper.SQLiteHandlerForUsers;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -48,7 +40,6 @@ public class OffersMapsActivity extends AppCompatActivity {
 
     private  List<Offer> offerList;
     private static final String TAG = OffersMapsActivity.class.getSimpleName();
-    private GoogleMap mMap;
     RecyclerView recyclerView;
 
     private ProgressDialog pDialog;
@@ -71,6 +62,7 @@ public class OffersMapsActivity extends AppCompatActivity {
         final String users_id = String.valueOf(user.getDbID());
         pDialog.setMessage("Trying to get your offers from database ...");
         showDialog();
+
         String tag_string_req = "req...offers";
         StringRequest strReq = new StringRequest(Request.Method.POST,
                 AppConfig.USER_GET_OFFERS_FROM_DESIRES, new Response.Listener<String>() {
