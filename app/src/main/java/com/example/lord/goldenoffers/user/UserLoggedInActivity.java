@@ -46,7 +46,7 @@ public class UserLoggedInActivity extends AppCompatActivity {
         Button btnLogout = findViewById(R.id.btn_logout);
         Button btnAddDesire = findViewById(R.id.btn_add_desire);
         Button btnDesiresList = findViewById(R.id.btn_desires_list);
-
+        Button btnCheckOffers = findViewById(R.id.btn_map);
         session = new SessionManagerForUsers(getApplicationContext());
         if (!session.isLoggedIn()) {
             logoutUser();
@@ -83,6 +83,17 @@ public class UserLoggedInActivity extends AppCompatActivity {
                 Intent intent = new Intent(
                         UserLoggedInActivity.this,
                         MyDesiresActivity.class
+                );
+                startActivity(intent);
+            }
+        });
+
+        btnCheckOffers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(
+                        UserLoggedInActivity.this,
+                        OffersMapsActivity.class
                 );
                 startActivity(intent);
             }
