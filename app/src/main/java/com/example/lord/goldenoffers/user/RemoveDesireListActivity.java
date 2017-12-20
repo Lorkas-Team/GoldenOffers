@@ -41,7 +41,7 @@ public class RemoveDesireListActivity extends AppCompatActivity {
         final ListView listView = (ListView) findViewById(R.id.listView1);
         ListAdapter adapter = new RemoveDesireListRowAdapter(this, arrNames);
         listView.setAdapter(adapter);
-/*
+
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int pos, long l) {
@@ -56,18 +56,16 @@ public class RemoveDesireListActivity extends AppCompatActivity {
                 }
             }
         });
-*/
+
         //Long click to delete a desire
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-
             @Override
-            public void onItemLongClickListener(AdapterView<?> adapterView, View view, int pos, long l) {
-                // ? ? ?
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int pos, long l) {
                 int id = listDesires.get(pos).getDbID();
                 db.deleteAdesire(id);
                 listView.removeViewAt(pos);
+                return false;
             }
-
         });
     }
 
