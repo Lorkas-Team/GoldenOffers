@@ -74,6 +74,11 @@
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
             android:textStyle="bold" />
 
+
+
+
+
+
         <TextView
             android:id="@+id/text123"
             android:layout_width="wrap_content"

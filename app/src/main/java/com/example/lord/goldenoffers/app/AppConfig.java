@@ -20,4 +20,10 @@ public class AppConfig {
     public static String USER_URL_GET_DESIRES ="https://golden-offers.000webhostapp.com/API/Users_API_by_george/Get_Users_Desires.php";
 
     public static String USER_GET_OFFERS_FROM_DESIRES="https://golden-offers.000webhostapp.com/API/Users_API_by_george/Get_Offers_From_Desires.php";
+
+    public static String USER_DESIRE_UPDATE="https://golden-offers.000webhostapp.com/API/Users_API_by_george/Update_Desire.php";
+
+    public static String OFFER_UPDATE="https://golden-offers.000webhostapp.com/API/Business_Register.Login/Update_Offers.php";
+
+    public static String OFFER_DELETE="https://golden-offers.000webhostapp.com/API/Business_Register.Login/Delete_Offers.php";
 }

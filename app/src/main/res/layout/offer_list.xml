@@ -14,6 +14,7 @@
             android:layout_width="120dp"
             android:layout_height="90dp"
             android:padding="4dp" />
+
         <TextView
             android:id="@+id/textTitle"
             android:layout_width="wrap_content"
@@ -23,13 +24,14 @@
             android:text="Product name: "
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
             android:textColor="#000000" />
+
         <EditText
             android:id="@+id/textViewTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/textTitle"
             android:layout_marginLeft="5dp"
             android:layout_toRightOf="@id/imageView"
-            android:layout_below="@+id/textTitle"
             android:text="Apple MacBook Air Core i5 5th Gen - (8 GB/128 GB SSD/Mac OS Sierra)"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
             android:textColor="#000000" />
@@ -40,10 +42,11 @@
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/textViewTitle"
             android:layout_alignStart="@+id/textViewTitle"
-            android:layout_toRightOf="@id/imageView"
             android:layout_below="@+id/textViewTitle"
+            android:layout_toRightOf="@id/imageView"
             android:text="Description:"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
+
         <EditText
             android:id="@+id/textViewShortDesc"
             android:layout_width="wrap_content"
@@ -66,6 +69,7 @@
             android:text="Price: "
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
             android:textStyle="bold" />
+
         <EditText
             android:id="@+id/textViewPrice"
             android:layout_width="wrap_content"
@@ -101,6 +105,7 @@
             android:text="REGDATE"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
             android:textStyle="bold" />
+
         <TextView
             android:id="@+id/textExp"
             android:layout_width="wrap_content"
@@ -112,6 +117,7 @@
             android:text="Expiration date: "
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
             android:textStyle="bold" />
+
         <EditText
             android:id="@+id/expDate"
             android:layout_width="wrap_content"
@@ -123,11 +129,29 @@
             android:text="EXPDATE"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
             android:textStyle="bold" />
+
+
+        <Button
+            android:id="@+id/updateBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/expDate"
+            android:layout_toRightOf="@id/imageView"
+            android:text="UPDATE" />
+
+        <Button
+            android:id="@+id/deleteBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/expDate"
+            android:layout_toRightOf="@id/updateBtn"
+            android:text="DELETE" />
+
         <TextView
             android:id="@+id/text123"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/expDate"
+            android:layout_below="@id/updateBtn"
             android:layout_marginLeft="5dp"
             android:layout_marginTop="5dp"
             android:text="======================================================"

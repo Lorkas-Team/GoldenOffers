@@ -119,7 +119,7 @@ public class UserLoggedInActivity extends AppCompatActivity {
         finish();
     }
 
-    private void setDesiresToSQLite(final String strUsersDbID) {
+    public void setDesiresToSQLite(final String strUsersDbID) {
 
         String tag_string_req = "req_get_desires";
 
