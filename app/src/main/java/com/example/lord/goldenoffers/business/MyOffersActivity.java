@@ -130,6 +130,7 @@ public class MyOffersActivity extends AppCompatActivity {
                     //creating adapter object and setting it to recyclerview
                     OfferAdapter adapter = new OfferAdapter(MyOffersActivity.this, offerList);
                     recyclerView.setAdapter(adapter);
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
