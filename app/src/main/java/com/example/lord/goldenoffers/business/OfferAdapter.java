@@ -188,7 +188,7 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ProductViewH
                                 mCtx,
                                 MyOffersActivity.class);
                         mCtx.startActivity(intent);
-                        //TODO:finish();
+                        ((MyOffersActivity)mCtx).finish();
                     }else{
                         String errorMsg = jObj.getString("error_msg");
                         Toast.makeText(mCtx,
