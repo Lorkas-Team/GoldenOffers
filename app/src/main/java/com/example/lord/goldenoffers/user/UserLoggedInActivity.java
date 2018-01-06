@@ -93,7 +93,7 @@ public class UserLoggedInActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(
                         UserLoggedInActivity.this,
-                        OffersMapsActivity.class
+                        OffersBasedOnMyDesiresActivity.class
                 );
                 startActivity(intent);
             }

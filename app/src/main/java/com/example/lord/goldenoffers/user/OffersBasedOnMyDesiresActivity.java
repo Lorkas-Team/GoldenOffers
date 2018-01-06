@@ -61,10 +61,10 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
-public class OffersMapsActivity extends AppCompatActivity {
+public class OffersBasedOnMyDesiresActivity extends AppCompatActivity {
 
     private List<Offer> offerList;
-    private static final String TAG = OffersMapsActivity.class.getSimpleName();
+    private static final String TAG = OffersBasedOnMyDesiresActivity.class.getSimpleName();
     RecyclerView recyclerView;
     private ProgressDialog pDialog;
 
@@ -207,7 +207,7 @@ public class OffersMapsActivity extends AppCompatActivity {
 
 
                     //creating adapter object and setting it to recyclerview
-                    OffersDesiresAdapter adapter = new OffersDesiresAdapter(OffersMapsActivity.this, offerList);
+                    OffersDesiresAdapter adapter = new OffersDesiresAdapter(OffersBasedOnMyDesiresActivity.this, offerList);
                     recyclerView.setAdapter(adapter);
 
                 } catch (JSONException e) {
@@ -360,7 +360,7 @@ public class OffersMapsActivity extends AppCompatActivity {
     }
 
     private void startLocationPermissionRequest(int requestCode) {
-        ActivityCompat.requestPermissions(OffersMapsActivity.this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, requestCode);
+        ActivityCompat.requestPermissions(OffersBasedOnMyDesiresActivity.this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, requestCode);
     }
 
     private void requestPermissions(final int requestCode) {
@@ -394,17 +394,17 @@ public class OffersMapsActivity extends AppCompatActivity {
         try {
             LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder().addLocationRequest(locationRequest);
             builder.addLocationRequest(locationRequest);
-            SettingsClient settingsClient = LocationServices.getSettingsClient(OffersMapsActivity.this);
+            SettingsClient settingsClient = LocationServices.getSettingsClient(OffersBasedOnMyDesiresActivity.this);
 
             settingsClient.checkLocationSettings(builder.build())
-                    .addOnSuccessListener(OffersMapsActivity.this, new OnSuccessListener<LocationSettingsResponse>() {
+                    .addOnSuccessListener(OffersBasedOnMyDesiresActivity.this, new OnSuccessListener<LocationSettingsResponse>() {
                         @Override
                         public void onSuccess(LocationSettingsResponse locationSettingsResponse) {
                             //Setting is success...
-                            Toast.makeText(OffersMapsActivity.this, "Enabled the Location successfully. Now you can press the buttons..", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(OffersBasedOnMyDesiresActivity.this, "Enabled the Location successfully. Now you can press the buttons..", Toast.LENGTH_SHORT).show();
                         }
                     })
-                    .addOnFailureListener(OffersMapsActivity.this, new OnFailureListener() {
+                    .addOnFailureListener(OffersBasedOnMyDesiresActivity.this, new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
 
@@ -417,13 +417,13 @@ public class OffersMapsActivity extends AppCompatActivity {
                                         // Show the dialog by calling startResolutionForResult(), and check the
                                         // result in onActivityResult().
                                         ResolvableApiException rae = (ResolvableApiException) e;
-                                        rae.startResolutionForResult(OffersMapsActivity.this, REQUEST_PERMISSIONS_LOCATION_SETTINGS_REQUEST_CODE);
+                                        rae.startResolutionForResult(OffersBasedOnMyDesiresActivity.this, REQUEST_PERMISSIONS_LOCATION_SETTINGS_REQUEST_CODE);
                                     } catch (IntentSender.SendIntentException sie) {
                                         sie.printStackTrace();
                                     }
                                     break;
                                 case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
-                                    Toast.makeText(OffersMapsActivity.this, "Setting change is not available.Try in another device.", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(OffersBasedOnMyDesiresActivity.this, "Setting change is not available.Try in another device.", Toast.LENGTH_LONG).show();
                             }
 
                         }

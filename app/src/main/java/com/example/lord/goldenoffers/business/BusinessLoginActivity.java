@@ -170,6 +170,8 @@ public class BusinessLoginActivity extends Activity {
                         // Inserting row in users table
                         db.addUser(name, email, uid, owner, afm, latitude, longitude, created_at);
 
+                        Toast.makeText(getApplicationContext(), "User successfully logged in!", Toast.LENGTH_LONG).show();
+
                         // Launch Logged In activity
                         Intent intent = new Intent(BusinessLoginActivity.this,
                                 LoggedInActivity.class);
