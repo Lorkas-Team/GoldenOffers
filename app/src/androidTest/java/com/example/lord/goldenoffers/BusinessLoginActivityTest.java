@@ -5,6 +5,8 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.example.lord.goldenoffers.business.BusinessLoginActivity;
+import com.example.lord.goldenoffers.user.User;
+import com.example.lord.goldenoffers.user.UserLoginActivity;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -29,16 +31,15 @@ public class BusinessLoginActivityTest {
 
 
     @Rule
-    public ActivityTestRule<BusinessLoginActivity> mActivityRule =
+    public ActivityTestRule<BusinessLoginActivity> businessActivityRule =
             new ActivityTestRule<>(BusinessLoginActivity.class);
 
-    public BusinessLoginActivity mActivity = null;
 
+    public BusinessLoginActivity businessActivity = null;
     @Before
     public void setUp() throws Exception {
 
-        mActivity = mActivityRule.getActivity();
-
+        businessActivity = businessActivityRule.getActivity();
     }
     @Test
     public void testBusinessPortARegister(){
@@ -72,6 +73,7 @@ public class BusinessLoginActivityTest {
 
 
     }
+
 
 
 

@@ -99,9 +99,6 @@ public class AddDesireActivity extends AppCompatActivity {
                     JSONObject jObj = new JSONObject(response);
                     boolean error = jObj.getBoolean("error");
                     if (!error) {
-                        JSONObject prod_id = jObj.getJSONObject("prod_id");
-                        int desireDbID = prod_id.getInt("id");
-                        db.addDesire(desireDbID, prodName, strPriceLow, strPriceHigh);
 
                         makeToast("Desire Successfully Added.");
                         launchHomeActivity();

@@ -12,7 +12,7 @@ public class InputChecker {
     private static final String REGEX_PASSWORD = "^[A-Za-z0-9.!@#$&-]{6,20}$";
     private static final String REGEX_AFM = "^[0-9]{9}$";
     private static final String REGEX_PRICE = "^[0-9]{1,4}([.][0-9]{1,3})?$";
-    private static final String REGEX_DATE = "^20[0-9]{2}-[0-1][0-9]-[0-3][0-9]$";
+    //private static final String REGEX_DATE = "^\d{4}\-([1-9]|1[012])\-([1-9]|[12][0-9]|3[01])$";
 
     private static boolean isInputValid(String regexPattern, String strInput) {
         CharSequence chSeqInput = strInput;
@@ -222,17 +222,9 @@ public class InputChecker {
             error = true;
             msgError = "Registration Date field is empty.";
             unvalidInput = "reg_date";
-        } else if (!isInputValid(REGEX_DATE, strRegistDate)) {
-            error = true;
-            msgError = "Not valid Date.";
-            unvalidInput = "reg_date";
         } else if(strExpDate.isEmpty()) {
             error = true;
             msgError = "Exp Date field is empty.";
-            unvalidInput = "exp_date";
-        } else if (!isInputValid(REGEX_DATE, strExpDate)) {
-            error = true;
-            msgError = "Not valid Date.";
             unvalidInput = "exp_date";
         } else if(strPrice.isEmpty()) {
             error = true;
