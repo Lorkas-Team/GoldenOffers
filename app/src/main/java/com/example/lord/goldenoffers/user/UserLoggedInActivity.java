@@ -1,186 +1,143 @@
 package com.example.lord.goldenoffers.user;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.example.lord.goldenoffers.R;
-import com.example.lord.goldenoffers.app.AppConfig;
-import com.example.lord.goldenoffers.app.AppController;
 import com.example.lord.goldenoffers.helper.SQLiteHandlerForUsers;
 import com.example.lord.goldenoffers.helper.SessionManagerForUsers;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.HashMap;
-import java.util.Map;
-
+/**
+ * Users Home Page Activity<br />
+ * Contains buttons to navigate the user to :<br />
+ * ADD new desired product for search<br />
+ * VIEW list of desired products<br />
+ * VIEW list of offered products based on desires and users location<br />
+ * LOGOUT user from system<br />
+ * Checks if users session is logged in, initializes components, gets users info,<br />
+ * displays the info on screen and sets onClick listeners to Button components<br />
+ * If users session is NOT logged in, then logs out user, cleans SQLite users table<br />
+ * and launches UserLoginActivity.<br />
+ * Fields (All private) :<br />
+ * db - SQLiteHandlerForUsers Object. Used to get OR delete on logout users info.<br />
+ * session - SessionManagerForUsers Object. Session of current user.<br />
+ */
 public class UserLoggedInActivity extends AppCompatActivity {
-
-    private static final String TAG = UserLoggedInActivity.class.getSimpleName();
-    protected static User USER;
 
     private SQLiteHandlerForUsers db;
     private SessionManagerForUsers session;
-    private ProgressDialog pDialog;
 
+    /**
+     * Constructor<br />
+     * Checks if session is logged in, Gets users info from SQLite and displays it to screen,<br />
+     * initializes components and sets onLick listeners to Buttons.<br />
+     * Otherwise, logs out user, cleans SQLite users table and launches the UserLoginActivity<br />
+     * @param savedInstanceState Bundle Object
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_logged_in);
 
-        TextView tvName = findViewById(R.id.tv_name);
-        TextView tvEmail = findViewById(R.id.tv_email);
-        Button btnLogout = findViewById(R.id.btn_logout);
-        Button btnAddDesire = findViewById(R.id.btn_add_desire);
-        Button btnDesiresList = findViewById(R.id.btn_desires_list);
-        Button btnCheckOffers = findViewById(R.id.btn_map);
+        //initializing session field
         session = new SessionManagerForUsers(getApplicationContext());
-        if (!session.isLoggedIn()) {
-            logoutUser();
-        }
-
+        //initializing db field
         db = new SQLiteHandlerForUsers(getApplicationContext());
-        USER = db.getUserDetails();
+        //checking if users session is logged in
+        if (!session.isLoggedIn()) {
+            //users session is NOT logged in
+            //logout user, launching UserLoggedInActivity
+            logoutUser();
+        } else {
+            //getting users info from SQLite.
+            User user = db.getUser();
 
-        String name = USER.getUsername();
-        String email = USER.getEmail();
+            //getting TextView components
+            TextView tvName = findViewById(R.id.tv_name);
+            TextView tvEmail = findViewById(R.id.tv_email);
+            //displaying users info on screen.
+            tvName.setText(user.getUsername());
+            tvEmail.setText(user.getEmail());
 
-        tvName.setText(name);
-        tvEmail.setText(email);
+            //getting Button components
+            Button btnLogout = findViewById(R.id.btn_logout);
+            Button btnAddDesire = findViewById(R.id.btn_add_desire);
+            Button btnDesiresList = findViewById(R.id.btn_desires_list);
+            Button btnCheckOffers = findViewById(R.id.btn_map);
 
-        pDialog = new ProgressDialog(this);
-        pDialog.setCancelable(false);
+            //TODO start for result ???
+            //btnAddDesire click listener - launch addDesireActivity
+            btnAddDesire.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //launching AddDesireActivity
+                    Intent intent = new Intent(
+                            UserLoggedInActivity.this,
+                            AddDesireActivity.class
+                    );
+                    startActivity(intent);
+                }
+            });
 
-        setDesiresToSQLite(String.valueOf(USER.getDbID()));
+            //btnDesireList click listener - launch MyDesiresActivity
+            btnDesiresList.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //launching MyDesiresActivity
+                    Intent intent = new Intent(
+                            UserLoggedInActivity.this,
+                            MyDesiresActivity.class
+                    );
+                    startActivity(intent);
+                }
+            });
 
-        btnAddDesire.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(
-                        UserLoggedInActivity.this,
-                        AddDesireActivity.class
-                );
-                startActivity(intent);
-            }
-        });
+            //btnCheckOffers click listener - launch OffersMapsActivity
+            btnCheckOffers.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(
+                            UserLoggedInActivity.this,
+                            OffersMapsActivity.class
+                    );
+                    startActivity(intent);
+                }
+            });
 
-        btnDesiresList.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(
-                        UserLoggedInActivity.this,
-                        MyDesiresActivity.class
-                );
-                startActivity(intent);
-            }
-        });
-
-        btnCheckOffers.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(
-                        UserLoggedInActivity.this,
-                        OffersMapsActivity.class
-                );
-                startActivity(intent);
-            }
-        });
-
-        btnLogout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                logoutUser();
-            }
-        });
+            //btnLogout click listener
+            btnLogout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //logging out user
+                    //launching UserLoginActivity
+                    logoutUser();
+                }
+            });
+        }
     }
 
+    /**
+     * Logging out the user.<br />
+     * Will set isLoggedIn flag to false in shared preferences.<br />
+     * Clears the user data from SQLite users table
+     * Launches the UserLoginActivity
+     **/
     private void logoutUser() {
+        //setting session login to false
         session.setLogin(false);
+        //cleaning users from SQLite database
         db.deleteUsers();
-        db.deleteDesires();
+        //launching the UserLoginActivity.
         Intent intent = new Intent(
                 UserLoggedInActivity.this,
                 UserLoginActivity.class
         );
         startActivity(intent);
+        //finishing this activity
         finish();
-    }
-
-    public void setDesiresToSQLite(final String strUsersDbID) {
-
-        String tag_string_req = "req_get_desires";
-
-        StringRequest strReq = new StringRequest(Request.Method.POST,
-                AppConfig.USER_URL_GET_DESIRES, new Response.Listener<String>() {
-
-            @Override
-            public void onResponse(String response) {
-                Log.d(TAG, "Getting Desires Response: " + response);
-                try {
-                    JSONObject jObj = new JSONObject(response);
-                    boolean error = jObj.getBoolean("error");
-                    if (!error) {
-
-                        JSONArray jArrDesires = jObj.getJSONArray("desires");
-                        for(int pos = 0; pos < jArrDesires.length(); pos++){
-
-                            JSONArray desire = jArrDesires.getJSONArray(pos);
-
-                            String strPriceLow = desire.getString(1);
-                            String strPriceHigh = desire.getString(2);
-                            int desireDbID = desire.getInt(3);
-                            String desireName = desire.getString(4);
-
-                            db.addDesire(desireDbID, desireName, strPriceLow, strPriceHigh);
-                        }
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, new Response.ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e(TAG, "Getting Desires Error: " + error.getMessage());
-                makeToast(error.getMessage());
-            }
-        }) {
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<>();
-                params.put("users_id", strUsersDbID);
-                return params;
-            }
-        };
-        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
-    }
-
-    private void makeToast(String message) {
-        Toast.makeText(
-                getApplicationContext(),
-                message, Toast.LENGTH_LONG
-        ).show();
-    }
-
-    private void showDialog() {
-        if (!pDialog.isShowing()) pDialog.show();
-    }
-
-    private void hideDialog() {
-        if (pDialog.isShowing()) pDialog.dismiss();
     }
 }
