@@ -165,4 +165,11 @@ public class SQLiteHandlerForUsers extends SQLiteOpenHelper {
         db.close();
         Log.d(TAG, "Deleted all desires from sqlite");
     }
+
+    public void deleteAdesire(int id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_DESIRES, DESIRE_KEY_ID + " = ?", new String[]{Integer.toString(id)});
+        db.close();
+
+    }
 }
